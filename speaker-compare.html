@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaker Comparison — Winther Sound Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Allotrope — hosted on Wix CDN (same font as winthersoundsolutions.se) */
+  @font-face {
+    font-family: 'Allotrope';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('https://static.wixstatic.com/ufonts/beb0c0_f1e257ce10df4e3882a4c3fcde9e86a2/woff2/file.woff2') format('woff2'),
+         url('https://static.wixstatic.com/ufonts/beb0c0_f1e257ce10df4e3882a4c3fcde9e86a2/woff/file.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'Allotrope';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://static.wixstatic.com/ufonts/beb0c0_b46f0b4c8e08473d81b067d57ff9e6a1/woff2/file.woff2') format('woff2'),
+         url('https://static.wixstatic.com/ufonts/beb0c0_b46f0b4c8e08473d81b067d57ff9e6a1/woff/file.woff') format('woff');
+  }
+</style>
+
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #fafafa;
+    --gray-100: #f0f0ee;
+    --gray-200: #e2e2de;
+    --gray-400: #a8a8a2;
+    --gray-600: #6b6b64;
+    --gray-800: #2a2a26;
+    --accent: #1a1a1a;
+    --highlight: #c8a96e;
+    --highlight-soft: #f5edd8;
+    --col-min-width: 260px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: 'Allotrope', 'Avenir LT W01_35 Light', 'Avenir', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--gray-200);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .logo {
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--gray-400);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  header h1 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+  }
+
+  /* ── SELECTOR PANEL ── */
+  .selector-panel {
+    background: var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 28px 40px;
+  }
+
+  .selector-intro {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .selector-intro h2 {
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+
+  .speaker-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-600);
+    letter-spacing: 0.05em;
+  }
+
+  .selector-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .select-group label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+  }
+
+  select {
+    appearance: none;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 9px 32px 9px 12px;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--black);
+    cursor: pointer;
+    min-width: 160px;
+    max-width: 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b64' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color 0.15s;
+  }
+
+  select:focus {
+    outline: none;
+    border-color: var(--black);
+  }
+
+  select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 2px;
+    padding: 10px 20px;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s, opacity 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-add:hover:not(:disabled) { background: var(--gray-800); }
+  .btn-add:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .btn-add svg { flex-shrink: 0; }
+
+  /* ── ACTIVE SPEAKERS CHIPS ── */
+  .chips-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    min-height: 0;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 5px 10px 5px 12px;
+    font-size: 12px;
+    color: var(--gray-800);
+    animation: chipIn 0.2s ease;
+  }
+
+  .chip strong {
+    font-weight: 500;
+    color: var(--black);
+  }
+
+  .chip-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-400);
+    padding: 2px;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+    transition: color 0.12s;
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .chip-remove:hover { color: var(--black); }
+
+  @keyframes chipIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    padding: 80px 40px;
+    text-align: center;
+    color: var(--gray-400);
+  }
+
+  .empty-state .big-num {
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 96px;
+    line-height: 1;
+    color: var(--gray-200);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-size: 15px;
+    color: var(--gray-600);
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comparison-wrapper {
+    overflow-x: auto;
+    padding: 0;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 400px;
+  }
+
+  /* Sticky first column */
+  .comparison-table td:first-child,
+  .comparison-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--white);
+  }
+
+  .comparison-table th {
+    background: var(--white);
+    border-bottom: 2px solid var(--black);
+  }
+
+  /* ── SPEAKER HEADER COLUMNS ── */
+  .col-header {
+    padding: 28px 24px 20px;
+    vertical-align: top;
+    min-width: var(--col-min-width);
+    border-right: 1px solid var(--gray-200);
+  }
+
+  .col-header:last-child { border-right: none; }
+
+  .col-label {
+    padding: 28px 20px;
+    width: 180px;
+    min-width: 160px;
+    vertical-align: top;
+    background: var(--gray-100) !important;
+    border-right: 1px solid var(--gray-200);
+  }
+
+  .speaker-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 4px;
+  }
+
+  .speaker-model {
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--black);
+    margin-bottom: 4px;
+  }
+
+  .speaker-series {
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-bottom: 14px;
+  }
+
+  .speaker-type-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 3px 7px;
+    color: var(--gray-600);
+    margin-bottom: 16px;
+  }
+
+  .btn-remove-col {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 6px 10px;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 11px;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .btn-remove-col:hover {
+    border-color: var(--black);
+    color: var(--black);
+  }
+
+  /* ── TABLE ROWS ── */
+  .section-header td {
+    background: var(--black) !important;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    position: sticky;
+    left: 0;
+  }
+
+  .section-header td:first-child {
+    background: var(--black) !important;
+    color: var(--white);
+    z-index: 3;
+  }
+
+  .data-row {
+    border-bottom: 1px solid var(--gray-200);
+    transition: background 0.1s;
+  }
+
+  .data-row:hover td { background: var(--highlight-soft); }
+  .data-row:hover .col-label { background: #ede8dc !important; }
+
+  .row-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-600);
+    letter-spacing: 0.03em;
+    padding: 12px 20px;
+    white-space: nowrap;
+    background: var(--gray-100) !important;
+  }
+
+  .row-label .unit {
+    display: block;
+    font-size: 9px;
+    color: var(--gray-400);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .data-cell {
+    padding: 12px 24px;
+    border-right: 1px solid var(--gray-200);
+    vertical-align: middle;
+    min-width: var(--col-min-width);
+  }
+
+  .data-cell:last-child { border-right: none; }
+
+  .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+  }
+
+  .val.best {
+    color: var(--black);
+  }
+
+  .val.worst {
+    color: var(--black);
+  }
+
+  .val-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    flex-shrink: 0;
+  }
+
+  .val-icon.icon-best {
+    background: var(--black);
+  }
+
+  .val-icon.icon-worst {
+    background: none;
+    border: 1px solid var(--gray-300, #ccc);
+  }
+
+  .val-null {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-400);
+  }
+
+  .bar-wrap {
+    margin-top: 4px;
+    height: 3px;
+    background: var(--gray-200);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--black);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .bar-fill.best-bar { background: var(--highlight); }
+
+  /* Tags in cells */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 2px 6px;
+    color: var(--gray-600);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 48px;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 0.08em;
+  }
+
+  .btn-clear-all {
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 7px 14px;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 12px;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .btn-clear-all:hover { border-color: var(--black); color: var(--black); }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    gap: 12px;
+    color: var(--gray-400);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--gray-200);
+    border-top-color: var(--black);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+
+  /* ── SPEAKER IMAGE ── */
+  .sp-img-wrap {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .sp-img {
+    max-width: 100%;
+    max-height: 120px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    padding: 8px;
+  }
+
+  /* ── SPEAKER FOOTER BUTTONS ── */
+  .sp-footer-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .btn-product-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 6px 10px;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 11px;
+    color: var(--gray-600);
+    text-decoration: none;
+    transition: all 0.12s;
+  }
+
+  .btn-product-link:hover {
+    border-color: var(--black);
+    color: var(--black);
+  }
+
+  /* ── IP RATING TOOLTIP ── */
+  .ip-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+  }
+
+  .ip-condition {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+  }
+
+  .ip-info-btn {
+    display: inline-flex;
+    align-items: center;
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: color 0.12s;
+    flex-shrink: 0;
+  }
+
+  .ip-info-btn:hover { color: var(--black); }
+
+  .ip-tooltip {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 6px);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 12px 14px;
+    z-index: 300;
+    min-width: 300px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--black);
+    pointer-events: none;
+  }
+
+  .ip-wrap:hover .ip-tooltip,
+  .ip-info-btn:focus + .ip-tooltip { display: block; }
+
+  .ip-tooltip strong {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ip-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .ip-digit {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--black);
+    width: 14px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .ip-desc {
+    font-size: 11px;
+    color: var(--gray-600);
+    line-height: 1.4;
+  }
+
+  .ip-cond {
+    display: block;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 11px;
+    color: var(--gray-400);
+    font-style: italic;
+  }
+
+  /* ── CREST FACTOR BAR ── */
+  .crest-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .crest-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+  .crest-presets { display: flex; gap: 4px; }
+  .crest-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 5px 11px;
+    cursor: pointer;
+    color: var(--gray-600);
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+  .crest-btn:hover { border-color: var(--gray-600); color: var(--black); }
+  .crest-btn.active { background: var(--black); border-color: var(--black); color: var(--white); }
+  .crest-custom-wrap { display: flex; align-items: center; gap: 6px; }
+  .crest-input {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    width: 54px;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 5px 8px;
+    text-align: center;
+    color: var(--black);
+    background: var(--white);
+    transition: border-color 0.12s;
+  }
+  .crest-input:focus { outline: none; border-color: var(--black); }
+  .crest-unit { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-400); }
+  .crest-desc { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-400); letter-spacing: 0.04em; margin-left: auto; }
+  .calc-row td { background: var(--highlight-soft) !important; }
+  .calc-row .col-label { background: #ede8dc !important; }
+  .calc-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--highlight);
+    color: var(--white);
+    border-radius: 2px;
+    padding: 1px 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+
+  .crest-legend { position: relative; margin-left: auto; }
+
+  .legend-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 5px 10px;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+
+  .legend-toggle:hover { border-color: var(--black); color: var(--black); }
+
+  .legend-popup {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 16px 18px;
+    z-index: 200;
+    min-width: 460px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .legend-popup.open { display: block; }
+
+  .legend-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+  }
+
+  .legend-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .legend-table tr { border-bottom: 1px solid var(--gray-100); }
+  .legend-table tr:last-child { border-bottom: none; }
+
+  .legend-table td {
+    padding: 6px 0;
+    vertical-align: top;
+    font-size: 12px;
+  }
+
+  .lval {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--black);
+    white-space: nowrap;
+    padding-right: 16px;
+    width: 60px;
+  }
+
+  .lref {
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    color: var(--gray-600);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .lref strong { font-weight: 500; color: var(--black); }
+  .lref em { font-style: italic; }
+
+  .legend-note {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--gray-100);
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 11px;
+    color: var(--gray-400);
+    line-height: 1.5;
+  }
+  /* ── PRINT ── */
+  @media print {
+    header, .selector-panel, footer { display: none; }
+    .comparison-table td:first-child { position: static; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header, .selector-panel { padding: 16px 20px; }
+    .selector-row { flex-direction: column; align-items: flex-start; }
+    select { max-width: 100%; min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">W<span>inthersound</span></a>
+  <h1>Speaker Comparison Tool</h1>
+</header>
+
+<!-- SELECTOR -->
+<div class="selector-panel">
+  <div class="selector-intro">
+    <h2>Add speakers to compare</h2>
+    <span class="speaker-count" id="dbCount">Loading database…</span>
+  </div>
+
+  <div class="selector-row">
+    <div class="select-group">
+      <label>Brand</label>
+      <select id="selBrand">
+        <option value="">— Select brand —</option>
+      </select>
+    </div>
+
+    <div class="select-group">
+      <label>Series / Product line</label>
+      <select id="selSeries" disabled>
+        <option value="">— Select series —</option>
+      </select>
+    </div>
+
+    <div class="select-group">
+      <label>Model</label>
+      <select id="selModel" disabled>
+        <option value="">— Select model —</option>
+      </select>
+    </div>
+
+    <button class="btn-add" id="btnAdd" disabled onclick="addSelectedSpeaker()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Add to comparison
+    </button>
+  </div>
+
+  <div class="chips-bar" id="chipsBar"></div>
+</div>
+
+<!-- CREST FACTOR -->
+<div class="crest-bar">
+  <span class="crest-label">Crest factor</span>
+  <div class="crest-presets">
+    <button class="crest-btn active" onclick="setCrest(6)">+6 dB</button>
+    <button class="crest-btn" onclick="setCrest(10)">+10 dB</button>
+    <button class="crest-btn" onclick="setCrest(12)">+12 dB</button>
+    <button class="crest-btn" onclick="setCrest(18)">+18 dB</button>
+  </div>
+  <div class="crest-custom-wrap">
+    <input class="crest-input" id="crestInput" type="number" min="0" max="30" step="0.5" value="6" oninput="setCrestCustom(this.value)">
+    <span class="crest-unit">dB</span>
+  </div>
+  <span class="crest-desc" id="crestDesc">SPL continuous + 6 dB = calculated peak</span>
+
+  <div class="crest-legend">
+    <button class="legend-toggle" onclick="this.nextElementSibling.classList.toggle('open')" title="Show crest factor reference">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.25" stroke="currentColor" stroke-width="1.5"/><path d="M6 5.5v3M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Reference
+    </button>
+    <div class="legend-popup">
+      <div class="legend-title">Crest factor — signal peak-to-RMS ratio</div>
+      <table class="legend-table">
+        <tr><td class="lval">+6 dB</td><td class="lref"><strong>IEC 60268-1</strong> — standard pink noise test signal. Most manufacturer continuous SPL ratings are measured at this crest factor.</td></tr>
+        <tr><td class="lval">+10 dB</td><td class="lref"><strong>IEC 60268-1</strong> — higher-crest variant sometimes used for programme simulation.</td></tr>
+        <tr><td class="lval">+12 dB</td><td class="lref">Custom value — use to model a specific test signal or compare against a known measurement condition.</td></tr>
+        <tr><td class="lval">+18 dB</td><td class="lref">Custom value — high-crest signal (e.g. sparse transients). Note: this does <em>not</em> imply the speaker can sustain that peak level continuously.</td></tr>
+      </table>
+      <div class="legend-note">The calculated peak shows the instantaneous headroom implied by the datasheet continuous rating and the selected crest factor. It is not a guaranteed peak SPL capability.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main id="mainArea">
+  <div class="empty-state">
+    <span class="big-num">0</span>
+    <p>Select speakers above to start comparing</p>
+  </div>
+</main>
+
+<footer>
+  <p>Winther Sound Solutions · Speaker comparison tool · <span id="footerCount">0</span> speakers loaded</p>
+  <button class="btn-clear-all" onclick="clearAll()">Clear all</button>
+</footer>
+
+<!-- Load database -->
+<script src="speakers-db.js"></script>
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────
+let db = [];
+let selected = []; // array of speaker objects
+let crestFactor = 6; // dB
+
+function setCrest(val) {
+  crestFactor = val;
+  document.getElementById('crestInput').value = val;
+  document.getElementById('crestDesc').textContent = 'SPL continuous + ' + val + ' dB = calculated peak';
+  document.querySelectorAll('.legend-popup').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.crest-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.textContent) === val);
+  });
+  renderTable();
+}
+
+function setCrestCustom(val) {
+  const num = parseFloat(val);
+  if (isNaN(num) || num < 0) return;
+  crestFactor = num;
+  document.getElementById('crestDesc').textContent = 'SPL continuous + ' + num + ' dB = calculated peak';
+  document.querySelectorAll('.crest-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.textContent) === num);
+  });
+  renderTable();
+}
+
+
+// ── IMAGE & URL HELPERS ───────────────────────────────────────────────
+function slugify(str) {
+  if (!str) return '';
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Cache: id -> resolved URL (or null if not found)
+const imgCache = {};
+
+function speakerImageCandidates(sp) {
+  const brand  = slugify(sp.brand);
+  const series = slugify(sp.productLine || '');
+  const id     = sp.id;
+  const exts   = ['webp', 'jpg', 'png'];
+  const candidates = [];
+  // Also try series slug without trailing "-series" (e.g. "czr-series" -> "czr")
+  const seriesNoSuffix = series.replace(/-series$/, '');
+  // Also try series slug without trailing single word after last dash (e.g. "blackline-q" -> "blackline")
+  const seriesNoLastWord = series.includes('-') ? series.replace(/-[^-]+$/, '') : series;
+  const seriesSlugs = series ? [...new Set([series, seriesNoSuffix, seriesNoLastWord])] : [];
+
+  for (const ext of exts) {
+    // 1. brand/series/id.ext
+    for (const s of seriesSlugs) {
+      candidates.push(`images/speakers/${brand}/${s}/${id}.${ext}`);
+    }
+    // 2. brand/id.ext  (fallback for files sitting in brand root)
+    candidates.push(`images/speakers/${brand}/${id}.${ext}`);
+  }
+  return candidates;
+}
+
+async function resolveImageUrl(sp) {
+  if (imgCache[sp.id] !== undefined) return imgCache[sp.id];
+  const candidates = speakerImageCandidates(sp);
+  const found = await probeViaImg(candidates);
+  imgCache[sp.id] = found;
+  return found;
+}
+
+function probeViaImg(candidates) {
+  return new Promise(resolve => {
+    let i = 0;
+    function tryNext() {
+      if (i >= candidates.length) { resolve(null); return; }
+      const url = candidates[i++];
+      const img = new Image();
+      img.onload  = () => resolve(url);
+      img.onerror = () => tryNext();
+      img.src = url;
+    }
+    tryNext();
+  });
+}
+
+// Keep legacy sync helper (used for initial render before resolution)
+function speakerImagePath(sp) {
+  const brand  = slugify(sp.brand);
+  const series = slugify(sp.productLine || '');
+  const id     = sp.id;
+  return series
+    ? `images/speakers/${brand}/${series}/${id}.webp`
+    : `images/speakers/${brand}/${id}.webp`;
+}
+
+async function resolveAndSwap(id) {
+  const sp = selected.find(s => s.id === id);
+  if (!sp) return;
+  // Clear cache so resolveImageUrl actually probes
+  delete imgCache[id];
+  const url = await resolveImageUrl(sp);
+  const img  = document.getElementById('img-' + id);
+  const wrap = document.getElementById('imgwrap-' + id);
+  if (!img || !wrap) return;
+  if (url) {
+    img.onerror = null;
+    img.src = url;
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+function speakerProductUrl(sp) {
+  const ds = sp.meta?.dataSource || '';
+  if (!ds) return null;
+  // Format can be "Brand Model — https://..." or just a URL
+  const match = ds.match(/https?:\/\/\S+/);
+  return match ? match[0] : null;
+}
+
+function loadDb() {
+  if (typeof SPEAKER_DATABASE !== 'undefined') {
+    db = SPEAKER_DATABASE.speakers || [];
+  }
+  document.getElementById('dbCount').textContent = db.length + ' speakers in database';
+  document.getElementById('footerCount').textContent = db.length;
+  populateBrands();
+}
+
+// ── CASCADING SELECTS ─────────────────────────────────────────────────
+function populateBrands() {
+  const brands = [...new Set(db.map(s => s.brand))].sort();
+  const sel = document.getElementById('selBrand');
+  sel.innerHTML = '<option value="">— Select brand —</option>';
+  brands.forEach(b => {
+    const o = document.createElement('option');
+    o.value = b; o.textContent = b;
+    sel.appendChild(o);
+  });
+}
+
+document.getElementById('selBrand').addEventListener('change', function() {
+  const brand = this.value;
+  const seriesSel = document.getElementById('selSeries');
+  const modelSel  = document.getElementById('selModel');
+  seriesSel.innerHTML = '<option value="">— Select series —</option>';
+  modelSel.innerHTML  = '<option value="">— Select model —</option>';
+  seriesSel.disabled = !brand;
+  modelSel.disabled = true;
+  document.getElementById('btnAdd').disabled = true;
+
+  if (!brand) return;
+
+  const filtered = db.filter(s => s.brand === brand);
+  // Build series list — use productLine if available, else show "General" / ungrouped
+  const series = [...new Set(filtered.map(s => s.productLine || '—'))].sort();
+  series.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s; o.textContent = s;
+    seriesSel.appendChild(o);
+  });
+  seriesSel.disabled = false;
+});
+
+document.getElementById('selSeries').addEventListener('change', function() {
+  const brand  = document.getElementById('selBrand').value;
+  const series = this.value;
+  const modelSel = document.getElementById('selModel');
+  modelSel.innerHTML = '<option value="">— Select model —</option>';
+  document.getElementById('btnAdd').disabled = true;
+  modelSel.disabled = !series;
+  if (!series) return;
+
+  const filtered = db.filter(s =>
+    s.brand === brand && (s.productLine || '—') === series
+  );
+  // Sort models: try numeric first (e.g. "V8" < "V10" < "V12")
+  filtered.sort((a, b) => {
+    const na = parseFloat(a.model.replace(/\D/g, ''));
+    const nb = parseFloat(b.model.replace(/\D/g, ''));
+    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+    return a.model.localeCompare(b.model);
+  });
+  filtered.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.id; o.textContent = s.model + (s.type ? ' · ' + formatType(s.type) : '');
+    modelSel.appendChild(o);
+  });
+  modelSel.disabled = false;
+});
+
+document.getElementById('selModel').addEventListener('change', function() {
+  document.getElementById('btnAdd').disabled = !this.value;
+});
+
+// ── ADD / REMOVE ──────────────────────────────────────────────────────
+function addSelectedSpeaker() {
+  const id = document.getElementById('selModel').value;
+  if (!id) return;
+  if (selected.find(s => s.id === id)) {
+    alert('This speaker is already in the comparison.');
+    return;
+  }
+  const speaker = db.find(s => s.id === id);
+  if (!speaker) return;
+  selected.push(speaker);
+  renderChips();
+  renderTable();
+  // Pre-resolve image so it's cached before next re-render
+  resolveImageUrl(speaker);
+  // Reset model select
+  document.getElementById('selModel').value = '';
+  document.getElementById('btnAdd').disabled = true;
+}
+
+function removeSpeaker(id) {
+  selected = selected.filter(s => s.id !== id);
+  renderChips();
+  renderTable();
+}
+
+function clearAll() {
+  selected = [];
+  renderChips();
+  renderTable();
+}
+
+// ── CHIPS ─────────────────────────────────────────────────────────────
+function renderChips() {
+  const bar = document.getElementById('chipsBar');
+  bar.innerHTML = '';
+  selected.forEach(sp => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.innerHTML = `
+      <span><strong>${sp.brand}</strong> ${sp.model}</span>
+      <button class="chip-remove" onclick="removeSpeaker('${sp.id}')" title="Remove">×</button>
+    `;
+    bar.appendChild(chip);
+  });
+}
+
+// ── TABLE RENDERING ───────────────────────────────────────────────────
+function renderTable() {
+  const main = document.getElementById('mainArea');
+  if (selected.length === 0) {
+    main.innerHTML = `
+      <div class="empty-state">
+        <span class="big-num">0</span>
+        <p>Select speakers above to start comparing</p>
+      </div>`;
+    return;
+  }
+
+  const rows = buildRows();
+  let html = `<div class="comparison-wrapper"><table class="comparison-table">`;
+
+  // ── HEADER ROW ──
+  html += `<thead><tr>`;
+  html += `<th class="col-label"></th>`;
+  selected.forEach(sp => {
+    const imgPath = speakerImagePath(sp);
+    const productUrl = speakerProductUrl(sp);
+    html += `<th class="col-header">
+      <div class="sp-img-wrap" id="imgwrap-${sp.id}">
+        <img class="sp-img" id="img-${sp.id}" src="${imgPath}" alt="${sp.brand} ${sp.model}" onerror="resolveAndSwap('${sp.id}')">
+      </div>
+      <div class="speaker-brand">${sp.brand}</div>
+      <div class="speaker-model">${sp.model}</div>
+      <div class="speaker-series">${sp.productLine || ''}</div>
+      <div class="speaker-type-badge">${formatType(sp.type)}</div>
+      <div class="sp-footer-btns">
+        ${productUrl ? `<a class="btn-product-link" href="${productUrl}" target="_blank" rel="noopener">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M4 2H2a1 1 0 00-1 1v5a1 1 0 001 1h5a1 1 0 001-1V6M6 1h3m0 0v3m0-3L4.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Product page
+        </a>` : ''}
+        <button class="btn-remove-col" onclick="removeSpeaker('${sp.id}')">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Remove
+        </button>
+      </div>
+    </th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  // ── DATA ROWS ──
+  rows.forEach(row => {
+    if (row.type === 'section') {
+      html += `<tr class="section-header"><td colspan="${selected.length + 1}">${row.label}</td></tr>`;
+      return;
+    }
+
+    const values = selected.map(sp => row.get(sp));
+    const nums = values.map(v => parseFloat(v)).filter(n => !isNaN(n));
+    const maxNum = nums.length ? Math.max(...nums) : null;
+    const minNum = nums.length ? Math.min(...nums) : null;
+    const allSame = values.every(v => v === values[0]);
+
+    const rowClass = row.isCalc ? 'data-row calc-row' : 'data-row';
+    html += `<tr class="${rowClass}">`; 
+    const calcBadge = row.isCalc ? '<span class="calc-badge">calc</span>' : '';
+    html += `<td class="row-label col-label">${row.label}${calcBadge}${row.unit ? `<span class="unit">${row.unit}</span>` : ''}</td>`;
+
+    values.forEach((v, i) => {
+      let content = '';
+      if (v === null || v === undefined || v === '' || v === '—') {
+        content = `<span class="val-null">—</span>`;
+      } else if (row.isTags) {
+        content = `<div class="tag-list">${v.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('')}</div>`;
+      } else if (row.isIP) {
+        content = fmtIPRating(v);
+      } else {
+        const num = parseFloat(v);
+        const isNum = !isNaN(num) && nums.length > 1;
+        let cls = 'val';
+        let bar = '';
+
+        let iconHtml = '';
+        if (isNum && !allSame) {
+          const isBest = (row.higherBetter !== false && num === maxNum) || (row.higherBetter === false && num === minNum);
+          const isWorst = (row.higherBetter !== false && num === minNum && minNum !== maxNum) || (row.higherBetter === false && num === maxNum && maxNum !== minNum);
+
+          const pct = maxNum === minNum ? 100 : Math.round(((num - minNum) / (maxNum - minNum)) * 100);
+          const barPct = row.higherBetter === false ? 100 - pct : pct;
+          bar = `<div class="bar-wrap"><div class="bar-fill ${isBest ? 'best-bar' : ''}" style="width:${barPct}%"></div></div>`;
+
+          if (isBest) {
+            iconHtml = `<span class="val-icon icon-best" title="Highest value">
+              <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 1L5.5 5H0.5L3 1Z" fill="white"/>
+              </svg>
+            </span>`;
+          } else if (isWorst) {
+            iconHtml = `<span class="val-icon icon-worst" title="Lowest value">
+              <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 5L0.5 1H5.5L3 5Z" fill="#a8a8a2"/>
+              </svg>
+            </span>`;
+          }
+        }
+
+        content = `<span style="display:inline-flex;align-items:center"><span class="${cls}">${v}</span>${iconHtml}</span>${bar}`;
+      }
+      html += `<td class="data-cell">${content}</td>`;
+    });
+
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+  main.innerHTML = html;
+}
+
+// ── ROW DEFINITIONS ───────────────────────────────────────────────────
+function buildRows() {
+  return [
+    // GENERAL
+    { type: 'section', label: 'General' },
+    { label: 'Type', get: s => formatType(s.type) },
+    { label: 'Application', get: s => [s.application?.indoorOutdoor, ...(s.application?.recommendedUse || [])].filter(Boolean).join(', '), isTags: true },
+
+    // ELECTRICAL
+    { type: 'section', label: 'Electrical' },
+    { label: 'Impedance', unit: 'Ω', higherBetter: false, get: s => fmt(s.electrical?.impedance) },
+    { label: 'Power — Continuous', unit: 'W', get: s => fmt(s.electrical?.powerHandlingContinuous) },
+    { label: 'Power — Program', unit: 'W', get: s => fmt(s.electrical?.powerHandlingProgram) },
+    { label: 'Power — Peak', unit: 'W', get: s => fmt(s.electrical?.powerHandlingPeak) },
+    { label: 'Sensitivity', unit: 'dB', get: s => fmt(s.electrical?.sensitivity) },
+    { label: 'Freq. Response −3dB', unit: 'Hz', get: s => fmtRange(s.electrical?.frequencyResponseMinus3dB) },
+    { label: 'Freq. Response −10dB', unit: 'Hz', get: s => fmtRange(s.electrical?.frequencyResponseMinus10dB) },
+
+    // ACOUSTIC
+    { type: 'section', label: 'Acoustic' },
+    { label: 'Max SPL — Continuous', unit: 'dB', get: s => fmt(s.electrical?.maxSPLContinuous) },
+    { label: 'Max SPL — Peak (datasheet)', unit: 'dB', get: s => fmt(s.electrical?.maxSPLPeak) },
+    { label: 'Max SPL — Calc. Peak', unit: 'dB', isCalc: true, get: s => {
+      const cont = parseFloat(s.electrical?.maxSPLContinuous);
+      if (isNaN(cont)) return '—';
+      return (cont + crestFactor).toFixed(1);
+    } },
+    { label: 'Coverage H', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageH) },
+    { label: 'Coverage V', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageV) },
+    { label: 'Drive units', get: s => fmtDrivers(s.acoustic?.driveUnits) },
+
+    // PHYSICAL
+    { type: 'section', label: 'Physical' },
+    { label: 'Height', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.height) },
+    { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.width) },
+    { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.depth) },
+    { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weight) },
+    { label: 'Enclosure', get: s => s.physical?.enclosureType || '—' },
+    { label: 'IP Rating', isIP: true, get: s => s.physical?.ipRating || '—' },
+    { label: 'Colour options', get: s => (s.physical?.colors || []).join(', ') || '—' },
+  ];
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function fmt(v) {
+  if (v === null || v === undefined) return '—';
+  return String(v);
+}
+
+function fmtRange(arr) {
+  if (!arr || !arr.length) return '—';
+  const [lo, hi] = arr;
+  if (!lo && !hi) return '—';
+  return `${lo || '?'} – ${hi || '?'} Hz`;
+}
+
+function fmtCoverage(cov) {
+  if (!cov) return '—';
+  if (cov.mode === 'variable') {
+    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (var.)`;
+    return 'Variable';
+  }
+  if (cov.fixed !== null && cov.fixed !== undefined) return String(cov.fixed);
+  return '—';
+}
+
+function fmtDrivers(units) {
+  if (!units || !units.length) return '—';
+  return units.map(u => `${u.quantity}×${u.sizeInch}" ${u.section}`).join(', ');
+}
+
+
+function fmtIPRating(val) {
+  if (!val || val === '—') return '<span class="val-null">—</span>';
+
+  const IP_FIRST = {
+    '0': 'No protection against solid objects',
+    '1': 'Protected against objects > 50 mm (e.g. hand)',
+    '2': 'Protected against objects > 12.5 mm (e.g. finger)',
+    '3': 'Protected against objects > 2.5 mm (e.g. tools)',
+    '4': 'Protected against objects > 1 mm (e.g. wires)',
+    '5': 'Dust protected — limited ingress, no harmful deposit',
+    '6': 'Dust tight — no ingress of dust'
+  };
+  const IP_SECOND = {
+    '0': 'No protection against water',
+    '1': 'Protected against vertically dripping water',
+    '2': 'Protected against dripping water up to 15° tilt',
+    '3': 'Protected against spraying water up to 60°',
+    '4': 'Protected against splashing water from any direction',
+    '5': 'Protected against water jets from any direction',
+    '6': 'Protected against powerful water jets',
+    '7': 'Protected against temporary immersion (up to 1 m, 30 min)',
+    '8': 'Protected against continuous immersion (beyond 1 m)',
+    '9': 'Protected against high-pressure, high-temperature water jets'
+  };
+
+  // Parse e.g. "IP55", "IP44", "IP65 (with cover)" — extract digits
+  const match = val.match(/IP\s*(\d)(\d)/i);
+  if (!match) return `<span class="val">${val}</span>`;
+
+  const d1 = match[1];
+  const d2 = match[2];
+  const desc1 = IP_FIRST[d1] || '';
+  const desc2 = IP_SECOND[d2] || '';
+  const condition = val.replace(/IP\s*\d\d/i, '').trim().replace(/[()]/g, '').trim();
+
+  const tooltip = `<strong>IP${d1}${d2}</strong><br>
+    <span class="ip-row"><span class="ip-digit">${d1}</span><span class="ip-desc">${desc1}</span></span>
+    <span class="ip-row"><span class="ip-digit">${d2}</span><span class="ip-desc">${desc2}</span></span>
+    ${condition ? `<span class="ip-cond">${condition}</span>` : ''}`;
+
+  return `<span class="ip-wrap">
+    <span class="val">IP${d1}${d2}</span>${condition ? `<span class="ip-condition">${condition}</span>` : ''}
+    <span class="ip-info-btn" tabindex="0">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.25" stroke="currentColor" stroke-width="1.4"/><path d="M6 5.5v3M6 3.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </span>
+    <span class="ip-tooltip">${tooltip}</span>
+  </span>`;
+}
+function formatType(t) {
+  if (!t) return 'Unknown';
+  return t.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+window.addEventListener('load', loadDb);
+
+// Close legend popup on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.crest-legend')) {
+    document.querySelectorAll('.legend-popup').forEach(p => p.classList.remove('open'));
+  }
+});
+</script>
+</body>
+</html>
