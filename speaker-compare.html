@@ -1372,10 +1372,18 @@ function fmtRange(arr) {
 function fmtCoverage(cov) {
   if (!cov) return '—';
   if (cov.mode === 'variable') {
-    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (var.)`;
+    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (variable)`;
     return 'Variable';
   }
-  if (cov.fixed !== null && cov.fixed !== undefined) return String(cov.fixed);
+  if (cov.mode === 'tapered') {
+    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (tapered)`;
+    return 'Tapered';
+  }
+  if (cov.mode === 'conical') {
+    if (cov.fixed !== null && cov.fixed !== undefined) return `${cov.fixed}° (conical)`;
+    return 'Conical';
+  }
+  if (cov.fixed !== null && cov.fixed !== undefined) return `${cov.fixed}°`;
   return '—';
 }
 
