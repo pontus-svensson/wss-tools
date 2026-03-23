@@ -1346,13 +1346,13 @@ function buildRows() {
 
     // PHYSICAL
     { type: 'section', label: 'Physical' },
-    { label: 'Height', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.height) },
-    { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.width) },
-    { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.dimensions?.depth) },
-    { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weight) },
+    { label: 'Height', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.heightMM ?? s.physical?.dimensions?.height) },
+    { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.widthMM ?? s.physical?.dimensions?.width) },
+    { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.depthMM ?? s.physical?.dimensions?.depth) },
+    { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weightKg ?? s.physical?.weight) },
     { label: 'Enclosure', get: s => s.physical?.enclosureType || '—' },
     { label: 'IP Rating', isIP: true, get: s => s.physical?.ipRating || '—' },
-    { label: 'Colour options', get: s => (s.physical?.colors || []).join(', ') || '—' },
+    { label: 'Colour options', get: s => (s.physical?.finishes || s.physical?.colors || []).join(', ') || '—' },
   ];
 }
 
@@ -1372,11 +1372,16 @@ function fmtRange(arr) {
 function fmtCoverage(cov) {
   if (!cov) return '—';
   if (cov.mode === 'variable') {
-    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (variable)`;
+    const lo = cov.min ?? cov.taperedFar;
+    const hi = cov.max ?? cov.taperedNear;
+    if (lo && hi) return `${lo}°–${hi}° (variable)`;
     return 'Variable';
   }
   if (cov.mode === 'tapered') {
-    if (cov.min && cov.max) return `${cov.min}°–${cov.max}° (tapered)`;
+    const near = cov.taperedNear ?? cov.min;
+    const far  = cov.taperedFar  ?? cov.max;
+    if (near && far) return `${far}°–${near}° (tapered)`;
+    if (near || far) return `${near || far}° (tapered)`;
     return 'Tapered';
   }
   if (cov.mode === 'conical') {
