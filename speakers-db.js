@@ -1,7 +1,7 @@
 /**
  * PRO AUDIO LOUDSPEAKER DATABASE
- * Schema: 1.1 | Exported: 2026-03-20T10:27:05.118Z
- * Speakers: 473
+ * Schema: 1.1 | Exported: 2026-03-23T13:20:07.860Z
+ * Speakers: 470
  */
 const SPEAKER_DATABASE = {
   "speakers": [
@@ -14520,36 +14520,34 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          98,
-          17000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 98,
+          "high": 17000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 103,
         "maxSPLPeak": 109,
-        "crestFactorDB": null,
-        "constantVoltage": null,
-        "frequencyResponseMinus10dB": {
-          "low": 70
-        }
+        "crestFactorDB": 6,
+        "constantVoltage": null
       },
       "acoustic": {
         "coverageH": {
           "mode": "fixed",
           "fixed": 110,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 80,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -14581,20 +14579,45 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
-        "connectors": [],
+        "enclosureFinish": "Black",
+        "connectors": [
+          "Phoenix-style 12 A plug"
+        ],
+        "riggingPoints": null,
         "ipRating": "IP54",
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "VIA2004"
         ],
-        "dspBuiltIn": "false"
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-via2004"
@@ -14605,6 +14628,7 @@ const SPEAKER_DATABASE = {
         "martin-audio-cddcb5b-cddcb5w"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/a40",
         "documents": [
           {
@@ -14713,7 +14737,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-a40.jpg",
+        "msrpEUR": null,
         "notes": "Auto resetting fuse on HF & LF"
       },
       "_manual": {
@@ -14765,19 +14789,19 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          98,
-          17000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 98,
+          "high": 17000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 103,
         "maxSPLPeak": 109,
-        "crestFactorDB": null,
+        "crestFactorDB": 6,
         "constantVoltage": {
           "supported": true,
           "lines": [
             {
               "voltage": "100V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 20,
@@ -14795,7 +14819,6 @@ const SPEAKER_DATABASE = {
             },
             {
               "voltage": "70V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 20,
@@ -14821,29 +14844,26 @@ const SPEAKER_DATABASE = {
             "70V"
           ],
           "notes": null
-        },
-        "frequencyResponseMinus10dB": {
-          "low": 70
         }
       },
       "acoustic": {
         "coverageH": {
           "mode": "fixed",
           "fixed": 110,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 80,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -14875,26 +14895,52 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
-        "connectors": [],
+        "enclosureFinish": "Black",
+        "connectors": [
+          "Phoenix-style 12 A plug"
+        ],
+        "riggingPoints": null,
         "ipRating": "IP54",
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "VIA5002"
         ],
-        "dspBuiltIn": "false"
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-via5002"
       ],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/a40t",
         "documents": [
           {
@@ -15003,7 +15049,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-a40t.jpg",
+        "msrpEUR": null,
         "notes": null
       },
       "_manual": {
@@ -15054,36 +15100,34 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          90,
-          17000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 90,
+          "high": 17000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 107,
         "maxSPLPeak": 113,
-        "crestFactorDB": null,
-        "constantVoltage": null,
-        "frequencyResponseMinus10dB": {
-          "low": 65
-        }
+        "crestFactorDB": 6,
+        "constantVoltage": null
       },
       "acoustic": {
         "coverageH": {
           "mode": "fixed",
           "fixed": 110,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 80,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -15115,26 +15159,52 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
-        "connectors": [],
+        "enclosureFinish": "Black",
+        "connectors": [
+          "Phoenix-style 12 A plug"
+        ],
+        "riggingPoints": null,
         "ipRating": "IP54",
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "VIA2004"
         ],
-        "dspBuiltIn": "false"
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-via2004"
       ],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/a55",
         "documents": [
           {
@@ -15243,7 +15313,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-a55.png",
+        "msrpEUR": null,
         "notes": null
       },
       "_manual": {
@@ -15295,19 +15365,19 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          90,
-          17000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 90,
+          "high": 17000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 107,
         "maxSPLPeak": 113,
-        "crestFactorDB": null,
+        "crestFactorDB": 6,
         "constantVoltage": {
           "supported": true,
           "lines": [
             {
               "voltage": "100V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 30,
@@ -15325,7 +15395,6 @@ const SPEAKER_DATABASE = {
             },
             {
               "voltage": "70V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 30,
@@ -15351,29 +15420,26 @@ const SPEAKER_DATABASE = {
             "70V"
           ],
           "notes": null
-        },
-        "frequencyResponseMinus10dB": {
-          "low": 65
         }
       },
       "acoustic": {
         "coverageH": {
           "mode": "fixed",
           "fixed": 110,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 80,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -15405,25 +15471,52 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
-        "connectors": [],
+        "enclosureFinish": "Black",
+        "connectors": [
+          "Phoenix-style 12 A plug"
+        ],
+        "riggingPoints": null,
         "ipRating": "IP54",
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "VIA5002"
-        ]
+        ],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-via5002"
       ],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/a55t",
         "documents": [
           {
@@ -15532,7 +15625,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-a55t.png",
+        "msrpEUR": null,
         "notes": null
       },
       "_manual": {
@@ -15582,19 +15675,19 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          63,
-          17000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 63,
+          "high": 17000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 114,
         "maxSPLPeak": 120,
-        "crestFactorDB": null,
+        "crestFactorDB": 6,
         "constantVoltage": {
           "supported": true,
           "lines": [
             {
               "voltage": "100V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 60,
@@ -15612,7 +15705,6 @@ const SPEAKER_DATABASE = {
             },
             {
               "voltage": "70V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 60,
@@ -15638,29 +15730,26 @@ const SPEAKER_DATABASE = {
             "70V"
           ],
           "notes": null
-        },
-        "frequencyResponseMinus10dB": {
-          "low": 50
         }
       },
       "acoustic": {
         "coverageH": {
           "mode": "fixed",
           "fixed": 90,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 50,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -15692,24 +15781,47 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
+        "enclosureFinish": "Black",
         "connectors": [
           "Phoenix-style 12 A plug (replacement part PCX00006)"
         ],
+        "riggingPoints": null,
         "ipRating": "IP54",
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "VIA2502",
-          "VIA5004 (",
-          "VIA5002 for70V/100V line)"
+          "VIA5004",
+          "VIA5002"
         ],
-        "dspBuiltIn": "false"
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-via2502"
@@ -15721,6 +15833,7 @@ const SPEAKER_DATABASE = {
         "martin-audio-cddcb6-8b-cddcb6-8w"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/a80t",
         "documents": [
           {
@@ -15834,7 +15947,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-a80t.jpg",
+        "msrpEUR": null,
         "notes": null
       },
       "_manual": {
@@ -16727,12 +16840,16 @@ const SPEAKER_DATABASE = {
       "type": "pendant",
       "application": {
         "indoorOutdoor": "indoor",
-        "recommendedUse": []
+        "recommendedUse": [
+          "delay",
+          "ceiling",
+          "installation"
+        ]
       },
       "electrical": {
         "impedance": 16,
         "powerHandlingContinuous": 50,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 100,
         "powerHandlingPeak": 200,
         "sensitivity": 86,
         "sensitivityRef": "1W/1m",
@@ -16743,19 +16860,19 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          98,
-          20000
-        ],
-        "maxSPLContinuous": null,
+        "frequencyResponseMinus3dB": {
+          "low": 98,
+          "high": 20000
+        },
+        "frequencyResponseMinus10dB": null,
+        "maxSPLContinuous": 103,
         "maxSPLPeak": 109,
-        "crestFactorDB": null,
+        "crestFactorDB": 6,
         "constantVoltage": {
           "supported": true,
           "lines": [
             {
               "voltage": "100V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 30,
@@ -16773,7 +16890,6 @@ const SPEAKER_DATABASE = {
             },
             {
               "voltage": "70V",
-              "enabled": true,
               "taps": [
                 {
                   "watts": 30,
@@ -16805,20 +16921,20 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": {
           "angleDeg": 150,
           "upperFreqHz": 7000
@@ -16853,26 +16969,50 @@ const SPEAKER_DATABASE = {
           "Black",
           "white"
         ],
+        "enclosureFinish": "Black",
         "connectors": [
           "Ceramic connector (in and link)"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [],
-        "dspBuiltIn": "false"
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [],
       "linkedAccIds": [
         "martin-audio-ck3"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/acp-55t",
         "documents": [
           {
@@ -16981,7 +17121,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-acp-55t.jpg",
+        "msrpEUR": null,
         "notes": null
       },
       "_manual": {
@@ -16994,7 +17134,18 @@ const SPEAKER_DATABASE = {
         "system.arrayable": false,
         "physical.depthMM": 238,
         "physical.diameterMM": 246,
-        "physical.weightKg": 3.46
+        "physical.weightKg": 3.46,
+        "electrical.impedance": 16,
+        "electrical.sensitivity": 86,
+        "electrical.sensitivityRef": "1W/1m",
+        "electrical.powerHandlingContinuous": 50,
+        "electrical.powerHandlingProgram": 100,
+        "electrical.powerHandlingPeak": 200,
+        "electrical.frequencyResponseMinus3dB.low": 98,
+        "electrical.frequencyResponseMinus3dB.high": 20000,
+        "electrical.frequencyResponseMinus10dB.low": 56,
+        "electrical.maxSPLContinuous": 103,
+        "electrical.maxSPLPeak": 109
       }
     },
     {
@@ -27145,7 +27296,7 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklinex10",
       "brand": "Martin Audio",
       "model": "BLACKLINEX10",
-      "productLine": "Blackline",
+      "productLine": "Blackline X (legacy)",
       "type": "point-source",
       "application": {
         "indoorOutdoor": "both",
@@ -27154,7 +27305,7 @@ const SPEAKER_DATABASE = {
       "electrical": {
         "impedance": 8,
         "powerHandlingContinuous": 250,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 500,
         "powerHandlingPeak": 1000,
         "sensitivity": 94,
         "sensitivityRef": "1W/1m",
@@ -27165,10 +27316,11 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": [
-          65,
-          20000
-        ],
+        "frequencyResponseMinus3dB": {
+          "low": 65,
+          "high": 20000
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 118,
         "maxSPLPeak": 124,
         "crestFactorDB": 6,
@@ -27178,20 +27330,20 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": 90,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": 50,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": [
           {
@@ -27222,23 +27374,48 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Black textured paint"
         ],
+        "enclosureFinish": "Black textured paint",
         "connectors": [
           "2 x NL4 type"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              },
+              {
+                "name": "HF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
+        "recommendedAmplifiers": [],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/loudspeakers/blacklinex10",
         "documents": [
           {
@@ -27327,7 +27504,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklinex10.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -39495,21 +39672,27 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklineq210",
       "brand": "Martin Audio",
       "model": "BLACKLINEQ210",
-      "productLine": "Blackline",
+      "productLine": "Blackline Q",
       "type": "subwoofer",
       "application": {
         "indoorOutdoor": "both",
-        "recommendedUse": []
+        "recommendedUse": [
+          "sub"
+        ]
       },
       "electrical": {
         "impedance": 4,
         "powerHandlingContinuous": 400,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 800,
         "powerHandlingPeak": 1600,
         "sensitivity": 101,
         "sensitivityRef": "1W/1m",
         "crossoverPoints": [],
-        "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus3dB": {
+          "low": 49,
+          "high": 100
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 127,
         "maxSPLPeak": 133,
         "crestFactorDB": 6,
@@ -39519,22 +39702,29 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
-        "driveUnits": []
+        "driveUnits": [
+          {
+            "section": "LF",
+            "sizeInch": 10,
+            "quantity": 2,
+            "description": "2” (50 mm) long excursion voice coil, ferrite motor system"
+          }
+        ]
       },
       "physical": {
         "heightMM": 718,
@@ -39547,24 +39737,43 @@ const SPEAKER_DATABASE = {
           "Black",
           "white textured paint"
         ],
+        "enclosureFinish": "Black",
         "connectors": [
           "3 x NL4 connectors: 2 at bottom rear (input and link A)",
           "1 at top rear (link B)"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "DX0.4",
           "DX0.6",
-          "iKON amplifier-processor"
-        ]
+          "iKON"
+        ],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-dx0-4",
@@ -39575,6 +39784,7 @@ const SPEAKER_DATABASE = {
         "martin-audio-q210tc"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/blacklineq210",
         "documents": [
           {
@@ -39693,7 +39903,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklineq210.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -39701,21 +39911,27 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklineq118",
       "brand": "Martin Audio",
       "model": "BLACKLINEQ118",
-      "productLine": "Blackline",
+      "productLine": "Blackline Q",
       "type": "subwoofer",
       "application": {
         "indoorOutdoor": "both",
-        "recommendedUse": []
+        "recommendedUse": [
+          "sub"
+        ]
       },
       "electrical": {
         "impedance": 8,
         "powerHandlingContinuous": 800,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 1600,
         "powerHandlingPeak": 3200,
         "sensitivity": 101,
         "sensitivityRef": "1W/1m",
         "crossoverPoints": [],
-        "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus3dB": {
+          "low": 38,
+          "high": 100
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 130,
         "maxSPLPeak": 136,
         "crestFactorDB": 6,
@@ -39725,22 +39941,29 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
-        "driveUnits": []
+        "driveUnits": [
+          {
+            "section": "LF",
+            "sizeInch": 18,
+            "quantity": 1,
+            "description": "4” (100 mm) long excursion voice coil, ferrite motor system"
+          }
+        ]
       },
       "physical": {
         "heightMM": 606,
@@ -39752,24 +39975,43 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Black textured paint"
         ],
+        "enclosureFinish": "Black textured paint",
         "connectors": [
           "3 x NL4 connectors: 2 at bottom rear (input and link A)",
           "1 at top rear (link B)"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "DX0.4",
           "DX0.6",
-          "iKON amplifier-processor"
-        ]
+          "iKON"
+        ],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-dx0-4",
@@ -39781,6 +40023,7 @@ const SPEAKER_DATABASE = {
         "martin-audio-q118tc"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/blacklineq118",
         "documents": [
           {
@@ -39879,7 +40122,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklineq118.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -39887,21 +40130,27 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklineq218",
       "brand": "Martin Audio",
       "model": "BLACKLINEQ218",
-      "productLine": "Blackline",
+      "productLine": "Blackline Q",
       "type": "subwoofer",
       "application": {
         "indoorOutdoor": "both",
-        "recommendedUse": []
+        "recommendedUse": [
+          "sub"
+        ]
       },
       "electrical": {
         "impedance": 4,
         "powerHandlingContinuous": 1600,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 3200,
         "powerHandlingPeak": 6400,
         "sensitivity": 104,
         "sensitivityRef": "1W/1m",
         "crossoverPoints": [],
-        "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus3dB": {
+          "low": 38,
+          "high": 100
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 136,
         "maxSPLPeak": 142,
         "crestFactorDB": 6,
@@ -39911,22 +40160,29 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
-        "driveUnits": []
+        "driveUnits": [
+          {
+            "section": "LF",
+            "sizeInch": 18,
+            "quantity": 2,
+            "description": "4” (100 mm) long excursion voice coil, ferrite motor system"
+          }
+        ]
       },
       "physical": {
         "heightMM": 1206,
@@ -39938,24 +40194,43 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Black textured paint"
         ],
+        "enclosureFinish": "Black textured paint",
         "connectors": [
           "3 x NL4 connectors: 2 at bottom rear (input and link A)",
           "1 at top rear (link B)"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": null,
+                "connectorWiring": null
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
         "recommendedAmplifiers": [
           "DX0.4",
           "DX0.6",
-          "iKON amplifier-processor"
-        ]
+          "iKON"
+        ],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [
         "martin-audio-dx0-4",
@@ -39965,6 +40240,7 @@ const SPEAKER_DATABASE = {
         "martin-audio-q218tc"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/blacklineq218",
         "documents": [
           {
@@ -40053,7 +40329,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklineq218.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -44909,16 +45185,18 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklinex115",
       "brand": "Martin Audio",
       "model": "BLACKLINEX115",
-      "productLine": "Blackline",
+      "productLine": "Blackline X (legacy)",
       "type": "subwoofer",
       "application": {
         "indoorOutdoor": "both",
-        "recommendedUse": []
+        "recommendedUse": [
+          "sub"
+        ]
       },
       "electrical": {
         "impedance": 8,
         "powerHandlingContinuous": 500,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 1000,
         "powerHandlingPeak": 2000,
         "sensitivity": 102,
         "sensitivityRef": "1W/1m",
@@ -44929,7 +45207,11 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus3dB": {
+          "low": 45,
+          "high": 150
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 129,
         "maxSPLPeak": 135,
         "crestFactorDB": 6,
@@ -44939,20 +45221,20 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
         "driveUnits": []
       },
@@ -44966,23 +45248,37 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Black textured paint"
         ],
+        "enclosureFinish": "Black textured paint",
         "connectors": [
           "3 x NL4 type"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
-        "activePassive": "passive",
+        "activePassive": "active",
+        "crossoverModes": {
+          "passive": {
+            "supported": false
+          },
+          "active": {
+            "supported": true,
+            "sections": []
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
+        "recommendedAmplifiers": [],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/blacklinex115",
         "documents": [
           {
@@ -45056,7 +45352,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklinex115.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -45064,7 +45360,7 @@ const SPEAKER_DATABASE = {
       "id": "martin-audio-blacklinex118",
       "brand": "Martin Audio",
       "model": "BLACKLINEX118",
-      "productLine": "Blackline",
+      "productLine": "Blackline X (legacy)",
       "type": "subwoofer",
       "application": {
         "indoorOutdoor": "both",
@@ -45073,7 +45369,7 @@ const SPEAKER_DATABASE = {
       "electrical": {
         "impedance": 8,
         "powerHandlingContinuous": 800,
-        "powerHandlingProgram": null,
+        "powerHandlingProgram": 1600,
         "powerHandlingPeak": 3200,
         "sensitivity": 101,
         "sensitivityRef": "1W/1m",
@@ -45084,7 +45380,11 @@ const SPEAKER_DATABASE = {
             "slopeDBO": null
           }
         ],
-        "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus3dB": {
+          "low": 42,
+          "high": 150
+        },
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": 130,
         "maxSPLPeak": 136,
         "crestFactorDB": 6,
@@ -45094,22 +45394,31 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
         "conicalDispersion": null,
-        "driveUnits": []
+        "driveUnits": [
+          {
+            "section": "LF",
+            "sizeInch": 18,
+            "quantity": 1,
+            "description": "4” (100mm) voice coil, long excursion, ferrite magnet",
+            "connectorWiring": "1+/1-",
+            "powerHandlingW": 800
+          }
+        ]
       },
       "physical": {
         "heightMM": 669,
@@ -45121,23 +45430,43 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Black textured paint"
         ],
+        "enclosureFinish": "Black textured paint",
         "connectors": [
           "3 x NL4 type"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
-        "activePassive": "passive",
+        "activePassive": "active",
+        "crossoverModes": {
+          "passive": {
+            "supported": false
+          },
+          "active": {
+            "supported": true,
+            "sections": [
+              {
+                "name": "LF",
+                "powerHandlingW": 800,
+                "connectorWiring": "1+/1-"
+              }
+            ]
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
+        "recommendedAmplifiers": [],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [],
       "linkedAccIds": [],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/blacklinex118",
         "documents": [
           {
@@ -45236,7 +45565,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklinex118.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
@@ -45407,156 +45736,6 @@ const SPEAKER_DATABASE = {
           }
         ],
         "imageFile": "images/speakers/martin-audio/blackline/martin-audio-blacklinex218.jpg",
-        "notes": null
-      }
-    },
-    {
-      "id": "martin-audio-b218",
-      "brand": "Martin Audio",
-      "model": "B218",
-      "productLine": "ADORN",
-      "type": "subwoofer",
-      "application": {
-        "indoorOutdoor": "both",
-        "recommendedUse": []
-      },
-      "electrical": {
-        "impedance": 4,
-        "powerHandlingContinuous": 2000,
-        "powerHandlingProgram": null,
-        "powerHandlingPeak": 8000,
-        "sensitivity": 108,
-        "sensitivityRef": "1W/1m",
-        "crossoverPoints": [
-          {
-            "frequencyHz": 120,
-            "type": "active",
-            "slopeDBO": null
-          }
-        ],
-        "frequencyResponseMinus3dB": null,
-        "maxSPLContinuous": 138,
-        "maxSPLPeak": 144,
-        "crestFactorDB": 6,
-        "constantVoltage": null
-      },
-      "acoustic": {
-        "coverageH": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "coverageHMinus10dB": null,
-        "coverageV": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "conicalDispersion": null,
-        "driveUnits": []
-      },
-      "physical": {
-        "heightMM": 530,
-        "widthMM": 1085,
-        "depthMM": 780,
-        "diameterMM": null,
-        "cutoutDiameterMM": null,
-        "weightKg": 84,
-        "finishes": [
-          "Black paint"
-        ],
-        "connectors": [
-          "2 x Neutrik® NL4"
-        ],
-        "ipRating": null,
-        "certifications": null
-      },
-      "system": {
-        "activePassive": "passive",
-        "arrayable": false,
-        "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
-      },
-      "linkedAmpIds": [],
-      "linkedAccIds": [],
-      "meta": {
-        "dataSource": "https://martin-audio.com/products/subwoofers/b218",
-        "documents": [
-          {
-            "type": "spec-sheet",
-            "label": "Blackline3 Brochure [Eng]",
-            "url": "https://static.martin-audio.com/downloads/brochures/Blackline3-brochure.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Blackline3 Brochure [Chinese]",
-            "url": "https://static.martin-audio.com/downloads/brochures/Blackline3-brochure-chinese.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/B218datasheet.pdf"
-          },
-          {
-            "type": "drawing",
-            "label": "DWG",
-            "url": "https://martin-audio.com/downloads/drawings/dwgs/drawing-blackline-b218.dwg"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/VIA2502-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/VIA-Amplifier-User-Guide.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/VIA5002-datasheet.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/VIA5004-datasheet.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.4datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_4_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.6datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_6_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Products Catalogue",
-            "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
-          }
-        ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-b218.jpg",
         "notes": null
       }
     },
@@ -45959,334 +46138,6 @@ const SPEAKER_DATABASE = {
           }
         ],
         "imageFile": "images/speakers/martin-audio/martin-audio-d-15.jpg",
-        "notes": null
-      }
-    },
-    {
-      "id": "martin-audio-b218x",
-      "brand": "Martin Audio",
-      "model": "B218X",
-      "productLine": "ADORN",
-      "type": "subwoofer",
-      "application": {
-        "indoorOutdoor": "both",
-        "recommendedUse": []
-      },
-      "electrical": {
-        "impedance": 4,
-        "powerHandlingContinuous": 1600,
-        "powerHandlingProgram": null,
-        "powerHandlingPeak": 6400,
-        "sensitivity": 106,
-        "sensitivityRef": "1W/1m",
-        "crossoverPoints": [
-          {
-            "frequencyHz": 120,
-            "type": "active",
-            "slopeDBO": null
-          }
-        ],
-        "frequencyResponseMinus3dB": null,
-        "maxSPLContinuous": null,
-        "maxSPLPeak": 141,
-        "crestFactorDB": null,
-        "constantVoltage": null
-      },
-      "acoustic": {
-        "coverageH": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "coverageHMinus10dB": null,
-        "coverageV": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "conicalDispersion": null,
-        "driveUnits": []
-      },
-      "physical": {
-        "heightMM": 587,
-        "widthMM": 1049,
-        "depthMM": 727,
-        "diameterMM": null,
-        "cutoutDiameterMM": null,
-        "weightKg": 88,
-        "finishes": [
-          "Black textured paint"
-        ],
-        "connectors": [
-          "2 x NL4 type"
-        ],
-        "ipRating": null,
-        "certifications": null
-      },
-      "system": {
-        "activePassive": "passive",
-        "arrayable": false,
-        "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
-      },
-      "linkedAmpIds": [],
-      "linkedAccIds": [],
-      "meta": {
-        "dataSource": "https://martin-audio.com/products/subwoofers/b218x",
-        "documents": [
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/B218Xdatasheet.pdf"
-          },
-          {
-            "type": "drawing",
-            "label": "DWG",
-            "url": "https://martin-audio.com/downloads/drawings/dwgs/drawing-B218X.dwg"
-          },
-          {
-            "type": "drawing",
-            "label": "PDF",
-            "url": "https://martin-audio.com/downloads/drawings/pdfs/drawing-B218X.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/VIA5002-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/VIA-Amplifier-User-Guide.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/ik42-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/iK42_User_Guide_en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/ik81-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/iK81_User_Guide_en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.4datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_4_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.6datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_6_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx4.0-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX4.0-User-Guide.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Products Catalogue",
-            "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
-          }
-        ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-b218x.jpg",
-        "notes": null
-      }
-    },
-    {
-      "id": "martin-audio-b118x",
-      "brand": "Martin Audio",
-      "model": "B118X",
-      "productLine": "ADORN",
-      "type": "subwoofer",
-      "application": {
-        "indoorOutdoor": "both",
-        "recommendedUse": []
-      },
-      "electrical": {
-        "impedance": 8,
-        "powerHandlingContinuous": 800,
-        "powerHandlingProgram": null,
-        "powerHandlingPeak": null,
-        "sensitivity": 100,
-        "sensitivityRef": "2.83V/1m",
-        "crossoverPoints": [
-          {
-            "frequencyHz": 120,
-            "type": "active",
-            "slopeDBO": null
-          }
-        ],
-        "frequencyResponseMinus3dB": null,
-        "maxSPLContinuous": null,
-        "maxSPLPeak": 135,
-        "crestFactorDB": null,
-        "constantVoltage": null
-      },
-      "acoustic": {
-        "coverageH": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "coverageHMinus10dB": null,
-        "coverageV": {
-          "mode": "fixed",
-          "fixed": null,
-          "taperedNear": null,
-          "taperedFar": null,
-          "presets": [],
-          "notes": ""
-        },
-        "conicalDispersion": null,
-        "driveUnits": []
-      },
-      "physical": {
-        "heightMM": 662,
-        "widthMM": 537,
-        "depthMM": 640,
-        "diameterMM": null,
-        "cutoutDiameterMM": null,
-        "weightKg": 40.65,
-        "finishes": [],
-        "connectors": [
-          "2 x NL4 type"
-        ],
-        "ipRating": null,
-        "certifications": null
-      },
-      "system": {
-        "activePassive": "passive",
-        "arrayable": false,
-        "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
-      },
-      "linkedAmpIds": [],
-      "linkedAccIds": [],
-      "meta": {
-        "dataSource": "https://martin-audio.com/products/subwoofers/b118x",
-        "documents": [
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/B118Xdatasheet.pdf"
-          },
-          {
-            "type": "drawing",
-            "label": "DWG",
-            "url": "https://martin-audio.com/downloads/drawings/dwgs/drawing-b118x.dwg"
-          },
-          {
-            "type": "drawing",
-            "label": "PDF",
-            "url": "https://martin-audio.com/downloads/drawings/pdfs/drawing-B118X.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/VIA5002-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/VIA-Amplifier-User-Guide.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/ik42-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/iK42_User_Guide_en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/ik81-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/iK81_User_Guide_en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.4datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_4_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx0.6datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX0_6_User_Guide-en.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Datasheet",
-            "url": "https://martin-audio.com/downloads/datasheets/dx4.0-datasheet.pdf"
-          },
-          {
-            "type": "manual",
-            "label": "User Guide",
-            "url": "https://martin-audio.com/downloads/userguides/DX4.0-User-Guide.pdf"
-          },
-          {
-            "type": "spec-sheet",
-            "label": "Products Catalogue",
-            "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
-          }
-        ],
-        "imageFile": "images/speakers/martin-audio/adorn/martin-audio-b118x.jpg",
         "notes": null
       }
     },
@@ -64948,7 +64799,7 @@ const SPEAKER_DATABASE = {
       ]
     }
   ],
-  "lastUpdated": "2026-03-17"
+  "lastUpdated": "2026-03-23"
 };
 
 function normaliseCoverage(val) {
