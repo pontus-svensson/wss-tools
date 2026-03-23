@@ -958,7 +958,7 @@
 </footer>
 
 <!-- Load database -->
-<script src="speakers-db.js"></script>
+<script src="https://pontus-svensson.github.io/wss-tools/speakers-db.js"></script>
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────
 let db = [];
@@ -988,6 +988,9 @@ function setCrestCustom(val) {
 }
 
 
+// ── CONFIG ───────────────────────────────────────────────────────────
+const BASE_URL = 'https://pontus-svensson.github.io/wss-tools';
+
 // ── IMAGE & URL HELPERS ───────────────────────────────────────────────
 function slugify(str) {
   if (!str) return '';
@@ -1012,10 +1015,10 @@ function speakerImageCandidates(sp) {
   for (const ext of exts) {
     // 1. brand/series/id.ext
     for (const s of seriesSlugs) {
-      candidates.push(`images/speakers/${brand}/${s}/${id}.${ext}`);
+      candidates.push(`${BASE_URL}/images/speakers/${brand}/${s}/${id}.${ext}`);
     }
     // 2. brand/id.ext  (fallback for files sitting in brand root)
-    candidates.push(`images/speakers/${brand}/${id}.${ext}`);
+    candidates.push(`${BASE_URL}/images/speakers/${brand}/${id}.${ext}`);
   }
   return candidates;
 }
@@ -1049,8 +1052,8 @@ function speakerImagePath(sp) {
   const series = slugify(sp.productLine || '');
   const id     = sp.id;
   return series
-    ? `images/speakers/${brand}/${series}/${id}.webp`
-    : `images/speakers/${brand}/${id}.webp`;
+    ? `${BASE_URL}/images/speakers/${brand}/${series}/${id}.webp`
+    : `${BASE_URL}/images/speakers/${brand}/${id}.webp`;
 }
 
 async function resolveAndSwap(id) {
