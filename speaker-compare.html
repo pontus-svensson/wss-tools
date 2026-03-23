@@ -696,6 +696,65 @@
     font-style: italic;
   }
 
+
+  /* ── HALF SPACE CONTROL ── */
+  .halfspace-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+    border-left: 1px solid var(--gray-200);
+  }
+
+  .halfspace-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-family: 'Allotrope', 'Avenir', sans-serif;
+    font-size: 13px;
+    color: var(--black);
+    user-select: none;
+  }
+
+  .halfspace-label input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--black);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .halfspace-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    margin-left: 3px;
+  }
+
+  .halfspace-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SPL CONDITION BADGE ── */
+  .spl-condition {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 2px;
+    padding: 1px 6px;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+
   /* ── CREST FACTOR BAR ── */
   .crest-bar {
     background: var(--white);
@@ -925,6 +984,14 @@
   </div>
   <span class="crest-desc" id="crestDesc">SPL continuous + 6 dB = calculated peak</span>
 
+  <div class="halfspace-wrap">
+    <label class="halfspace-label">
+      <input type="checkbox" id="halfSpaceCheck" onchange="toggleHalfSpace(this)">
+      <span class="halfspace-text">Half space <span class="halfspace-sub">(subs only)</span></span>
+    </label>
+    <span class="halfspace-hint">+6 dB — boundary loading vs. free field</span>
+  </div>
+
   <div class="crest-legend">
     <button class="legend-toggle" onclick="this.nextElementSibling.classList.toggle('open')" title="Show crest factor reference">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.25" stroke="currentColor" stroke-width="1.5"/><path d="M6 5.5v3M6 3.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -963,6 +1030,7 @@
 let db = [];
 let selected = []; // array of speaker objects
 let crestFactor = 6; // dB
+let halfSpace = false; // +6 dB for subwoofers measured in half space
 
 function setCrest(val) {
   crestFactor = val;
@@ -1070,6 +1138,11 @@ async function resolveAndSwap(id) {
   } else {
     wrap.style.display = 'none';
   }
+}
+
+function toggleHalfSpace(checkbox) {
+  halfSpace = checkbox.checked;
+  renderTable();
 }
 
 function speakerProductUrl(sp) {
@@ -1269,6 +1342,21 @@ function renderTable() {
         content = `<span class="val-null">—</span>`;
       } else if (row.isTags) {
         content = `<div class="tag-list">${v.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('')}</div>`;
+      } else if (row.isHtml) {
+        const num = parseFloat(v);
+        const isNum = !isNaN(num) && nums.length > 1;
+        let bar = '';
+        let iconHtml = '';
+        if (isNum && !allSame) {
+          const isBest = (row.higherBetter !== false && num === maxNum) || (row.higherBetter === false && num === minNum);
+          const isWorst = (row.higherBetter !== false && num === minNum && minNum !== maxNum) || (row.higherBetter === false && num === maxNum && maxNum !== minNum);
+          const pct = maxNum === minNum ? 100 : Math.round(((num - minNum) / (maxNum - minNum)) * 100);
+          const barPct = row.higherBetter === false ? 100 - pct : pct;
+          bar = `<div class="bar-wrap"><div class="bar-fill ${isBest ? 'best-bar' : ''}" style="width:${barPct}%"></div></div>`;
+          if (isBest) iconHtml = `<span class="val-icon icon-best" title="Highest value"><svg width="6" height="6" viewBox="0 0 6 6" fill="none"><path d="M3 1L5.5 5H0.5L3 1Z" fill="white"/></svg></span>`;
+          else if (isWorst) iconHtml = `<span class="val-icon icon-worst" title="Lowest value"><svg width="6" height="6" viewBox="0 0 6 6" fill="none"><path d="M3 5L0.5 1H5.5L3 5Z" fill="#a8a8a2"/></svg></span>`;
+        }
+        content = `<span style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px"><span class="val">${v}</span>${iconHtml}</span>${bar}`;
       } else if (row.isIP) {
         content = fmtIPRating(v);
       } else {
@@ -1333,13 +1421,30 @@ function buildRows() {
 
     // ACOUSTIC
     { type: 'section', label: 'Acoustic' },
-    { label: 'Max SPL — Continuous', unit: 'dB', get: s => fmt(s.electrical?.maxSPLContinuous) },
-    { label: 'Max SPL — Peak (datasheet)', unit: 'dB', get: s => fmt(s.electrical?.maxSPLPeak) },
+    { label: 'Max SPL — Continuous', unit: 'dB', get: s => {
+      const val = parseFloat(s.electrical?.maxSPLContinuous);
+      if (isNaN(val)) return '—';
+      const isSub = s.type === 'subwoofer';
+      const offset = (isSub && halfSpace) ? 6 : 0;
+      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
+      return (val + offset).toFixed(1) + suffix;
+    }, isHtml: true },
+    { label: 'Max SPL — Peak (datasheet)', unit: 'dB', get: s => {
+      const val = parseFloat(s.electrical?.maxSPLPeak);
+      if (isNaN(val)) return '—';
+      const isSub = s.type === 'subwoofer';
+      const offset = (isSub && halfSpace) ? 6 : 0;
+      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
+      return (val + offset).toFixed(1) + suffix;
+    }, isHtml: true },
     { label: 'Max SPL — Calc. Peak', unit: 'dB', isCalc: true, get: s => {
       const cont = parseFloat(s.electrical?.maxSPLContinuous);
       if (isNaN(cont)) return '—';
-      return (cont + crestFactor).toFixed(1);
-    } },
+      const isSub = s.type === 'subwoofer';
+      const offset = (isSub && halfSpace) ? 6 : 0;
+      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
+      return (cont + crestFactor + offset).toFixed(1) + suffix;
+    }, isHtml: true },
     { label: 'Coverage H', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageH) },
     { label: 'Coverage V', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageV) },
     { label: 'Drive units', get: s => fmtDrivers(s.acoustic?.driveUnits) },
