@@ -742,6 +742,15 @@
   }
 
   /* ── SPL CONDITION BADGE ── */
+  .spl-cardioid {
+    background: none;
+    border-color: var(--gray-300, #ccc);
+    color: var(--gray-400);
+    font-style: italic;
+    cursor: help;
+  }
+
+
   .spl-condition {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
@@ -1005,7 +1014,7 @@
       <input type="checkbox" id="halfSpaceCheck" onchange="toggleHalfSpace(this)">
       <span class="halfspace-text">Half space <span class="halfspace-sub">(subs only)</span></span>
     </label>
-    <span class="halfspace-hint">+6 dB — boundary loading vs. free field</span>
+    <span class="halfspace-hint">+6 dB for omni subs only — boundary loading vs. free field</span>
   </div>
 
   <div class="crest-legend">
@@ -1024,7 +1033,8 @@
       <div class="legend-note">The calculated peak shows the instantaneous headroom implied by the datasheet continuous rating and the selected crest factor. It is not a guaranteed peak SPL capability.</div>
       <div class="legend-divider"></div>
       <div class="legend-title" style="margin-top:12px">Half space — boundary loading</div>
-      <div class="legend-halfspace">When a subwoofer is placed on the floor or against a wall, acoustic energy that would otherwise radiate into the rear hemisphere is reflected forward instead. This boundary loading effectively doubles the acoustic power in the forward half, adding <strong>+6 dB</strong> to both continuous and peak SPL compared to a free-field measurement. Most manufacturer SPL specs are measured in free field (anechoic or outdoors). Tick the half space box to compare subs as they would realistically perform on the floor of a venue.</div>
+      <div class="legend-halfspace">When a subwoofer is placed on the floor or against a wall, acoustic energy that would otherwise radiate into the rear hemisphere is reflected forward. This boundary loading effectively doubles the acoustic power in the forward half, adding <strong>+6 dB</strong> to both continuous and peak SPL compared to a free-field measurement. Most manufacturer SPL specs are measured in free field (anechoic or outdoors). Tick the half space box to compare omni subs as they would realistically perform on the floor of a venue.</div>
+      <div class="legend-halfspace" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--gray-100);"><strong>Cardioid subwoofers — half space does not apply.</strong> A cardioid sub intentionally cancels rear radiation using DSP delay or physical configuration. Because it already sacrifices output to the rear hemisphere to achieve directional control, placing it on the floor does not produce the clean +6 dB boundary gain that an omni sub would receive. The boundary interaction partially undermines the cardioid cancellation, and the net SPL gain is unpredictable without measurement. Cardioid subs in this tool are always shown at their free-field rated SPL, regardless of the half space setting.</div>
     </div>
   </div>
 </div>
@@ -1157,6 +1167,17 @@ async function resolveAndSwap(id) {
   } else {
     wrap.style.display = 'none';
   }
+}
+
+function isOmniSub(sp) {
+  if (sp.type !== 'subwoofer') return false;
+  // If field not yet set, assume omni (safe default)
+  const pattern = sp.acoustic?.subPattern;
+  return !pattern || pattern === 'omni';
+}
+
+function isCardioidSub(sp) {
+  return sp.type === 'subwoofer' && sp.acoustic?.subPattern === 'cardioid';
 }
 
 function toggleHalfSpace(checkbox) {
@@ -1443,26 +1464,32 @@ function buildRows() {
     { label: 'Max SPL — Continuous', unit: 'dB', get: s => {
       const val = parseFloat(s.electrical?.maxSPLContinuous);
       if (isNaN(val)) return '—';
-      const isSub = s.type === 'subwoofer';
-      const offset = (isSub && halfSpace) ? 6 : 0;
-      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
-      return (val + offset).toFixed(1) + suffix;
+      if (s.type !== 'subwoofer') return val.toFixed(1);
+      if (isCardioidSub(s)) {
+        return val.toFixed(1) + ' <span class="spl-condition spl-cardioid" title="Cardioid subs already sacrifice rear radiation for directional control. Half space loading does not apply uniformly — the +6 dB boundary gain is not valid for cardioid configurations.">cardioid — half space N/A</span>';
+      }
+      const offset = halfSpace ? 6 : 0;
+      return (val + offset).toFixed(1) + ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>`;
     }, isHtml: true },
     { label: 'Max SPL — Peak (datasheet)', unit: 'dB', get: s => {
       const val = parseFloat(s.electrical?.maxSPLPeak);
       if (isNaN(val)) return '—';
-      const isSub = s.type === 'subwoofer';
-      const offset = (isSub && halfSpace) ? 6 : 0;
-      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
-      return (val + offset).toFixed(1) + suffix;
+      if (s.type !== 'subwoofer') return val.toFixed(1);
+      if (isCardioidSub(s)) {
+        return val.toFixed(1) + ' <span class="spl-condition spl-cardioid" title="Cardioid subs already sacrifice rear radiation for directional control. Half space loading does not apply uniformly — the +6 dB boundary gain is not valid for cardioid configurations.">cardioid — half space N/A</span>';
+      }
+      const offset = halfSpace ? 6 : 0;
+      return (val + offset).toFixed(1) + ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>`;
     }, isHtml: true },
     { label: 'Max SPL — Calc. Peak', unit: 'dB', isCalc: true, get: s => {
       const cont = parseFloat(s.electrical?.maxSPLContinuous);
       if (isNaN(cont)) return '—';
-      const isSub = s.type === 'subwoofer';
-      const offset = (isSub && halfSpace) ? 6 : 0;
-      const suffix = isSub ? ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>` : '';
-      return (cont + crestFactor + offset).toFixed(1) + suffix;
+      if (s.type !== 'subwoofer') return (cont + crestFactor).toFixed(1);
+      if (isCardioidSub(s)) {
+        return (cont + crestFactor).toFixed(1) + ' <span class="spl-condition spl-cardioid" title="Cardioid subs already sacrifice rear radiation for directional control. Half space loading does not apply uniformly — the +6 dB boundary gain is not valid for cardioid configurations.">cardioid — half space N/A</span>';
+      }
+      const offset = halfSpace ? 6 : 0;
+      return (cont + crestFactor + offset).toFixed(1) + ` <span class="spl-condition">${halfSpace ? 'half space' : 'free field'}</span>`;
     }, isHtml: true },
     { label: 'Coverage H', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageH) },
     { label: 'Coverage V', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageV) },
@@ -1474,6 +1501,12 @@ function buildRows() {
     { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.widthMM ?? s.physical?.dimensions?.width) },
     { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.depthMM ?? s.physical?.dimensions?.depth) },
     { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weightKg ?? s.physical?.weight) },
+    { label: 'Sub pattern', get: s => {
+      if (s.type !== 'subwoofer') return '—';
+      const p = s.acoustic?.subPattern;
+      if (!p) return 'Omni (assumed)';
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    } },
     { label: 'Enclosure', get: s => s.physical?.enclosureType || '—' },
     { label: 'IP Rating', isIP: true, get: s => s.physical?.ipRating || '—' },
     { label: 'Colour options', get: s => (s.physical?.finishes || s.physical?.colors || []).join(', ') || '—' },
