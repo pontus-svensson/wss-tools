@@ -1,6 +1,6 @@
 /**
  * PRO AUDIO LOUDSPEAKER DATABASE
- * Schema: 1.1 | Exported: 2026-03-24T08:17:36.926Z
+ * Schema: 1.1 | Exported: 2026-03-24T08:19:56.398Z
  * Speakers: 473
  */
 const SPEAKER_DATABASE = {
@@ -42731,6 +42731,7 @@ const SPEAKER_DATABASE = {
         "sensitivityRef": "1W/1m",
         "crossoverPoints": [],
         "frequencyResponseMinus3dB": null,
+        "frequencyResponseMinus10dB": null,
         "maxSPLContinuous": null,
         "maxSPLPeak": 140,
         "crestFactorDB": null,
@@ -42740,20 +42741,22 @@ const SPEAKER_DATABASE = {
         "coverageH": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
-        "coverageHMinus10dB": null,
         "coverageV": {
           "mode": "fixed",
           "fixed": null,
+          "presets": [],
           "taperedNear": null,
           "taperedFar": null,
-          "presets": [],
           "notes": ""
         },
+        "dispersionPattern": null,
+        "subConfiguration": "cardioid",
+        "subCardioAngDeg": null,
         "conicalDispersion": null,
         "driveUnits": []
       },
@@ -42767,25 +42770,39 @@ const SPEAKER_DATABASE = {
         "finishes": [
           "Textured black paint"
         ],
+        "enclosureFinish": "Textured black paint",
         "connectors": [
           "2 x NL4"
         ],
+        "riggingPoints": null,
         "ipRating": null,
-        "certifications": null
+        "ipRatingCondition": null,
+        "flownCapable": false,
+        "groundStackable": false
       },
       "system": {
         "activePassive": "passive",
+        "crossoverModes": {
+          "passive": {
+            "supported": true
+          },
+          "active": {
+            "supported": false,
+            "sections": []
+          }
+        },
         "arrayable": false,
         "maxArrayElements": null,
-        "cabinetsPerAmpChannel": null,
-        "cabinetsPerAmpChannelMin": null,
-        "recommendedAmplifiers": []
+        "recommendedAmplifiers": [],
+        "compatibleProcessors": [],
+        "dspBuiltIn": false
       },
       "linkedAmpIds": [],
       "linkedAccIds": [
         "martin-audio-sxc118tc"
       ],
       "meta": {
+        "specVersion": "1.1",
         "dataSource": "https://martin-audio.com/products/subwoofers/sxc118",
         "documents": [
           {
@@ -42834,7 +42851,7 @@ const SPEAKER_DATABASE = {
             "url": "https://static.martin-audio.com/downloads/MartinAudioCatalogue.pdf"
           }
         ],
-        "imageFile": "images/speakers/martin-audio/sx/martin-audio-sxc118.jpg",
+        "msrpEUR": null,
         "notes": null
       }
     },
