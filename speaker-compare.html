@@ -1493,20 +1493,20 @@ function buildRows() {
     }, isHtml: true },
     { label: 'Coverage H', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageH) },
     { label: 'Coverage V', unit: '°', higherBetter: false, get: s => fmtCoverage(s.acoustic?.coverageV) },
-    { label: 'Drive units', get: s => fmtDrivers(s.acoustic?.driveUnits) },
-
-    // PHYSICAL
-    { type: 'section', label: 'Physical' },
-    { label: 'Height', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.heightMM ?? s.physical?.dimensions?.height) },
-    { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.widthMM ?? s.physical?.dimensions?.width) },
-    { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.depthMM ?? s.physical?.dimensions?.depth) },
-    { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weightKg ?? s.physical?.weight) },
     { label: 'Sub configuration', get: s => {
       if (s.type !== 'subwoofer') return '—';
       const cfg = s.acoustic?.subConfiguration;
       if (!cfg) return 'Omni (assumed)';
       return cfg.charAt(0).toUpperCase() + cfg.slice(1);
     } },
+
+    // PHYSICAL
+    { type: 'section', label: 'Physical' },
+    { label: 'Drive units', get: s => fmtDrivers(s.acoustic?.driveUnits) },
+    { label: 'Height', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.heightMM ?? s.physical?.dimensions?.height) },
+    { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.widthMM ?? s.physical?.dimensions?.width) },
+    { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.depthMM ?? s.physical?.dimensions?.depth) },
+    { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weightKg ?? s.physical?.weight) },
     { label: 'Enclosure', get: s => s.physical?.enclosureType || '—' },
     { label: 'IP Rating', isIP: true, get: s => s.physical?.ipRating || '—' },
     { label: 'Colour options', get: s => (s.physical?.finishes || s.physical?.colors || []).join(', ') || '—' },
