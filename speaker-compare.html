@@ -1172,12 +1172,12 @@ async function resolveAndSwap(id) {
 function isOmniSub(sp) {
   if (sp.type !== 'subwoofer') return false;
   // If field not yet set, assume omni (safe default)
-  const pattern = sp.acoustic?.subPattern;
-  return !pattern || pattern === 'omni';
+  const cfg = sp.acoustic?.subConfiguration;
+  return !cfg || cfg === 'omnidirectional';
 }
 
 function isCardioidSub(sp) {
-  return sp.type === 'subwoofer' && sp.acoustic?.subPattern === 'cardioid';
+  return sp.type === 'subwoofer' && sp.acoustic?.subConfiguration === 'cardioid';
 }
 
 function toggleHalfSpace(checkbox) {
@@ -1501,11 +1501,11 @@ function buildRows() {
     { label: 'Width', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.widthMM ?? s.physical?.dimensions?.width) },
     { label: 'Depth', unit: 'mm', higherBetter: false, get: s => fmt(s.physical?.depthMM ?? s.physical?.dimensions?.depth) },
     { label: 'Weight', unit: 'kg', higherBetter: false, get: s => fmt(s.physical?.weightKg ?? s.physical?.weight) },
-    { label: 'Sub pattern', get: s => {
+    { label: 'Sub configuration', get: s => {
       if (s.type !== 'subwoofer') return '—';
-      const p = s.acoustic?.subPattern;
-      if (!p) return 'Omni (assumed)';
-      return p.charAt(0).toUpperCase() + p.slice(1);
+      const cfg = s.acoustic?.subConfiguration;
+      if (!cfg) return 'Omni (assumed)';
+      return cfg.charAt(0).toUpperCase() + cfg.slice(1);
     } },
     { label: 'Enclosure', get: s => s.physical?.enclosureType || '—' },
     { label: 'IP Rating', isIP: true, get: s => s.physical?.ipRating || '—' },
