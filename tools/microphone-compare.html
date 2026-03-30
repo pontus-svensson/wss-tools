@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mikrofonsdatabas</title>
+<title>Microphone Database</title>
 <style>
 :root {
   --bg: #f9f9f7;
@@ -16,37 +16,23 @@
   --accent: #2563eb;
   --accent-bg: #eff6ff;
   --tag-bg: #f1f0ea;
-  --grid-line: rgba(0,0,0,0.07);
-  --polar-grid: rgba(0,0,0,0.08);
-  --freq-line: #e85d2a;
+  --c0: #2563eb; --c1: #10b981; --c2: #f59e0b; --c3: #ef4444;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #141414;
-    --surface: #1e1e1e;
-    --border: rgba(255,255,255,0.1);
-    --border-strong: rgba(255,255,255,0.18);
-    --text: #e8e8e4;
-    --text-muted: #8a8a86;
-    --text-faint: #555552;
-    --accent: #60a5fa;
-    --accent-bg: #1e2d44;
-    --tag-bg: #2a2a28;
-    --grid-line: rgba(255,255,255,0.07);
-    --polar-grid: rgba(255,255,255,0.09);
-    --freq-line: #f87c50;
+    --bg: #141414; --surface: #1e1e1e;
+    --border: rgba(255,255,255,0.1); --border-strong: rgba(255,255,255,0.18);
+    --text: #e8e8e4; --text-muted: #8a8a86; --text-faint: #555552;
+    --accent: #60a5fa; --accent-bg: #1e2d44; --tag-bg: #2a2a28;
   }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
-a { color: var(--accent); text-decoration: none; }
+body { font-family: -apple-system,'Helvetica Neue',Arial,sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
 
-/* Layout */
 .app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
 .sidebar { border-right: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .main { overflow-y: auto; padding: 1.5rem; }
 
-/* Sidebar */
 .sidebar-header { padding: 1rem 1rem 0.75rem; border-bottom: 1px solid var(--border); }
 .sidebar-header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
 .sidebar-header p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
@@ -59,23 +45,24 @@ a { color: var(--accent); text-decoration: none; }
 .mic-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
 .mic-item { padding: 8px 1rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; display: flex; align-items: center; gap: 8px; }
 .mic-item:hover { background: var(--tag-bg); }
-.mic-item.selected { border-left-color: var(--accent); background: var(--accent-bg); }
-.mic-item.compare { border-left-color: #10b981; background: rgba(16,185,129,0.06); }
+.mic-item.selected { border-left-color: var(--c0); background: var(--accent-bg); }
+.mic-item.compare-1 { border-left-color: var(--c1); background: rgba(16,185,129,0.06); }
+.mic-item.compare-2 { border-left-color: var(--c2); background: rgba(245,158,11,0.06); }
+.mic-item.compare-3 { border-left-color: var(--c3); background: rgba(239,68,68,0.06); }
 .mic-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .mic-item-info { flex: 1; min-width: 0; }
 .mic-item-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mic-item-sub { font-size: 11px; color: var(--text-muted); }
-.mic-item-cb { width: 14px; height: 14px; accent-color: #10b981; flex-shrink: 0; }
+.mic-item-cb { width: 14px; height: 14px; flex-shrink: 0; }
 
-/* Main sections */
 .section { margin-bottom: 2rem; }
-.section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+.section-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
 
 /* Spec table */
 .spec-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
 .spec-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .spec-table th { padding: 8px 12px; text-align: left; font-weight: 500; color: var(--text-muted); font-size: 11px; background: var(--tag-bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
-.spec-table th.mic-col { color: var(--text); font-size: 12px; }
+.spec-table th.mic-col { color: var(--text); font-size: 12px; font-weight: 600; }
 .spec-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .spec-table tr:last-child td { border-bottom: none; }
 .spec-table .row-label { color: var(--text-muted); font-size: 12px; }
@@ -86,7 +73,6 @@ a { color: var(--accent); text-decoration: none; }
 .badge-supercardioid { background: #ede9fe; color: #5b21b6; }
 .badge-omni { background: #d1fae5; color: #065f46; }
 .badge-widecardioid { background: #fef3c7; color: #92400e; }
-.badge-figure8 { background: #fee2e2; color: #991b1b; }
 @media (prefers-color-scheme: dark) {
   .badge-cardioid { background: #1e3a5f; color: #93c5fd; }
   .badge-supercardioid { background: #2e1e5f; color: #c4b5fd; }
@@ -94,30 +80,38 @@ a { color: var(--accent); text-decoration: none; }
   .badge-widecardioid { background: #451a03; color: #fcd34d; }
 }
 
-/* Diagrams row */
+/* Mic image cards */
+.mic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.mic-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.mic-card-img { width: 100%; height: 140px; object-fit: contain; background: var(--tag-bg); padding: 12px; display: block; }
+.mic-card-img-placeholder { width: 100%; height: 140px; background: var(--tag-bg); display: flex; align-items: center; justify-content: center; color: var(--text-faint); }
+.mic-card-footer { padding: 8px 10px; border-top: 1px solid var(--border); }
+.mic-card-name { font-size: 12px; font-weight: 600; }
+.mic-card-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.mic-card-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+/* Diagrams */
 .diagrams-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .diagram-card { border: 1px solid var(--border); border-radius: 10px; padding: 1rem; background: var(--surface); }
 .diagram-card h3 { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-.polar-wrap { display: grid; gap: 0.75rem; }
 
 /* Freq controls */
-.freq-controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 0.75rem; }
+.freq-controls { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 8px; }
 .slider-row { display: flex; align-items: center; gap: 8px; }
 .slider-row label { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
 .slider-row input[type=range] { flex: 1; }
-.freq-display { font-size: 13px; font-weight: 600; min-width: 52px; text-align: right; color: var(--accent); }
+.freq-display { font-size: 13px; font-weight: 700; min-width: 52px; text-align: right; }
 .freq-btns { display: flex; flex-wrap: wrap; gap: 4px; }
 .freq-btn { padding: 3px 8px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.1s; }
-.freq-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.freq-btn.active { color: #fff; border-color: transparent; }
 
-/* Polar canvas grid */
+/* Polar grid */
 .polar-grid { display: grid; gap: 0.5rem; }
 .polar-item { display: flex; flex-direction: column; align-items: center; }
-.polar-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+.polar-label { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
 canvas.polar-canvas { display: block; }
 
-/* Frequency response chart */
-.freqresp-wrap { position: relative; }
+/* Freq response */
 canvas.freqresp-canvas { width: 100%; display: block; }
 
 /* Noise calculator */
@@ -125,26 +119,18 @@ canvas.freqresp-canvas { width: 100%; display: block; }
 .noise-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
 .noise-field label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
 .noise-field select, .noise-field input { width: 100%; padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg); color: var(--text); font-size: 13px; }
-.noise-std-row { display: flex; gap: 4px; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.noise-presets { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 0.5rem; }
 .noise-preset { padding: 3px 8px; border: 1px solid var(--border-strong); border-radius: 20px; font-size: 11px; cursor: pointer; background: transparent; color: var(--text-muted); }
 .noise-preset:hover { border-color: var(--accent); color: var(--accent); }
-.noise-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
-.noise-result { background: var(--tag-bg); border-radius: 8px; padding: 0.75rem; }
-.noise-result-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-.noise-result-value { font-size: 18px; font-weight: 600; }
-.noise-result-unit { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 .noise-table-wrap { overflow-x: auto; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
 .noise-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .noise-table th, .noise-table td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--border); }
 .noise-table th:first-child, .noise-table td:first-child { text-align: left; }
 .noise-table th { color: var(--text-muted); font-weight: 500; font-size: 11px; }
-.noise-table tr.selected-row td { font-weight: 500; color: var(--accent); }
+.noise-table tr:last-child td { border-bottom: none; }
 
-/* Empty state */
 .empty { padding: 3rem 1rem; text-align: center; color: var(--text-muted); }
-.empty svg { opacity: 0.3; margin-bottom: 0.75rem; }
 
-/* Responsive */
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { position: relative; height: auto; }
@@ -156,79 +142,87 @@ canvas.freqresp-canvas { width: 100%; display: block; }
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <h1>Mikrofonsdatabas</h1>
-      <p id="mic-count">Laddar...</p>
+      <h1>Microphone Database</h1>
+      <p id="mic-count">Loading...</p>
     </div>
     <div class="search-wrap">
-      <input type="text" id="search" placeholder="Sök mikrofon..." autocomplete="off">
+      <input type="text" id="search" placeholder="Search microphones..." autocomplete="off">
     </div>
     <div class="filters" id="pattern-filters"></div>
     <div class="mic-list" id="mic-list"></div>
   </aside>
-
   <main class="main">
     <div id="content">
       <div class="empty">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        <p>Välj en mikrofon i listan för att se specifikationer och diagram.<br>Kryssa i flera för att jämföra.</p>
+        <p style="font-size:13px">Select a microphone to view specifications and diagrams.<br>Check the box next to multiple microphones to compare.</p>
       </div>
     </div>
   </main>
 </div>
 
-<script>
-// ============================================================
-// DATABASE (inline for single-file deployment)
-// ============================================================
-</script>
 <script src="../database/microphones_db.js"></script>
 <script>
-// ============================================================
-// APP STATE
-// ============================================================
+// ── constants ──────────────────────────────────────────────
 const POLAR_FREQS = [100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000];
-const QUICK_FREQS = [250,500,1000,2000,4000,8000,16000];
-const COLORS = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'];
-const PATTERN_LABELS = {cardioid:'Kardoid',supercardioid:'Superkardoid',omni:'Omni',widecardioid:'Breddkardoid','figure-8':'Åtta'};
+const QUICK_FREQS = [250,500,1000,2000,4000,8000];
+const COLORS = ['#2563eb','#10b981','#f59e0b','#ef4444'];
+const PATTERN_LABELS = {cardioid:'Cardioid',supercardioid:'Supercardioid',omni:'Omni',widecardioid:'Wide cardioid','figure-8':'Figure-8'};
+
+// image path: /images/microphones/<manufacturer>/<series>/<model>.jpg
+// We'll try jpg, fall back to placeholder
+function imgPath(m) {
+  const mfr = (m.manufacturer || '').toLowerCase().replace(/\s+/g, '-');
+  const series = (m.system || m.type || 'studio').toLowerCase().replace(/\s+/g, '-');
+  const model = (m.model || '').toLowerCase().replace(/\s+/g, '-');
+  return `/images/microphones/${mfr}/${series}/${model}.jpg`;
+}
+
+const MICS = Object.entries(MIC_DB).map(([name,m]) => ({...m, _name: name}));
 
 let state = {
-  selected: null,    // primary mic id
-  compare: [],       // array of mic ids for comparison (max 4)
-  freq: 1000,        // current polar freq
+  selected: null,
+  compare: [],
+  freq: 1000,
   noiseN: 1,
   noiseMode: 'IEC',
   search: '',
   patternFilter: 'all'
 };
 
-// Build flat array of mics
-const MICS = Object.entries(MIC_DB).map(([name, m]) => ({ ...m, _name: name }));
-
-// ============================================================
-// SIDEBAR
-// ============================================================
-function getPatterns() {
-  const p = new Set(MICS.map(m => m.pattern));
-  return ['all', ...p];
+// ── color helpers ───────────────────────────────────────────
+function micColor(id) {
+  const idx = activeMicIds().indexOf(id);
+  return idx >= 0 ? COLORS[idx] : null;
+}
+function activeMicIds() {
+  return [state.selected, ...state.compare].filter(Boolean);
+}
+function getActiveMics() {
+  return activeMicIds().map(id => MICS.find(m => m.id === id)).filter(Boolean);
+}
+function freqColor() {
+  // Match freq-display and polar labels to the current primary color
+  return COLORS[0];
 }
 
+// ── sidebar ─────────────────────────────────────────────────
 function buildSidebar() {
-  const filters = document.getElementById('pattern-filters');
-  getPatterns().forEach(p => {
+  const fil = document.getElementById('pattern-filters');
+  const patterns = ['all', ...new Set(MICS.map(m => m.pattern))];
+  patterns.forEach(p => {
     const btn = document.createElement('button');
-    btn.className = 'filter-chip' + (state.patternFilter === p ? ' active' : '');
-    btn.textContent = p === 'all' ? 'Alla' : (PATTERN_LABELS[p] || p);
+    btn.className = 'filter-chip' + (p === state.patternFilter ? ' active' : '');
+    btn.textContent = p === 'all' ? 'All' : (PATTERN_LABELS[p] || p);
     btn.onclick = () => { state.patternFilter = p; renderAll(); };
-    filters.appendChild(btn);
+    fil.appendChild(btn);
   });
-
   document.getElementById('search').oninput = e => { state.search = e.target.value.toLowerCase(); renderMicList(); };
 }
 
 function filteredMics() {
   return MICS.filter(m => {
     if (state.patternFilter !== 'all' && m.pattern !== state.patternFilter) return false;
-    if (state.search && !m._name.toLowerCase().includes(state.search) && !m.manufacturer.toLowerCase().includes(state.search)) return false;
+    if (state.search && !m._name.toLowerCase().includes(state.search) && !(m.manufacturer||'').toLowerCase().includes(state.search)) return false;
     return true;
   });
 }
@@ -236,29 +230,36 @@ function filteredMics() {
 function renderMicList() {
   const list = document.getElementById('mic-list');
   const mics = filteredMics();
-  document.getElementById('mic-count').textContent = `${mics.length} mikrofoner`;
+  document.getElementById('mic-count').textContent = `${mics.length} microphone${mics.length !== 1 ? 's' : ''}`;
   list.innerHTML = '';
 
-  mics.forEach((m, i) => {
+  mics.forEach(m => {
     const isSelected = state.selected === m.id;
-    const compareIdx = state.compare.indexOf(m.id);
-    const isCompare = compareIdx >= 0;
-    const color = isSelected ? COLORS[0] : isCompare ? COLORS[compareIdx + 1] : 'transparent';
+    const compIdx = state.compare.indexOf(m.id);
+    const isCompare = compIdx >= 0;
+    const colorIdx = isSelected ? 0 : isCompare ? compIdx + 1 : -1;
+    const color = colorIdx >= 0 ? COLORS[colorIdx] : 'transparent';
+    const borderColor = colorIdx >= 0 ? color : 'var(--border-strong)';
 
     const item = document.createElement('div');
-    item.className = 'mic-item' + (isSelected ? ' selected' : isCompare ? ' compare' : '');
+    let cls = 'mic-item';
+    if (isSelected) cls += ' selected';
+    else if (isCompare) cls += ` compare-${compIdx + 1}`;
+    item.className = cls;
+
     item.innerHTML = `
-      <div class="mic-dot" style="background:${color};border:1px solid ${color === 'transparent' ? 'var(--border-strong)' : color}"></div>
+      <div class="mic-dot" style="background:${color};border:1px solid ${borderColor}"></div>
       <div class="mic-item-info">
         <div class="mic-item-name">${m.manufacturer} ${m.model}</div>
-        <div class="mic-item-sub">${PATTERN_LABELS[m.pattern] || m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa</div>
+        <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa</div>
       </div>
-      <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''}>
+      <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''} style="accent-color:${COLORS[isCompare ? compIdx+1 : 1]}">
     `;
     item.querySelector('.mic-item-info').onclick = () => { state.selected = m.id; renderAll(); };
     item.querySelector('.mic-item-cb').onchange = e => {
       if (e.target.checked) {
-        if (!state.compare.includes(m.id) && state.compare.length < 4) state.compare.push(m.id);
+        if (!state.compare.includes(m.id) && state.compare.length < 3) state.compare.push(m.id);
+        else e.target.checked = false;
       } else {
         state.compare = state.compare.filter(id => id !== m.id);
       }
@@ -266,300 +267,236 @@ function renderMicList() {
     };
     list.appendChild(item);
   });
+
+  // re-sync filter chips
+  document.querySelectorAll('.filter-chip').forEach(btn => {
+    const p = btn.textContent === 'All' ? 'all' : Object.entries(PATTERN_LABELS).find(([k,v])=>v===btn.textContent)?.[0] || btn.textContent;
+    btn.classList.toggle('active', p === state.patternFilter);
+  });
 }
 
-// ============================================================
-// SPEC TABLE
-// ============================================================
+// ── spec table ──────────────────────────────────────────────
 const SPEC_ROWS = [
-  { key: 'pattern', label: 'Polarmönster', fmt: v => `<span class="spec-badge badge-${v}">${PATTERN_LABELS[v]||v}</span>`, compare: false },
-  { key: 'transducer', label: 'Princip', fmt: v => v === 'pressure_gradient' ? 'Tryckg.' : 'Tryck', compare: false },
-  { key: 'sensitivity_mV_Pa', label: 'Känslighet', fmt: v => `${v} mV/Pa`, unit: 'mV/Pa', higher_better: true },
-  { key: 'sensitivity_dBV_Pa', label: 'Känslighet', fmt: v => `${v} dBV/Pa`, unit: 'dBV/Pa', higher_better: true },
-  { key: 'noise_IEC_dBA', label: 'Egenbrus (IEC)', fmt: v => `${v} dB(A)`, unit: 'dB(A)', higher_better: false },
-  { key: 'noise_CCIR_dB', label: 'Egenbrus (CCIR)', fmt: v => `${v} dB`, unit: 'dB', higher_better: false },
-  { key: 'ein_IEC', label: 'EIN (IEC)', fmt: v => `${v.toFixed(1)} dB`, unit: 'dB', higher_better: false },
-  { key: 'ein_CCIR', label: 'EIN (CCIR)', fmt: v => `${v.toFixed(1)} dB`, unit: 'dB', higher_better: false },
-  { key: 'snr_A_dB', label: 'SNR (A-vägd)', fmt: v => `${v} dB`, unit: 'dB', higher_better: true },
-  { key: 'max_spl_dB', label: 'Max SPL', fmt: v => `${v} dB`, unit: 'dB', higher_better: true },
-  { key: 'dynamic_range_dB', label: 'Dynamikområde', fmt: v => `${v} dB`, unit: 'dB', higher_better: true },
-  { key: 'impedance_ohm', label: 'Utgångsimpedans', fmt: v => `${v} Ω`, compare: false },
-  { key: 'phantom', label: 'Phantom', fmt: v => v, compare: false },
-  { key: 'current_mA', label: 'Strömförbrukning', fmt: v => `${v} mA`, unit: 'mA', higher_better: false },
-  { key: 'weight_g', label: 'Vikt', fmt: v => `${v} g`, unit: 'g', higher_better: false },
-  { key: 'length_mm', label: 'Längd', fmt: (v, m) => m.length_with_preamp_mm ? `${v} mm (${m.length_with_preamp_mm} mm m. preamp)` : `${v} mm`, compare: false },
-  { key: 'diameter_mm', label: 'Diameter', fmt: v => `${v} mm`, compare: false },
-  { key: 'connector', label: 'Anslutning', fmt: v => v, compare: false },
-  { key: 'data_source', label: 'Datakvalitet', fmt: v => v === 'vector_pdf' ? 'Vektor-PDF' : 'Visuell avläsning', compare: false },
+  {key:'pattern',         label:'Polar pattern',          fmt: v=>`<span class="spec-badge badge-${v}">${PATTERN_LABELS[v]||v}</span>`, compare:false},
+  {key:'transducer',      label:'Principle',              fmt: v=>v==='pressure_gradient'?'Pressure gradient':'Pressure', compare:false},
+  {key:'sensitivity_mV_Pa', label:'Sensitivity',          fmt: v=>`${v} mV/Pa`,    higher_better:true},
+  {key:'sensitivity_dBV_Pa',label:'Sensitivity',          fmt: v=>`${v} dBV/Pa`,   higher_better:true},
+  {key:'noise_IEC_dBA',   label:'Self-noise (IEC)',        fmt: v=>`${v} dB(A)`,    higher_better:false},
+  {key:'noise_CCIR_dB',   label:'Self-noise (CCIR)',       fmt: v=>`${v} dB`,       higher_better:false},
+  {key:'ein_IEC',         label:'EIN (IEC)',               fmt: v=>`${v.toFixed(1)} dB`, higher_better:false},
+  {key:'ein_CCIR',        label:'EIN (CCIR)',              fmt: v=>`${v.toFixed(1)} dB`, higher_better:false},
+  {key:'snr_A_dB',        label:'SNR (A-weighted)',        fmt: v=>`${v} dB`,       higher_better:true},
+  {key:'max_spl_dB',      label:'Max SPL',                 fmt: v=>`${v} dB`,       higher_better:true},
+  {key:'dynamic_range_dB',label:'Dynamic range',           fmt: v=>`${v} dB`,       higher_better:true},
+  {key:'impedance_ohm',   label:'Output impedance',        fmt: v=>`${v} Ω`,        compare:false},
+  {key:'phantom',         label:'Phantom power',           fmt: v=>v,               compare:false},
+  {key:'current_mA',      label:'Current consumption',     fmt: v=>`${v} mA`,       higher_better:false},
+  {key:'weight_g',        label:'Weight',                  fmt: v=>`${v} g`,        higher_better:false},
+  {key:'length_mm',       label:'Length',                  fmt:(v,m)=>m.length_with_preamp_mm?`${v} mm (${m.length_with_preamp_mm} mm w/ preamp)`:`${v} mm`, compare:false},
+  {key:'diameter_mm',     label:'Diameter',                fmt: v=>`${v} mm`,       compare:false},
+  {key:'connector',       label:'Connector',               fmt: v=>v,               compare:false},
+  {key:'freq_range_hz',   label:'Frequency range',         fmt: v=>`${v[0]} Hz – ${v[1].toLocaleString()} Hz`, compare:false},
+  {key:'data_source',     label:'Data quality',            fmt: v=>v==='vector_pdf'?'Vector PDF':'Visual read', compare:false},
 ];
 
 function buildSpecTable(mics) {
-  if (!mics.length) return '<p style="color:var(--text-muted)">Ingen mikrofon vald.</p>';
-
-  let html = '<div class="spec-table-wrap"><table class="spec-table"><thead><tr><th>Specifikation</th>';
-  mics.forEach((m, i) => {
-    const color = COLORS[i];
-    html += `<th class="mic-col"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:5px"></span>${m.manufacturer} ${m.model}</th>`;
+  if (!mics.length) return '';
+  let html = '<div class="spec-table-wrap"><table class="spec-table"><thead><tr><th>Specification</th>';
+  mics.forEach((m,i) => {
+    html += `<th class="mic-col"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${COLORS[i]};margin-right:5px"></span>${m.manufacturer} ${m.model}</th>`;
   });
   html += '</tr></thead><tbody>';
 
   SPEC_ROWS.forEach(row => {
     const vals = mics.map(m => m[row.key]);
-    const hasData = vals.some(v => v !== undefined && v !== null);
-    if (!hasData) return;
-
+    if (!vals.some(v => v !== undefined && v !== null)) return;
     html += `<tr><td class="row-label">${row.label}</td>`;
-    vals.forEach((v, i) => {
+    vals.forEach((v,i) => {
       if (v === undefined || v === null) { html += '<td>—</td>'; return; }
       let cls = '';
       if (mics.length > 1 && row.higher_better !== undefined) {
-        const nums = vals.filter(x => x !== undefined && x !== null).map(Number);
-        const best = row.higher_better ? Math.max(...nums) : Math.min(...nums);
+        const nums = vals.filter(x=>x!=null).map(Number);
+        const best  = row.higher_better ? Math.max(...nums) : Math.min(...nums);
         const worst = row.higher_better ? Math.min(...nums) : Math.max(...nums);
-        if (Number(v) === best && nums.filter(n => n === best).length === 1) cls = ' class="best"';
-        else if (Number(v) === worst && nums.filter(n => n === worst).length === 1) cls = ' class="worst"';
+        if (nums.filter(n=>n===best).length===1  && Number(v)===best)  cls=' class="best"';
+        if (nums.filter(n=>n===worst).length===1 && Number(v)===worst) cls=' class="worst"';
       }
       html += `<td${cls}>${row.fmt(v, mics[i])}</td>`;
     });
     html += '</tr>';
   });
-
   html += '</tbody></table></div>';
   return html;
 }
 
-// ============================================================
-// POLAR DIAGRAM
-// ============================================================
-function drawPolar(canvas, micsData, freqHz) {
+// ── polar diagram ───────────────────────────────────────────
+function drawPolar(canvas, mic, freqHz, color) {
   const dpr = window.devicePixelRatio || 1;
   const size = canvas.offsetWidth || 200;
   canvas.width = size * dpr; canvas.height = size * dpr;
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
-  const cx = size / 2, cy = size / 2, maxR = size * 0.40;
+  const cx = size/2, cy = size/2, maxR = size*0.40;
   const dark = matchMedia('(prefers-color-scheme:dark)').matches;
   const gc = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
   const tc = dark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.36)';
-
-  ctx.clearRect(0, 0, size, size);
-
-  // Determine scale (most mics 0-24dB, some 0-20dB)
   const DB_MAX = 24;
 
-  // Grid rings
-  [0, 6, 12, 18, 24].forEach(db => {
-    const r = maxR * (1 - db / DB_MAX);
-    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clearRect(0,0,size,size);
+  [0,6,12,18,24].forEach(db => {
+    const r = maxR*(1-db/DB_MAX);
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
     ctx.strokeStyle = gc; ctx.lineWidth = 0.5; ctx.stroke();
     if (db > 0) {
-      ctx.font = `${Math.round(size * 0.048)}px -apple-system,sans-serif`;
+      ctx.font = `${Math.round(size*0.048)}px -apple-system,sans-serif`;
       ctx.fillStyle = tc; ctx.textAlign = 'center';
-      ctx.fillText('-' + db, cx + r * 0.07, cy - r + size * 0.04);
+      ctx.fillText('-'+db, cx+r*0.07, cy-r+size*0.04);
     }
   });
-
-  // Axes
   [0,30,60,90,120,150].forEach(deg => {
-    const rad = (deg - 90) * Math.PI / 180;
+    const rad = (deg-90)*Math.PI/180;
     ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(rad) * maxR * 1.03, cy + Math.sin(rad) * maxR * 1.03);
-    ctx.lineTo(cx - Math.cos(rad) * maxR * 1.03, cy - Math.sin(rad) * maxR * 1.03);
+    ctx.moveTo(cx+Math.cos(rad)*maxR*1.03, cy+Math.sin(rad)*maxR*1.03);
+    ctx.lineTo(cx-Math.cos(rad)*maxR*1.03, cy-Math.sin(rad)*maxR*1.03);
     ctx.strokeStyle = gc; ctx.lineWidth = 0.5; ctx.stroke();
-    const lbs = {0:'0°',30:'30°',60:'60°',90:'90°',120:'120°',150:'150°'};
-    const opp = {0:'180°',30:'210°',60:'240°',90:'270°',120:'300°',150:'330°'};
-    const fs = Math.round(size * 0.048);
+    const lbs={0:'0°',30:'30°',60:'60°',90:'90°',120:'120°',150:'150°'};
+    const opp={0:'180°',30:'210°',60:'240°',90:'270°',120:'300°',150:'330°'};
+    const fs = Math.round(size*0.048);
     ctx.font = `${fs}px -apple-system,sans-serif`;
     ctx.fillStyle = tc; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
-    ctx.fillText(lbs[deg], cx + Math.cos(rad) * (maxR + size*0.07), cy + Math.sin(rad) * (maxR + size*0.07));
-    ctx.fillText(opp[deg], cx - Math.cos(rad) * (maxR + size*0.07), cy - Math.sin(rad) * (maxR + size*0.07));
+    ctx.fillText(lbs[deg], cx+Math.cos(rad)*(maxR+size*0.07), cy+Math.sin(rad)*(maxR+size*0.07));
+    ctx.fillText(opp[deg], cx-Math.cos(rad)*(maxR+size*0.07), cy-Math.sin(rad)*(maxR+size*0.07));
   });
 
-  // Find nearest available freq
-  function nearestFreq(pd, hz) {
-    const keys = Object.keys(pd).map(Number).sort((a,b)=>a-b);
-    return keys.reduce((best, k) => Math.abs(k-hz) < Math.abs(best-hz) ? k : best, keys[0]);
+  if (!mic || !mic.polar_data) return;
+  const keys = Object.keys(mic.polar_data).map(Number).sort((a,b)=>a-b);
+  const freq = keys.reduce((b,k) => Math.abs(k-freqHz)<Math.abs(b-freqHz)?k:b, keys[0]);
+  const vals = mic.polar_data[String(freq)];
+  if (!vals) return;
+
+  ctx.beginPath();
+  for (let deg=0; deg<=360; deg++) {
+    const tDeg = deg<=180 ? deg : 360-deg;
+    const idx = tDeg/5;
+    const lo = Math.floor(idx), hi = Math.min(Math.ceil(idx),36);
+    const atten = vals[lo] + (idx-lo)*(vals[hi]-vals[lo]);
+    const r = maxR*Math.max(0, 1-atten/DB_MAX);
+    const rad = (deg-90)*Math.PI/180;
+    deg===0 ? ctx.moveTo(cx+Math.cos(rad)*r, cy+Math.sin(rad)*r)
+             : ctx.lineTo(cx+Math.cos(rad)*r, cy+Math.sin(rad)*r);
   }
-
-  // Draw curves
-  micsData.forEach((m, i) => {
-    if (!m || !m.polar_data) return;
-    const freq = nearestFreq(m.polar_data, freqHz);
-    const vals = m.polar_data[String(freq)];
-    if (!vals) return;
-    const color = COLORS[i];
-
-    ctx.beginPath();
-    for (let deg = 0; deg <= 360; deg++) {
-      const tDeg = deg <= 180 ? deg : 360 - deg;
-      const idx = tDeg / 5;
-      const lo = Math.floor(idx), hi = Math.min(Math.ceil(idx), 36);
-      const frac = idx - lo;
-      const atten = vals[lo] + frac * (vals[hi] - vals[lo]);
-      const level = Math.max(0, 1 - atten / DB_MAX);
-      const r = maxR * level;
-      const rad = (deg - 90) * Math.PI / 180;
-      const x = cx + Math.cos(rad) * r, y = cy + Math.sin(rad) * r;
-      deg === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
-  });
+  ctx.closePath();
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
 }
 
-// ============================================================
-// FREQUENCY RESPONSE CHART
-// ============================================================
-function drawFreqResp(canvas, micsData, markerHz) {
-  const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || 400, H = canvas.offsetHeight || 200;
-  canvas.width = W * dpr; canvas.height = H * dpr;
+// ── freq response chart ─────────────────────────────────────
+function drawFreqResp(canvas, mics, markerHz) {
+  const dpr = window.devicePixelRatio||1;
+  const W = canvas.offsetWidth||400, H = 220;
+  canvas.width = W*dpr; canvas.height = H*dpr;
   const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
+  ctx.scale(dpr,dpr);
   const dark = matchMedia('(prefers-color-scheme:dark)').matches;
   const gc = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
   const tc = dark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.38)';
+  ctx.clearRect(0,0,W,H);
 
-  ctx.clearRect(0, 0, W, H);
+  const pad={l:36,r:12,t:12,b:28};
+  const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+  const DB_MIN=-30, DB_MAX=12;
+  const xHz = hz => pad.l + Math.log10(hz/20)/Math.log10(20000/20)*cw;
+  const yDb = db => pad.t + (DB_MAX-db)/(DB_MAX-DB_MIN)*ch;
 
-  const pad = { l: 36, r: 12, t: 12, b: 28 };
-  const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
-  const DB_MIN = -30, DB_MAX = 12;
-
-  function xForHz(hz) {
-    return pad.l + Math.log10(hz / 20) / Math.log10(20000 / 20) * cw;
-  }
-  function yForDb(db) {
-    return pad.t + (DB_MAX - db) / (DB_MAX - DB_MIN) * ch;
-  }
-
-  // Grid dB lines
+  // dB grid
   [-30,-20,-10,0,10].forEach(db => {
-    const y = yForDb(db);
-    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y);
-    ctx.strokeStyle = db === 0 ? (dark?'rgba(255,255,255,0.2)':'rgba(0,0,0,0.15)') : gc;
-    ctx.lineWidth = db === 0 ? 1 : 0.5; ctx.stroke();
-    ctx.font = `10px -apple-system,sans-serif`; ctx.fillStyle = tc; ctx.textAlign = 'right';
-    ctx.fillText(db + 'dB', pad.l - 4, y + 3.5);
+    const y=yDb(db);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+cw,y);
+    ctx.strokeStyle = db===0?(dark?'rgba(255,255,255,0.2)':'rgba(0,0,0,0.15)'):gc;
+    ctx.lineWidth = db===0?1:0.5; ctx.stroke();
+    ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=tc; ctx.textAlign='right';
+    ctx.fillText(db+'dB', pad.l-4, y+3.5);
   });
-
-  // Grid Hz lines
+  // Hz grid
   [20,50,100,200,500,1000,2000,5000,10000,20000].forEach(hz => {
-    const x = xForHz(hz);
-    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch);
-    ctx.strokeStyle = gc; ctx.lineWidth = 0.5; ctx.stroke();
-    const labels = {20:'20',100:'100',1000:'1k',10000:'10k',20000:'20k'};
-    if (labels[hz]) {
-      ctx.font = '10px -apple-system,sans-serif'; ctx.fillStyle = tc; ctx.textAlign = 'center';
-      ctx.fillText(labels[hz], x, pad.t + ch + 16);
-    }
+    const x=xHz(hz);
+    ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,pad.t+ch);
+    ctx.strokeStyle=gc; ctx.lineWidth=0.5; ctx.stroke();
+    const lbl={20:'20',100:'100',1000:'1k',10000:'10k',20000:'20k'}[hz];
+    if(lbl){ctx.font='10px -apple-system,sans-serif';ctx.fillStyle=tc;ctx.textAlign='center';ctx.fillText(lbl,x,pad.t+ch+16);}
   });
+  ctx.font='10px -apple-system,sans-serif';ctx.fillStyle=tc;ctx.textAlign='center';
+  ctx.fillText('Hz',pad.l+cw/2,H-4);
 
-  // Hz label
-  ctx.font = '10px -apple-system,sans-serif'; ctx.fillStyle = tc; ctx.textAlign = 'center';
-  ctx.fillText('Hz', pad.l + cw / 2, H - 4);
-
-  // Draw curves
-  micsData.forEach((m, mi) => {
-    if (!m || !m.freq_response) return;
+  // curves
+  mics.forEach((m,mi) => {
+    if(!m||!m.freq_response) return;
     const color = COLORS[mi];
-
-    ['0deg', '180deg'].forEach((ang, ai) => {
-      const fr = m.freq_response[ang];
-      if (!fr) return;
-      const pts = Object.entries(fr).map(([hz, db]) => [Number(hz), db]).sort((a,b)=>a[0]-b[0]);
-      if (!pts.length) return;
-
+    ['0deg','180deg'].forEach((ang,ai) => {
+      const fr = m.freq_response[ang]; if(!fr) return;
+      const pts = Object.entries(fr).map(([h,d])=>[+h,d]).sort((a,b)=>a[0]-b[0]).filter(p=>p[0]>=10&&p[0]<=25000);
+      if(!pts.length) return;
       ctx.beginPath();
-      pts.forEach(([hz, db], i) => {
-        if (hz < 10 || hz > 25000) return;
-        const x = xForHz(hz), y = yForDb(db);
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      });
-      ctx.strokeStyle = color;
-      ctx.lineWidth = ai === 0 ? 1.8 : 1;
-      ctx.setLineDash(ai === 0 ? [] : [4, 3]);
-      ctx.stroke();
-      ctx.setLineDash([]);
+      pts.forEach(([hz,db],i) => { const x=xHz(hz),y=yDb(db); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+      ctx.strokeStyle=color; ctx.lineWidth=ai===0?1.8:1;
+      ctx.setLineDash(ai===0?[]:[4,3]); ctx.stroke(); ctx.setLineDash([]);
     });
   });
 
-  // Frequency marker line
-  if (markerHz >= 20 && markerHz <= 20000) {
-    const x = xForHz(markerHz);
-    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch);
-    ctx.strokeStyle = dark ? '#f87c50' : '#e85d2a';
-    ctx.lineWidth = 1.5; ctx.setLineDash([3, 2]); ctx.stroke(); ctx.setLineDash([]);
-
-    // Freq label
-    const label = markerHz >= 1000 ? (markerHz/1000).toFixed(markerHz%1000===0?0:1)+' kHz' : markerHz+' Hz';
-    ctx.font = '10px -apple-system,sans-serif';
-    ctx.fillStyle = dark ? '#f87c50' : '#e85d2a';
-    const lx = Math.min(x + 3, pad.l + cw - 30);
-    ctx.textAlign = 'left';
-    ctx.fillText(label, lx, pad.t + 12);
+  // freq marker — color matches freq-display and polar labels (COLORS[0] of selected)
+  if(markerHz>=20&&markerHz<=20000){
+    const x=xHz(markerHz);
+    ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,pad.t+ch);
+    ctx.strokeStyle=COLORS[0]; ctx.lineWidth=1.5; ctx.setLineDash([3,2]); ctx.stroke(); ctx.setLineDash([]);
+    const lbl=markerHz>=1000?(markerHz/1000).toFixed(markerHz%1000===0?0:1)+' kHz':markerHz+' Hz';
+    ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=COLORS[0]; ctx.textAlign='left';
+    ctx.fillText(lbl, Math.min(x+3, pad.l+cw-30), pad.t+12);
   }
 
-  // Legend (solid=0°, dashed=180°)
-  let lx = pad.l + 4;
-  const ly = pad.t + ch - 6;
-  ctx.font = '10px -apple-system,sans-serif'; ctx.textBaseline = 'middle';
-  ['— 0°', '- - 180°'].forEach((lbl, i) => {
-    ctx.fillStyle = tc; ctx.textAlign = 'left';
-    ctx.fillText(lbl, lx, ly);
-    lx += ctx.measureText(lbl).width + 12;
-  });
+  // legend
+  ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=tc; ctx.textAlign='left';
+  ctx.fillText('— 0°    - - 180°', pad.l+4, pad.t+ch-6);
 }
 
-// ============================================================
-// NOISE CALCULATOR
-// ============================================================
+// ── noise calculator ────────────────────────────────────────
 const PRESETS = [
-  { name: 'Mono', n: 1 },
-  { name: 'AB/XY', n: 2 },
-  { name: 'ORTF', n: 2 },
-  { name: 'Decca Tree', n: 3 },
-  { name: 'Decca+Outriggers', n: 5 },
-  { name: 'Surround 5.1', n: 6 },
-  { name: 'Orkester-array', n: 8 },
+  {name:'Mono',n:1},{name:'AB / XY',n:2},{name:'ORTF',n:2},
+  {name:'Decca Tree',n:3},{name:'Decca + outriggers',n:5},
+  {name:'Surround 5.1',n:6},{name:'Orchestra array',n:8},
 ];
 
 function calcNoise(mic, n, mode) {
-  const sens_dBV = mic.sensitivity_dBV_Pa;
-  const noise = mode === 'IEC' ? mic.noise_IEC_dBA : mic.noise_CCIR_dB;
-  const ein = noise - sens_dBV;
-  const total_ein = 10 * Math.log10(Math.pow(10, ein / 10) * n);
-  return { ein: ein.toFixed(1), total_ein: total_ein.toFixed(1), noise, sens_dBV: sens_dBV.toFixed(2) };
+  const s = mic.sensitivity_dBV_Pa;
+  const noise = mode==='IEC' ? mic.noise_IEC_dBA : mic.noise_CCIR_dB;
+  const ein = noise - s;
+  const total = 10*Math.log10(Math.pow(10,ein/10)*n);
+  return {ein:ein.toFixed(1), total:total.toFixed(1), noise, sens:s.toFixed(2)};
 }
 
-function buildNoiseCalc(mics) {
-  const allMics = MICS;
+function buildNoiseCalc() {
   return `
   <div class="noise-calc">
     <div class="noise-inputs">
       <div class="noise-field">
-        <label>Brusstandard</label>
+        <label>Noise standard</label>
         <select id="noise-mode" onchange="updateNoise()">
-          <option value="IEC" ${state.noiseMode==='IEC'?'selected':''}>IEC 268-4 (dBA) — default</option>
+          <option value="IEC" ${state.noiseMode==='IEC'?'selected':''}>IEC 268-4 dB(A) — default</option>
           <option value="CCIR" ${state.noiseMode==='CCIR'?'selected':''}>CCIR 468-4</option>
         </select>
       </div>
       <div class="noise-field">
-        <label>Antal mikrofoner (N)</label>
-        <input type="number" id="noise-n" value="${state.noiseN}" min="1" max="32" onchange="updateNoise()">
+        <label>Number of microphones (N)</label>
+        <input type="number" id="noise-n" value="${state.noiseN}" min="1" max="64" onchange="updateNoise()">
       </div>
     </div>
-    <div class="noise-std-row" id="noise-presets">
-      ${PRESETS.map(p => `<button class="noise-preset" onclick="setNoisePreset(${p.n})">${p.name} (${p.n})</button>`).join('')}
-    </div>
+    <div class="noise-presets">${PRESETS.map(p=>`<button class="noise-preset" onclick="setPreset(${p.n})">${p.name} (${p.n})</button>`).join('')}</div>
     <div class="noise-table-wrap">
-      <table class="noise-table" id="noise-table">
+      <table class="noise-table">
         <thead><tr>
-          <th>Mikrofon</th>
-          <th>Känslighet</th>
-          <th>Egenbrus</th>
+          <th>Microphone</th>
+          <th>Sensitivity</th>
+          <th>Self-noise</th>
           <th>EIN (1 mic)</th>
-          <th>EIN (N=${state.noiseN})</th>
+          <th id="noise-th-n">EIN (N=${state.noiseN})</th>
         </tr></thead>
         <tbody id="noise-tbody"></tbody>
       </table>
@@ -567,226 +504,185 @@ function buildNoiseCalc(mics) {
   </div>`;
 }
 
-function updateNoise() {
-  state.noiseMode = document.getElementById('noise-mode').value;
-  state.noiseN = parseInt(document.getElementById('noise-n').value) || 1;
-  renderNoiseTable();
-}
-
-function setNoisePreset(n) {
-  state.noiseN = n;
-  const el = document.getElementById('noise-n');
-  if (el) el.value = n;
-  renderNoiseTable();
-}
-
 function renderNoiseTable() {
-  const tbody = document.getElementById('noise-tbody');
-  if (!tbody) return;
+  const tbody = document.getElementById('noise-tbody'); if(!tbody) return;
+  const th = document.getElementById('noise-th-n'); if(th) th.textContent=`EIN (N=${state.noiseN})`;
+  const mics = getActiveMics();
+  if(!mics.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:1rem">Select microphones to compare noise performance</td></tr>';return;}
 
-  const allMics = MICS;
-  const activeMicIds = [state.selected, ...state.compare].filter(Boolean);
-
-  const rows = allMics.map(m => {
-    const r = calcNoise(m, state.noiseN, state.noiseMode);
-    return { m, ...r };
-  }).sort((a, b) => parseFloat(a.total_ein) - parseFloat(b.total_ein));
-
-  tbody.innerHTML = rows.map(r => {
-    const isActive = activeMicIds.includes(r.m.id);
-    const idx = [state.selected, ...state.compare].indexOf(r.m.id);
-    const color = idx >= 0 ? COLORS[idx] : null;
-    const dot = color ? `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${color};margin-right:5px"></span>` : '';
-    return `<tr class="${isActive ? 'selected-row' : ''}">
-      <td>${dot}${r.m.manufacturer} ${r.m.model}</td>
-      <td>${r.sens_dBV} dBV/Pa</td>
-      <td>${r.noise} ${state.noiseMode === 'IEC' ? 'dB(A)' : 'dB'}</td>
+  const rows = mics.map((m,i)=>({m,i,...calcNoise(m,state.noiseN,state.noiseMode)}));
+  rows.sort((a,b)=>parseFloat(a.total)-parseFloat(b.total));
+  tbody.innerHTML = rows.map(r=>`
+    <tr>
+      <td><span class="mic-card-dot" style="background:${COLORS[r.i]}"></span>${r.m.manufacturer} ${r.m.model}</td>
+      <td>${r.sens} dBV/Pa</td>
+      <td>${r.noise} ${state.noiseMode==='IEC'?'dB(A)':'dB'}</td>
       <td>${r.ein} dB</td>
-      <td>${r.total_ein} dB</td>
-    </tr>`;
-  }).join('');
-
-  // Update header
-  const th = document.querySelector('#noise-table thead tr th:last-child');
-  if (th) th.textContent = `EIN (N=${state.noiseN})`;
+      <td>${r.total} dB</td>
+    </tr>`).join('');
 }
 
-// ============================================================
-// MAIN RENDER
-// ============================================================
+// ── main render ─────────────────────────────────────────────
 function renderAll() {
   renderMicList();
   renderContent();
-  // Re-apply filters
-  document.querySelectorAll('.filter-chip').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === (state.patternFilter === 'all' ? 'Alla' : (PATTERN_LABELS[state.patternFilter] || state.patternFilter)));
-  });
-}
-
-function getActiveMics() {
-  const result = [];
-  if (state.selected) {
-    const m = MICS.find(m => m.id === state.selected);
-    if (m) result.push(m);
-  }
-  state.compare.forEach(id => {
-    const m = MICS.find(m => m.id === id);
-    if (m && !result.find(r => r.id === id)) result.push(m);
-  });
-  return result;
 }
 
 function renderContent() {
   const content = document.getElementById('content');
   const mics = getActiveMics();
 
-  if (!mics.length) {
-    content.innerHTML = `<div class="empty">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      <p>Välj en mikrofon i listan för att se specifikationer och diagram.<br>Kryssa i flera för att jämföra.</p>
-    </div>`;
+  if(!mics.length){
+    content.innerHTML='<div class="empty"><p style="font-size:13px">Select a microphone to view specifications and diagrams.<br>Check the box next to multiple microphones to compare.</p></div>';
     return;
   }
 
-  const freqLabel = state.freq >= 1000 ? (state.freq/1000).toFixed(state.freq%1000===0?0:1)+' kHz' : state.freq+' Hz';
-  const colsPerRow = Math.min(mics.length, 4);
+  const freqLabel = fmtFreq(state.freq);
+  const cols = Math.min(mics.length,4);
+
+  // mic image cards
+  const imgCards = mics.map((m,i) => `
+    <div class="mic-card">
+      <img class="mic-card-img" src="${imgPath(m)}" alt="${m.manufacturer} ${m.model}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="mic-card-img-placeholder" style="display:none">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".4"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="mic-card-footer">
+        <div class="mic-card-name"><span class="mic-card-dot" style="background:${COLORS[i]}"></span>${m.manufacturer} ${m.model}</div>
+        <div class="mic-card-sub">${PATTERN_LABELS[m.pattern]||m.pattern}</div>
+      </div>
+    </div>`).join('');
 
   content.innerHTML = `
     <div class="section">
-      <div class="section-title">Specifikationer</div>
+      <div class="mic-cards">${imgCards}</div>
+      <div class="section-title">Specifications</div>
       ${buildSpecTable(mics)}
     </div>
 
     <div class="section">
-      <div class="section-title">Polärdiagram & Frekvensrespons</div>
+      <div class="section-title">Polar diagram &amp; frequency response</div>
       <div class="freq-controls">
         <div class="slider-row">
-          <label>Frekvens</label>
-          <input type="range" id="freq-slider" min="0" max="${POLAR_FREQS.length-1}" value="${POLAR_FREQS.indexOf(state.freq) >= 0 ? POLAR_FREQS.indexOf(state.freq) : 10}" step="1">
-          <span class="freq-display" id="freq-label">${freqLabel}</span>
+          <label>Frequency</label>
+          <input type="range" id="freq-slider" min="0" max="${POLAR_FREQS.length-1}" value="${Math.max(0,POLAR_FREQS.indexOf(state.freq))}" step="1">
+          <span class="freq-display" id="freq-label" style="color:${COLORS[0]}">${freqLabel}</span>
         </div>
-        <div class="freq-btns">
-          ${QUICK_FREQS.map(f => `<button class="freq-btn${f===state.freq?' active':''}" onclick="setFreq(${f})">${f>=1000?f/1000+'kHz':f+'Hz'}</button>`).join('')}
+        <div class="freq-btns" id="freq-btns">
+          ${QUICK_FREQS.map(f=>`<button class="freq-btn${f===state.freq?' active':''}" style="${f===state.freq?`background:${COLORS[0]};color:#fff`:''}" onclick="setFreq(${f})">${fmtFreq(f)}</button>`).join('')}
         </div>
       </div>
       <div class="diagrams-row">
         <div class="diagram-card">
-          <h3>Polärdiagram — ${freqLabel}</h3>
-          <div class="polar-grid" id="polar-grid" style="grid-template-columns:repeat(${colsPerRow},1fr)">
-          </div>
+          <h3>Polar diagram — <span id="polar-title-freq" style="color:${COLORS[0]}">${freqLabel}</span></h3>
+          <div class="polar-grid" id="polar-grid" style="grid-template-columns:repeat(${cols},1fr)"></div>
         </div>
         <div class="diagram-card">
-          <h3>Frekvensrespons <span style="color:var(--text-faint);font-weight:400">— 0° och 180°</span></h3>
-          <div class="freqresp-wrap">
-            <canvas class="freqresp-canvas" id="freqresp-canvas" style="height:220px"></canvas>
-          </div>
-          <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">Heldragen = 0° · Streckad = 180°</div>
+          <h3>Frequency response <span style="color:var(--text-faint);font-weight:400">0° &amp; 180°</span></h3>
+          <canvas class="freqresp-canvas" id="freqresp-canvas"></canvas>
+          <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">Solid = 0° · Dashed = 180°</div>
         </div>
       </div>
     </div>
 
     <div class="section">
-      <div class="section-title">Brusjämförelse — alla mikrofoner</div>
-      ${buildNoiseCalc(mics)}
+      <div class="section-title">Noise performance comparison</div>
+      ${buildNoiseCalc()}
     </div>
   `;
 
-  // Build polar canvases
+  // polar canvases
   const grid = document.getElementById('polar-grid');
-  mics.forEach((m, i) => {
-    const item = document.createElement('div');
-    item.className = 'polar-item';
-    const label = document.createElement('div');
-    label.className = 'polar-label';
-    label.style.color = COLORS[i];
-    label.textContent = `${m.manufacturer} ${m.model}`;
-    const cv = document.createElement('canvas');
-    cv.className = 'polar-canvas';
-    cv.style.cssText = 'width:100%;max-width:200px;height:200px';
-    item.appendChild(label);
-    item.appendChild(cv);
+  mics.forEach((m,i) => {
+    const item = document.createElement('div'); item.className='polar-item';
+    const lbl = document.createElement('div'); lbl.className='polar-label';
+    lbl.style.color = COLORS[i];
+    lbl.textContent = `${m.manufacturer} ${m.model}`;
+    const cv = document.createElement('canvas'); cv.className='polar-canvas';
+    cv.style.cssText='width:100%;max-width:200px;height:200px';
+    item.appendChild(lbl); item.appendChild(cv);
     grid.appendChild(item);
-    requestAnimationFrame(() => drawPolar(cv, [m], state.freq));
+    requestAnimationFrame(() => drawPolar(cv, m, state.freq, COLORS[i]));
   });
 
-  // Freq response chart
+  // freq response
   requestAnimationFrame(() => {
     const cv = document.getElementById('freqresp-canvas');
-    if (cv) {
-      cv.style.height = '220px';
-      drawFreqResp(cv, mics, state.freq);
-    }
+    if(cv) drawFreqResp(cv, mics, state.freq);
   });
 
-  // Freq slider
-  const slider = document.getElementById('freq-slider');
-  if (slider) {
-    slider.oninput = e => {
-      const idx = parseInt(e.target.value);
-      state.freq = POLAR_FREQS[idx];
-      updateDiagrams();
-    };
-  }
+  // slider
+  document.getElementById('freq-slider').oninput = e => {
+    state.freq = POLAR_FREQS[+e.target.value];
+    updateDiagrams();
+  };
 
-  // Noise table
   renderNoiseTable();
 }
 
 function setFreq(hz) {
   state.freq = hz;
+  const sl = document.getElementById('freq-slider');
   const idx = POLAR_FREQS.indexOf(hz);
-  const slider = document.getElementById('freq-slider');
-  if (slider && idx >= 0) slider.value = idx;
+  if(sl && idx>=0) sl.value = idx;
   updateDiagrams();
 }
 
 function updateDiagrams() {
   const mics = getActiveMics();
-  const freqLabel = state.freq >= 1000 ? (state.freq/1000).toFixed(state.freq%1000===0?0:1)+' kHz' : state.freq+' Hz';
+  const lbl = fmtFreq(state.freq);
 
-  // Update label
-  const lbl = document.getElementById('freq-label');
-  if (lbl) lbl.textContent = freqLabel;
+  // update text labels
+  const fl = document.getElementById('freq-label'); if(fl){fl.textContent=lbl;fl.style.color=COLORS[0];}
+  const pt = document.getElementById('polar-title-freq'); if(pt){pt.textContent=lbl;pt.style.color=COLORS[0];}
 
-  // Update diagram title
-  const h3 = document.querySelector('.diagram-card h3');
-  if (h3 && !h3.textContent.includes('Frekvens')) h3.textContent = `Polärdiagram — ${freqLabel}`;
-
-  // Update freq buttons
+  // update freq buttons
   document.querySelectorAll('.freq-btn').forEach(btn => {
-    const f = parseInt(btn.textContent) * (btn.textContent.includes('k') ? 1000 : 1);
-    btn.classList.toggle('active', f === state.freq);
+    const f = QUICK_FREQS.find(f => fmtFreq(f) === btn.textContent);
+    const active = f === state.freq;
+    btn.classList.toggle('active', active);
+    btn.style.background = active ? COLORS[0] : '';
+    btn.style.color = active ? '#fff' : '';
+    btn.style.borderColor = active ? COLORS[0] : '';
   });
 
-  // Redraw polar
+  // redraw polars
   const canvases = document.querySelectorAll('.polar-canvas');
-  canvases.forEach((cv, i) => {
-    if (mics[i]) drawPolar(cv, [mics[i]], state.freq);
-  });
+  canvases.forEach((cv,i) => { if(mics[i]) drawPolar(cv, mics[i], state.freq, COLORS[i]); });
 
-  // Redraw freq response with updated marker
+  // redraw freq response
   const frcv = document.getElementById('freqresp-canvas');
-  if (frcv) drawFreqResp(frcv, mics, state.freq);
+  if(frcv) drawFreqResp(frcv, mics, state.freq);
 }
 
-// ============================================================
-// INIT
-// ============================================================
-window.updateNoise = updateNoise;
-window.setNoisePreset = setNoisePreset;
+function fmtFreq(hz) {
+  return hz >= 1000 ? (hz/1000).toFixed(hz%1000===0?0:1)+' kHz' : hz+' Hz';
+}
+
+// ── globals exposed for inline handlers ─────────────────────
+window.updateNoise = function() {
+  state.noiseMode = document.getElementById('noise-mode').value;
+  state.noiseN = parseInt(document.getElementById('noise-n').value)||1;
+  renderNoiseTable();
+};
+window.setPreset = function(n) {
+  state.noiseN = n;
+  const el = document.getElementById('noise-n'); if(el) el.value = n;
+  renderNoiseTable();
+};
 window.setFreq = setFreq;
 
+// ── init ────────────────────────────────────────────────────
 buildSidebar();
 renderMicList();
 renderContent();
 
 window.addEventListener('resize', () => {
   const mics = getActiveMics();
-  document.querySelectorAll('.polar-canvas').forEach((cv, i) => {
-    if (mics[i]) drawPolar(cv, [mics[i]], state.freq);
-  });
+  document.querySelectorAll('.polar-canvas').forEach((cv,i) => { if(mics[i]) drawPolar(cv,mics[i],state.freq,COLORS[i]); });
   const frcv = document.getElementById('freqresp-canvas');
-  if (frcv) drawFreqResp(frcv, mics, state.freq);
+  if(frcv) drawFreqResp(frcv, mics, state.freq);
 });
 </script>
 </body>
