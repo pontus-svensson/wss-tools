@@ -208,7 +208,7 @@ function micColor(id) {
   return idx >= 0 ? COLORS[idx] : null;
 }
 function activeMicIds() {
-  return [state.selected, ...state.compare].filter(Boolean);
+  return [...state.compare].filter(Boolean);
 }
 function getActiveMics() {
   return activeMicIds().map(id => MICS.find(m => m.id === id)).filter(Boolean);
