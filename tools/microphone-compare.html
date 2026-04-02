@@ -461,14 +461,20 @@ function drawFreqResp(canvas, mics, markerHz) {
   mics.forEach((m,mi) => {
     if(!m||!m.freq_response) return;
     const color = COLORS[mi];
-    ['0deg','180deg'].forEach((ang,ai) => {
+    const fqAngles = Object.keys(m.freq_response).sort((a,b)=>{
+        // 0deg first, then by angle number
+        if(a==='0deg') return -1; if(b==='0deg') return 1;
+        return parseInt(a)-parseInt(b);
+      });
+    fqAngles.forEach((ang,ai) => {
       const fr = m.freq_response[ang]; if(!fr) return;
       const pts = Object.entries(fr).map(([h,d])=>[+h,d]).sort((a,b)=>a[0]-b[0]).filter(p=>p[0]>=10&&p[0]<=25000);
       if(!pts.length) return;
       ctx.beginPath();
       pts.forEach(([hz,db],i) => { const x=xHz(hz),y=yDb(db); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
       ctx.strokeStyle=color; ctx.lineWidth=ai===0?1.8:1;
-      ctx.setLineDash(ai===0?[]:[4,3]); ctx.stroke(); ctx.setLineDash([]);
+      const dashPat=[[],[4,3],[2,4],[6,2,2,2],[8,3]][ai]||[4,3];
+      ctx.setLineDash(dashPat); ctx.stroke(); ctx.setLineDash([]);
     });
   });
 
