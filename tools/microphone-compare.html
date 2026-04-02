@@ -488,9 +488,48 @@ function drawFreqResp(canvas, mics, markerHz) {
     ctx.fillText(lbl, Math.min(x+3, pad.l+cw-30), pad.t+12);
   }
 
-  // legend
-  ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=tc; ctx.textAlign='left';
-  ctx.fillText('— 0°    - - 180°', pad.l+4, pad.t+ch-6);
+  // legend drawn dynamically in HTML below canvas
+}
+
+// ── freq response legend ────────────────────────────────────
+function updateFqLegend(mics) {
+  const el = document.getElementById('fq-legend');
+  if (!el) return;
+  const DASH_LABELS = ['solid','dashed','dotted','dash-dot','long-dash'];
+  const DASH_CSS = ['─────','- - -','· · ·','─ · ─','── ──'];
+  const ANGLE_LABELS = {
+    '0deg':'0°','30deg':'30°','60deg':'60°','90deg':'90°',
+    '135deg':'135°','140deg':'140°','180deg':'180°'
+  };
+
+  // Collect all unique angles across selected mics
+  const allAngles = new Set();
+  mics.forEach(m => { if(m && m.freq_response) Object.keys(m.freq_response).forEach(a => allAngles.add(a)); });
+  const angles = [...allAngles].sort((a,b) => {
+    if(a==='0deg') return -1; if(b==='0deg') return 1;
+    return parseInt(a)-parseInt(b);
+  });
+
+  if(angles.length === 0) { el.textContent = ''; return; }
+
+  // Build legend
+  let parts = angles.map((ang, ai) => {
+    const lbl = ANGLE_LABELS[ang] || ang.replace('deg','°');
+    const dash = DASH_CSS[ai] || '─────';
+    return `<span style="margin-right:12px;white-space:nowrap">`
+      + `<span style="font-family:monospace;letter-spacing:-1px">${dash}</span> ${lbl}</span>`;
+  });
+
+  // If more than 2 angles, add note
+  let note = '';
+  if(angles.length > 2) {
+    note = `<span style="color:var(--text-faint);margin-left:4px">`
+      + `(${angles.length} measurement angles)</span>`;
+  } else if(angles.length === 1) {
+    note = '<span style="color:var(--text-faint)">(on-axis only)</span>';
+  }
+
+  el.innerHTML = parts.join('') + note;
 }
 
 // ── noise calculator ────────────────────────────────────────
@@ -601,9 +640,9 @@ function renderContent() {
           <div class="polar-grid" id="polar-grid" style="grid-template-columns:repeat(${cols},1fr)"></div>
         </div>
         <div class="diagram-card">
-          <h3>Frequency response <span style="color:var(--text-faint);font-weight:400">0° &amp; 180°</span></h3>
+          <h3>Frequency response</h3>
           <canvas class="freqresp-canvas" id="freqresp-canvas"></canvas>
-          <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">Solid = 0° · Dashed = 180°</div>
+          <div id="fq-legend" style="margin-top:6px;font-size:11px;color:var(--text-muted);line-height:1.8"></div>
         </div>
       </div>
     </div>
@@ -632,6 +671,7 @@ function renderContent() {
   requestAnimationFrame(() => {
     const cv = document.getElementById('freqresp-canvas');
     if(cv) drawFreqResp(cv, mics, state.freq);
+    updateFqLegend(mics);
   });
 
   // slider
@@ -677,6 +717,7 @@ function updateDiagrams() {
   // redraw freq response
   const frcv = document.getElementById('freqresp-canvas');
   if(frcv) drawFreqResp(frcv, mics, state.freq);
+  updateFqLegend(mics);
 }
 
 function fmtFreq(hz) {
@@ -706,6 +747,7 @@ window.addEventListener('resize', () => {
   document.querySelectorAll('.polar-canvas').forEach((cv,i) => { if(mics[i]) drawPolar(cv,mics[i],state.freq,COLORS[i]); });
   const frcv = document.getElementById('freqresp-canvas');
   if(frcv) drawFreqResp(frcv, mics, state.freq);
+  updateFqLegend(mics);
 });
 </script>
 </body>
