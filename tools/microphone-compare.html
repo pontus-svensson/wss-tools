@@ -42,7 +42,21 @@ body { font-family: -apple-system,'Helvetica Neue',Arial,sans-serif; background:
 .filters { padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 4px; }
 .filter-chip { padding: 3px 8px; border: 1px solid var(--border-strong); border-radius: 20px; font-size: 11px; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.12s; }
 .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-.mic-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
+.mic-list { flex: 1; overflow-y: auto; padding: 0.25rem 0; }
+.tree-mfr { }
+.tree-mfr-header { padding: 6px 1rem 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none; }
+.tree-mfr-header:hover { color: var(--text-muted); }
+.tree-caret { font-size: 9px; transition: transform 0.15s; display: inline-block; }
+.tree-mfr.collapsed .tree-caret { transform: rotate(-90deg); }
+.tree-mfr.collapsed .tree-series { display: none; }
+.tree-series { }
+.tree-series-header { padding: 3px 1rem 3px 1.75rem; font-size: 11px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none; }
+.tree-series-header:hover { color: var(--text); }
+.tree-series-caret { font-size: 8px; transition: transform 0.15s; display: inline-block; }
+.tree-series.collapsed .tree-series-caret { transform: rotate(-90deg); }
+.tree-series.collapsed .tree-series-items { display: none; }
+.tree-series-items { }
+.mic-item { padding: 5px 1rem 5px 2.5rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; display: flex; align-items: center; gap: 8px; }
 .mic-item { padding: 8px 1rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; display: flex; align-items: center; gap: 8px; }
 .mic-item:hover { background: var(--tag-bg); }
 .mic-item.selected { border-left-color: var(--c0); background: var(--accent-bg); }
@@ -240,45 +254,132 @@ function filteredMics() {
   });
 }
 
+function makeMicItem(m) {
+  const isCompare = state.compare.includes(m.id);
+  const compIdx = state.compare.indexOf(m.id);
+  const colorIdx = isCompare ? compIdx + 1 : -1;
+  const color = colorIdx >= 0 ? COLORS[colorIdx] : 'transparent';
+  const borderColor = colorIdx >= 0 ? color : 'transparent';
+
+  const item = document.createElement('div');
+  let cls = 'mic-item';
+  if (isCompare) cls += ` compare-${compIdx + 1}`;
+  item.className = cls;
+  item.dataset.micId = m.id;
+
+  item.innerHTML = `
+    <div class="mic-dot" style="background:${color};border:1px solid ${borderColor}"></div>
+    <div class="mic-item-info">
+      <div class="mic-item-name">${m.model}</div>
+      <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa</div>
+    </div>
+    <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''} style="accent-color:${COLORS[isCompare ? compIdx+1 : 1]}">
+  `;
+  item.querySelector('.mic-item-info').onclick = () => { state.selected = m.id; renderAll(); };
+  item.querySelector('.mic-item-cb').onchange = e => {
+    if (e.target.checked) {
+      if (!state.compare.includes(m.id) && state.compare.length < 3) state.compare.push(m.id);
+      else e.target.checked = false;
+    } else {
+      state.compare = state.compare.filter(id => id !== m.id);
+    }
+    renderAll();
+  };
+  return item;
+}
+
+// Track collapsed state
+const treeState = { mfr: {}, series: {} };
+
 function renderMicList() {
   const list = document.getElementById('mic-list');
   const mics = filteredMics();
   document.getElementById('mic-count').textContent = `${mics.length} microphone${mics.length !== 1 ? 's' : ''}`;
   list.innerHTML = '';
 
+  // Group: manufacturer → series → mics
+  const byMfr = {};
   mics.forEach(m => {
-    const isSelected = state.selected === m.id;
-    const compIdx = state.compare.indexOf(m.id);
-    const isCompare = compIdx >= 0;
-    const colorIdx = isSelected ? 0 : isCompare ? compIdx + 1 : -1;
-    const color = colorIdx >= 0 ? COLORS[colorIdx] : 'transparent';
-    const borderColor = colorIdx >= 0 ? color : 'var(--border-strong)';
+    const mfr = m.manufacturer || '?';
+    const ser = m.series || '–';
+    if (!byMfr[mfr]) byMfr[mfr] = {};
+    if (!byMfr[mfr][ser]) byMfr[mfr][ser] = [];
+    byMfr[mfr][ser].push(m);
+  });
 
-    const item = document.createElement('div');
-    let cls = 'mic-item';
-    if (isSelected) cls += ' selected';
-    else if (isCompare) cls += ` compare-${compIdx + 1}`;
-    item.className = cls;
+  Object.keys(byMfr).sort().forEach(mfr => {
+    const mfrKey = mfr;
+    if (!(mfrKey in treeState.mfr)) treeState.mfr[mfrKey] = false; // open by default
+    const collapsed = treeState.mfr[mfrKey];
 
-    item.innerHTML = `
-      <div class="mic-dot" style="background:${color};border:1px solid ${borderColor}"></div>
-      <div class="mic-item-info">
-        <div class="mic-item-name">${m.manufacturer} ${m.model}</div>
-        <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa</div>
-      </div>
-      <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''} style="accent-color:${COLORS[isCompare ? compIdx+1 : 1]}">
-    `;
-    item.querySelector('.mic-item-info').onclick = () => { state.selected = m.id; renderAll(); };
-    item.querySelector('.mic-item-cb').onchange = e => {
-      if (e.target.checked) {
-        if (!state.compare.includes(m.id) && state.compare.length < 3) state.compare.push(m.id);
-        else e.target.checked = false;
-      } else {
-        state.compare = state.compare.filter(id => id !== m.id);
-      }
-      renderAll();
+    const mfrEl = document.createElement('div');
+    mfrEl.className = 'tree-mfr' + (collapsed ? ' collapsed' : '');
+
+    const mfrHdr = document.createElement('div');
+    mfrHdr.className = 'tree-mfr-header';
+    mfrHdr.innerHTML = `<span class="tree-caret">▾</span>${mfr}`;
+    mfrHdr.onclick = () => {
+      treeState.mfr[mfrKey] = !treeState.mfr[mfrKey];
+      mfrEl.classList.toggle('collapsed', treeState.mfr[mfrKey]);
     };
-    list.appendChild(item);
+    mfrEl.appendChild(mfrHdr);
+
+    const seriesContainer = document.createElement('div');
+    seriesContainer.className = 'tree-series-items';
+
+    Object.keys(byMfr[mfr]).sort().forEach(ser => {
+      const serKey = mfr + '::' + ser;
+      if (!(serKey in treeState.series)) treeState.series[serKey] = false;
+      const serCollapsed = treeState.series[serKey];
+
+      const serEl = document.createElement('div');
+      serEl.className = 'tree-series' + (serCollapsed ? ' collapsed' : '');
+
+      // Only show series header if there are multiple series for this manufacturer
+      const multiSeries = Object.keys(byMfr[mfr]).length > 1;
+      if (multiSeries) {
+        const serHdr = document.createElement('div');
+        serHdr.className = 'tree-series-header';
+        serHdr.innerHTML = `<span class="tree-series-caret">▾</span>${ser}`;
+        serHdr.onclick = () => {
+          treeState.series[serKey] = !treeState.series[serKey];
+          serEl.classList.toggle('collapsed', treeState.series[serKey]);
+        };
+        serEl.appendChild(serHdr);
+      }
+
+      const itemsEl = document.createElement('div');
+      itemsEl.className = 'tree-series-items';
+      if (!multiSeries) itemsEl.style.paddingLeft = '0';
+
+      byMfr[mfr][ser].forEach(m => {
+        itemsEl.appendChild(makeMicItem(m));
+      });
+
+      serEl.appendChild(itemsEl);
+      seriesContainer.appendChild(serEl);
+    });
+
+    mfrEl.appendChild(seriesContainer);
+    list.appendChild(mfrEl);
+  });
+
+  // re-sync compare color dots without full re-render
+  document.querySelectorAll('.mic-item').forEach(item => {
+    const id = item.dataset.micId;
+    if (!id) return;
+    const compIdx = state.compare.indexOf(id);
+    const isCompare = compIdx >= 0;
+    const colorIdx = isCompare ? compIdx+1 : -1;
+    const color = colorIdx >= 0 ? COLORS[colorIdx] : 'transparent';
+    const dot = item.querySelector('.mic-dot');
+    if (dot) { dot.style.background = color; dot.style.border = `1px solid ${color}`; }
+    const cb = item.querySelector('.mic-item-cb');
+    if (cb) {
+      cb.checked = isCompare;
+      cb.style.accentColor = isCompare ? COLORS[compIdx+1] : '';
+    }
+    item.className = 'mic-item' + (isCompare ? ` compare-${compIdx+1}` : '');
   });
 
   // re-sync filter chips
