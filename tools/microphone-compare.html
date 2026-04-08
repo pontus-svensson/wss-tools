@@ -290,8 +290,9 @@ function buildMicSelectors(mics) {
     }
     var sections = '';
     if (patBtns) sections += '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">Pattern:</span>' + patBtns;
+    const eqLabel = (m.eq_options||[]).some(o=>o.hpf!==undefined) ? "Filter:" : "EQ:";
     if (btns)    sections += (patBtns ? '<span style="margin:0 6px;color:var(--border-strong)">|</span>' : '')
-                           + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">EQ:</span>' + btns;
+                           + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">' + eqLabel + '</span>' + btns;
     if (!sections) return;
     out += '<div style="margin-bottom:6px;padding:4px 8px;border-left:3px solid ' + color + ';background:' + color + '18;">'
          + sections + '</div>';
@@ -313,28 +314,37 @@ function setPatternOption(micId, optionId) {
 function getActiveMicData(m) {
   // Returns {polar_data, freq_response} for the currently selected pattern/eq
   const patOpts = m.pattern_options || [];
+  const eqOpts  = m.eq_options || [];
   if (patOpts.length) {
     const selPat = state.patternSelections[m.id] || patOpts[0].id;
     const opt = patOpts.find(o => o.id === selPat) || patOpts[0];
     const fqByPat = m.freq_response_by_pattern || {};
+    // Check if there's an HPF eq option selected
+    const selEq = eqOpts.length ? (state.eqSelections[m.id] || eqOpts[0].id) : null;
+    const eqOpt = selEq ? eqOpts.find(o => o.id === selEq) : null;
+    const useHpf = eqOpt && eqOpt.hpf;
+    const fqKey = opt.fq_key + (useHpf ? '_hpf' : '');
     return {
       polar_data: opt.polar_data || m.polar_data,
-      freq_response: fqByPat[opt.fq_key] || m.freq_response || {},
+      freq_response: fqByPat[fqKey] || fqByPat[opt.fq_key] || m.freq_response || {},
     };
   }
   return { polar_data: m.polar_data, freq_response: m.freq_response || {} };
 }
 
 function getMicFreqResponse(m) {
+  // Pattern-based mics: getActiveMicData handles pattern+filter combo
+  if ((m.pattern_options || []).length) return getActiveMicData(m).freq_response;
+  // EQ-only mics (e.g. U47fet): fq_key selects which stored curve to use
   const eqOpts = m.eq_options || [];
-  const base = getActiveMicData(m).freq_response;
+  const base = m.freq_response || {};
   if (!eqOpts.length) return base;
   const selected = state.eqSelections[m.id] || eqOpts[0].id;
   const opt = eqOpts.find(o => o.id === selected) || eqOpts[0];
-  const fqKey = opt.fq_key; // e.g. '0deg_flat'
-  const angleKey = fqKey.replace(/_flat|_rolloff|_hi|_lo|_pad/g,'');
-  const data = m.freq_response[fqKey];
-  if (!data) return m.freq_response || {};
+  if (!opt || !opt.fq_key) return base;
+  const angleKey = opt.fq_key.replace(/_flat|_rolloff|_hi|_lo|_pad/g,'');
+  const data = base[opt.fq_key];
+  if (!data) return base;
   return {[angleKey]: data};
 }
 
