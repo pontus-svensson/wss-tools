@@ -403,7 +403,7 @@ function makeMicItem(m) {
     <div class="mic-dot" style="background:${color};border:1px solid ${borderColor}"></div>
     <div class="mic-item-info">
       <div class="mic-item-name">${m.model}</div>
-      <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa</div>
+      <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa${m.connector_variants ? '<br><span style="font-size:10px;color:var(--text-faint)">MV400X (XLR) · MV400L (LEMO)</span>' : ''}</div>
     </div>
     <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''} style="accent-color:${COLORS[isCompare ? compIdx+1 : 1]}">
   `;
@@ -543,7 +543,13 @@ const SPEC_ROWS = [
   {key:'weight_g',        label:'Weight',                  fmt: v=>`${v} g`,        higher_better:false},
   {key:'length_mm',       label:'Length',                  fmt:(v,m)=>m.length_with_preamp_mm?`${v} mm (${m.length_with_preamp_mm} mm w/ preamp)`:`${v} mm`, compare:false},
   {key:'diameter_mm',     label:'Diameter',                fmt: v=>`${v} mm`,       compare:false},
-  {key:'connector',       label:'Connector',               fmt: v=>v,               compare:false},
+  {key:'connector',       label:'Connector',               fmt: (v,m)=>{
+    const vars = m && m.connector_variants;
+    if (!vars) return v || '–';
+    return vars.map(cv =>
+      `<span style="white-space:nowrap">${cv.label}: ${cv.total_length_mm}mm</span>`
+    ).join('<br>');
+  }, compare:false},
   {key:'freq_range_hz',   label:'Frequency range',         fmt: v=>`${v[0]} Hz – ${v[1].toLocaleString()} Hz`, compare:false},
   {key:'data_source',     label:'Data quality',            fmt: v=>({
     'vector_eps':               'Vector EPS',
