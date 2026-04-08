@@ -870,13 +870,13 @@ function renderContent() {
     mics.forEach((m,i) => {
       const item = document.createElement('div'); item.className='polar-item';
       const lbl = document.createElement('div'); lbl.className='polar-label';
-      lbl.style.color = COLORS[i];
+      lbl.style.color = COLORS[i+1];
       lbl.textContent = `${m.manufacturer} ${m.model}`;
       const cv = document.createElement('canvas'); cv.className='polar-canvas';
       cv.style.cssText='width:100%;max-width:200px;height:200px';
       item.appendChild(lbl); item.appendChild(cv);
       grid.appendChild(item);
-      requestAnimationFrame(() => drawPolar(cv, m, state.freq, COLORS[i]));
+      requestAnimationFrame(() => drawPolar(cv, m, state.freq, COLORS[i+1]));
     });
   }
 
