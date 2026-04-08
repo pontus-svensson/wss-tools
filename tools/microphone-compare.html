@@ -191,7 +191,7 @@ canvas.freqresp-canvas { width: 100%; display: block; }
 const POLAR_FREQS = [100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000];
 const QUICK_FREQS = [250,500,1000,2000,4000,8000];
 const COLORS = ['#2563eb','#10b981','#f59e0b','#ef4444'];
-const PATTERN_LABELS = {cardioid:'Cardioid',supercardioid:'Supercardioid',omni:'Omni',widecardioid:'Wide cardioid','figure-8':'Figure-8'};
+const PATTERN_LABELS = {cardioid:'Cardioid',supercardioid:'Supercardioid',omni:'Omni',widecardioid:'Wide cardioid','figure-8':'Figure-8',multi:'Multi-pattern'};
 const TRANSDUCER_LABELS = {condenser:'Condenser',dynamic:'Dynamic',ribbon:'Ribbon',electret:'Electret'};
 const DIAPHRAGM_LABELS = {small:'Small diaphragm',large:'Large diaphragm'};
 
@@ -228,6 +228,7 @@ let state = {
   diaphragmFilter: 'all',
   polarOverlay: false,
   eqSelections: {},    // micId → eq option id
+  patternSelections: {}, // micId → pattern option id
   compare: [],
   freq: 1000,
   noiseN: 1,
@@ -257,7 +258,8 @@ function buildMicSelectors(mics) {
   var out = '';
   mics.forEach(function(m, mi) {
     var eqOpts = m.eq_options || [];
-    if (!eqOpts.length) return;
+    var patOpts = m.pattern_options || [];
+    if (!eqOpts.length && !patOpts.length) return;
     var current = state.eqSelections[m.id] || eqOpts[0].id;
     var color = COLORS[mi + 1];
     var btns = '';
@@ -271,9 +273,27 @@ function buildMicSelectors(mics) {
             + 'color:' + (active ? '#fff' : 'var(--text-muted)') + ';">'
             + opt.label + '</button>';
     });
+    var patBtns = '';
+    if (patOpts.length) {
+      var curPat = state.patternSelections[m.id] || patOpts[0].id;
+      patOpts.forEach(function(opt) {
+        var active = curPat === opt.id;
+        patBtns += '<button data-mic="' + m.id + '" data-pat="' + opt.id + '"'
+                 + ' onclick="setPatternOption(this.dataset.mic,this.dataset.pat)"'
+                 + ' style="font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px;cursor:pointer;'
+                 + 'border:1px solid ' + (active ? color : 'var(--border-strong)') + ';'
+                 + 'background:' + (active ? color : 'transparent') + ';'
+                 + 'color:' + (active ? '#fff' : 'var(--text-muted)') + ';">'
+                 + opt.label + '</button>';
+      });
+    }
+    var sections = '';
+    if (patBtns) sections += '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">Pattern:</span>' + patBtns;
+    if (btns)    sections += (patBtns ? '<span style="margin:0 6px;color:var(--border-strong)">|</span>' : '')
+                           + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">EQ:</span>' + btns;
+    if (!sections) return;
     out += '<div style="margin-bottom:6px;padding:4px 8px;border-left:3px solid ' + color + ';background:' + color + '18;">'
-         + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">EQ:</span>'
-         + btns + '</div>';
+         + sections + '</div>';
   });
   return out;
 }
@@ -283,17 +303,34 @@ function setEqOption(micId, optionId) {
   renderContent();
 }
 
+function setPatternOption(micId, optionId) {
+  state.patternSelections[micId] = optionId;
+  renderContent();
+}
+
 // Override getFreqResponse to use eq selection
+function getActiveMicData(m) {
+  // Returns {polar_data, freq_response} for the currently selected pattern/eq
+  const patOpts = m.pattern_options || [];
+  if (patOpts.length) {
+    const selPat = state.patternSelections[m.id] || patOpts[0].id;
+    const opt = patOpts.find(o => o.id === selPat) || patOpts[0];
+    const fqByPat = m.freq_response_by_pattern || {};
+    return {
+      polar_data: opt.polar_data || m.polar_data,
+      freq_response: fqByPat[opt.fq_key] || m.freq_response || {},
+    };
+  }
+  return { polar_data: m.polar_data, freq_response: m.freq_response || {} };
+}
+
 function getMicFreqResponse(m) {
   const eqOpts = m.eq_options || [];
-  if (!eqOpts.length) {
-    // Standard: return first available freq_response key's angles
-    return m.freq_response || {};
-  }
+  const base = getActiveMicData(m).freq_response;
+  if (!eqOpts.length) return base;
   const selected = state.eqSelections[m.id] || eqOpts[0].id;
   const opt = eqOpts.find(o => o.id === selected) || eqOpts[0];
   const fqKey = opt.fq_key; // e.g. '0deg_flat'
-  // Remap: extract the angle from fqKey (e.g. '0deg_flat' → '0deg')
   const angleKey = fqKey.replace(/_flat|_rolloff|_hi|_lo|_pad/g,'');
   const data = m.freq_response[fqKey];
   if (!data) return m.freq_response || {};
@@ -586,10 +623,11 @@ function drawPolar(canvas, mic, freqHz, color) {
     ctx.fillText(opp[deg], cx-Math.cos(rad)*(maxR+size*0.07), cy-Math.sin(rad)*(maxR+size*0.07));
   });
 
-  if (!mic || !mic.polar_data) return;
-  const keys = Object.keys(mic.polar_data).map(Number).sort((a,b)=>a-b);
+  const _pd = getActiveMicData(mic).polar_data || mic.polar_data;
+  if (!mic || !_pd) return;
+  const keys = Object.keys(_pd).map(Number).sort((a,b)=>a-b);
   const freq = keys.reduce((b,k) => Math.abs(k-freqHz)<Math.abs(b-freqHz)?k:b, keys[0]);
-  const vals = mic.polar_data[String(freq)];
+  const vals = _pd[String(freq)];
   if (!vals) return;
 
   ctx.beginPath();
@@ -957,10 +995,11 @@ function drawOverlayPolar(canvas, mics, freqHz) {
 
   // Data curves — same interpolation logic as drawPolar
   mics.forEach((m, mi) => {
-    if (!m || !m.polar_data) return;
-    const keys = Object.keys(m.polar_data).map(Number).sort((a,b)=>a-b);
+    const _mpd = getActiveMicData(m).polar_data || m.polar_data;
+    if (!m || !_mpd) return;
+    const keys = Object.keys(_mpd).map(Number).sort((a,b)=>a-b);
     const freq = keys.reduce((b,k) => Math.abs(k-freqHz)<Math.abs(b-freqHz)?k:b, keys[0]);
-    const vals = m.polar_data[String(freq)];
+    const vals = _mpd[String(freq)];
     if (!vals) return;
     const color = COLORS[mi + 1];
     ctx.beginPath();
