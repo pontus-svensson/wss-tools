@@ -543,13 +543,7 @@ const SPEC_ROWS = [
   {key:'weight_g',        label:'Weight',                  fmt: v=>`${v} g`,        higher_better:false},
   {key:'length_mm',       label:'Length',                  fmt:(v,m)=>m.length_with_preamp_mm?`${v} mm (${m.length_with_preamp_mm} mm w/ preamp)`:`${v} mm`, compare:false},
   {key:'diameter_mm',     label:'Diameter',                fmt: v=>`${v} mm`,       compare:false},
-  {key:'connector',       label:'Connector',               fmt: (v,m)=>{
-    const vars = m && m.connector_variants;
-    if (!vars) return v || '–';
-    return vars.map(cv =>
-      `<span style="white-space:nowrap">${cv.label}: ${cv.total_length_mm}mm</span>`
-    ).join('<br>');
-  }, compare:false},
+  {key:'connector',       label:'Connector',               fmt: v=>v||'–',          compare:false},
   {key:'freq_range_hz',   label:'Frequency range',         fmt: v=>`${v[0]} Hz – ${v[1].toLocaleString()} Hz`, compare:false},
   {key:'data_source',     label:'Data quality',            fmt: v=>({
     'vector_eps':               'Vector EPS',
