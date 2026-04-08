@@ -248,8 +248,8 @@ function getActiveMics() {
   return activeMicIds().map(id => MICS.find(m => m.id === id)).filter(Boolean);
 }
 function freqColor() {
-  // Match freq-display and polar labels to the current primary color
-  return COLORS[0];
+  // Use color of first checked mic, or default to COLORS[1]
+  return state.compare.length > 0 ? COLORS[1] : COLORS[1];
 }
 
 // ── sidebar ─────────────────────────────────────────────────
@@ -512,7 +512,7 @@ function buildSpecTable(mics) {
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".4"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
       ${url ? `<a class="mic-link-btn" href="${url}" target="_blank" rel="noopener">Product page ↗</a>` : ''}
-      <div style="margin-top:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${COLORS[i]};margin-right:5px"></span>${m.manufacturer} ${m.model}</div>
+      <div style="margin-top:6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${COLORS[i+1]};margin-right:5px"></span>${m.manufacturer} ${m.model}</div>
     </th>`;
   });
   html += '</tr></thead><tbody>';
@@ -648,7 +648,7 @@ function drawFreqResp(canvas, mics, markerHz) {
   // curves
   mics.forEach((m,mi) => {
     if(!m||!m.freq_response) return;
-    const color = COLORS[mi];
+    const color = COLORS[mi+1];
     const fqRespData = getMicFreqResponse(m);
     const fqAngles = Object.keys(fqRespData).sort((a,b)=>{
         // 0deg first, then by angle number
@@ -671,9 +671,9 @@ function drawFreqResp(canvas, mics, markerHz) {
   if(markerHz>=20&&markerHz<=20000){
     const x=xHz(markerHz);
     ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,pad.t+ch);
-    ctx.strokeStyle=COLORS[0]; ctx.lineWidth=1.5; ctx.setLineDash([3,2]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle=COLORS[1]; ctx.lineWidth=1.5; ctx.setLineDash([3,2]); ctx.stroke(); ctx.setLineDash([]);
     const lbl=markerHz>=1000?(markerHz/1000).toFixed(markerHz%1000===0?0:1)+' kHz':markerHz+' Hz';
-    ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=COLORS[0]; ctx.textAlign='left';
+    ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=COLORS[1]; ctx.textAlign='left';
     ctx.fillText(lbl, Math.min(x+3, pad.l+cw-30), pad.t+12);
   }
 
@@ -778,7 +778,7 @@ function renderNoiseTable() {
   rows.sort((a,b)=>parseFloat(a.total)-parseFloat(b.total));
   tbody.innerHTML = rows.map(r=>`
     <tr>
-      <td><span class="mic-card-dot" style="background:${COLORS[r.i]}"></span>${r.m.manufacturer} ${r.m.model}</td>
+      <td><span class="mic-card-dot" style="background:${COLORS[r.i+1]}"></span>${r.m.manufacturer} ${r.m.model}</td>
       <td>${r.sens} dBV/Pa</td>
       <td>${r.noise} ${state.noiseMode==='IEC'?'dB(A)':'dB'}</td>
       <td>${r.ein} dB</td>
@@ -818,19 +818,19 @@ function renderContent() {
         <div class="slider-row">
           <label>Frequency</label>
           <input type="range" id="freq-slider" min="0" max="${POLAR_FREQS.length-1}" value="${Math.max(0,POLAR_FREQS.indexOf(state.freq))}" step="1">
-          <span class="freq-display" id="freq-label" style="color:${COLORS[0]}">${freqLabel}</span>
+          <span class="freq-display" id="freq-label" style="color:${COLORS[1]}">${freqLabel}</span>
         </div>
         <div class="freq-btns" id="freq-btns">
-          ${QUICK_FREQS.map(f=>`<button class="freq-btn${f===state.freq?' active':''}" style="${f===state.freq?`background:${COLORS[0]};color:#fff`:''}" onclick="setFreq(${f})">${fmtFreq(f)}</button>`).join('')}
+          ${QUICK_FREQS.map(f=>`<button class="freq-btn${f===state.freq?' active':''}" style="${f===state.freq?`background:${COLORS[1]};color:#fff`:''}" onclick="setFreq(${f})">${fmtFreq(f)}</button>`).join('')}
         </div>
       </div>
       <div class="diagrams-row">
         <div class="diagram-card">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
-            <h3 style="margin-bottom:0">Polar diagram — <span id="polar-title-freq" style="color:${COLORS[0]}">${freqLabel}</span></h3>
+            <h3 style="margin-bottom:0">Polar diagram — <span id="polar-title-freq" style="color:${COLORS[1]}">${freqLabel}</span></h3>
             <button id="overlay-btn" onclick="toggleOverlay()"
               style="font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--border-strong);
-                     background:${state.polarOverlay?'var(--accent)':'transparent'};
+                     background:${state.polarOverlay?COLORS[1]:'transparent'};
                      color:${state.polarOverlay?'#fff':'var(--text-muted)'};cursor:pointer">
               Overlay
             </button>
@@ -992,17 +992,17 @@ function updateDiagrams() {
   const lbl = fmtFreq(state.freq);
 
   // update text labels
-  const fl = document.getElementById('freq-label'); if(fl){fl.textContent=lbl;fl.style.color=COLORS[0];}
-  const pt = document.getElementById('polar-title-freq'); if(pt){pt.textContent=lbl;pt.style.color=COLORS[0];}
+  const fl = document.getElementById('freq-label'); if(fl){fl.textContent=lbl;fl.style.color=COLORS[1];}
+  const pt = document.getElementById('polar-title-freq'); if(pt){pt.textContent=lbl;pt.style.color=COLORS[1];}
 
   // update freq buttons
   document.querySelectorAll('.freq-btn').forEach(btn => {
     const f = QUICK_FREQS.find(f => fmtFreq(f) === btn.textContent);
     const active = f === state.freq;
     btn.classList.toggle('active', active);
-    btn.style.background = active ? COLORS[0] : '';
+    btn.style.background = active ? COLORS[1] : '';
     btn.style.color = active ? '#fff' : '';
-    btn.style.borderColor = active ? COLORS[0] : '';
+    btn.style.borderColor = active ? COLORS[1] : '';
   });
 
   // redraw polars
@@ -1015,7 +1015,7 @@ function updateDiagrams() {
     }
   } else {
     const canvases = document.querySelectorAll('.polar-canvas');
-    canvases.forEach((cv,i) => { if(mics[i]) drawPolar(cv, mics[i], state.freq, COLORS[i]); });
+    canvases.forEach((cv,i) => { if(mics[i]) drawPolar(cv, mics[i], state.freq, COLORS[i+1]); });
   }
 
   // redraw freq response
@@ -1048,7 +1048,7 @@ renderContent();
 
 window.addEventListener('resize', () => {
   const mics = getActiveMics();
-  document.querySelectorAll('.polar-canvas').forEach((cv,i) => { if(mics[i]) drawPolar(cv,mics[i],state.freq,COLORS[i]); });
+  document.querySelectorAll('.polar-canvas').forEach((cv,i) => { if(mics[i]) drawPolar(cv,mics[i],state.freq,COLORS[i+1]); });
   const frcv = document.getElementById('freqresp-canvas');
   if(frcv) drawFreqResp(frcv, mics, state.freq);
   updateFqLegend(mics);
