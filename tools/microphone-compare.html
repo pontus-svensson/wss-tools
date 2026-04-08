@@ -254,27 +254,28 @@ function freqColor() {
 
 // ── sidebar ─────────────────────────────────────────────────
 function buildMicSelectors(mics) {
-  // Build EQ/pattern selectors for mics that have options
-  let html = '';
+  let out = '';
   mics.forEach((m, mi) => {
     const eqOpts = m.eq_options || [];
     if (!eqOpts.length) return;
     const current = state.eqSelections[m.id] || eqOpts[0].id;
     const color = COLORS[mi + 1];
-    html += `<div class="mic-selectors" style="margin-bottom:8px;padding:6px 0;border-bottom:1px solid var(--border)">
-      <span style="font-size:11px;font-weight:600;color:${color};margin-right:8px">${m.model}</span>
-      <span style="font-size:11px;color:var(--text-muted);margin-right:8px">EQ:</span>
-      ${eqOpts.map(opt => `
-        <button onclick="setEqOption('${m.id}','${opt.id}')"
-          style="font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px;cursor:pointer;
-                 border:1px solid ${current===opt.id?color:'var(--border-strong)'};
-                 background:${current===opt.id?color:'transparent'};
-                 color:${current===opt.id?'#fff':'var(--text-muted)'}">
-          ${opt.label}
-        </button>`).join('')}
-    </div>`;
+    let btns = '';
+    eqOpts.forEach(opt => {
+      const active = current === opt.id;
+      btns += '<button onclick="setEqOption('' + m.id + '','' + opt.id + '')"'
+            + ' style="font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px;cursor:pointer;'
+            + 'border:1px solid ' + (active ? color : 'var(--border-strong)') + ';'
+            + 'background:' + (active ? color : 'transparent') + ';'
+            + 'color:' + (active ? '#fff' : 'var(--text-muted)') + '">'
+            + opt.label + '</button>';
+    });
+    out += '<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border)">'
+         + '<span style="font-size:11px;font-weight:600;color:' + color + ';margin-right:8px">' + m.model + '</span>'
+         + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px">EQ:</span>'
+         + btns + '</div>';
   });
-  return html;
+  return out;
 }
 
 function setEqOption(micId, optionId) {
@@ -655,7 +656,7 @@ function drawFreqResp(canvas, mics, markerHz) {
         return parseInt(a)-parseInt(b);
       });
     fqAngles.forEach((ang,ai) => {
-      const fr = m.freq_response[ang]; if(!fr) return;
+      const fr = fqRespData[ang]; if(!fr) return;
       const pts = Object.entries(fr).map(([h,d])=>[+h,d]).sort((a,b)=>a[0]-b[0]).filter(p=>p[0]>=10&&p[0]<=25000);
       if(!pts.length) return;
       ctx.beginPath();
@@ -812,7 +813,7 @@ function renderContent() {
 
     <div class="section">
       <div class="section-title">Polar diagram &amp; frequency response</div>
-      ${buildMicSelectors(selectedMics)}
+      ${buildMicSelectors(mics)}
       <div class="freq-controls">
         <div class="slider-row">
           <label>Frequency</label>
