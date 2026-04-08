@@ -260,7 +260,7 @@ function buildMicSelectors(mics) {
     var eqOpts = m.eq_options || [];
     var patOpts = m.pattern_options || [];
     if (!eqOpts.length && !patOpts.length) return;
-    var current = state.eqSelections[m.id] || eqOpts[0].id;
+    var current = state.eqSelections[m.id] || (eqOpts[0] && eqOpts[0].id);
     var color = COLORS[mi + 1];
     var btns = '';
     eqOpts.forEach(function(opt) {
