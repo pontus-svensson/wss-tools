@@ -271,8 +271,7 @@ function buildMicSelectors(mics) {
             + 'color:' + (active ? '#fff' : 'var(--text-muted)') + ';">'
             + opt.label + '</button>';
     });
-    out += '<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border);">'
-         + '<span style="font-size:11px;font-weight:600;color:' + color + ';margin-right:8px;">' + m.model + '</span>'
+    out += '<div style="margin-bottom:6px;padding:4px 8px;border-left:3px solid ' + color + ';background:' + color + '18;">'
          + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">EQ:</span>'
          + btns + '</div>';
   });
@@ -837,7 +836,7 @@ function renderContent() {
             </button>
           </div>
           <div class="polar-grid" id="polar-grid" style="grid-template-columns:repeat(${cols},1fr)"></div>
-          <canvas id="polar-overlay-canvas" style="display:none;width:100%;max-width:240px;height:240px;margin:0 auto"></canvas>
+          <canvas id="polar-overlay-canvas" style="display:none;width:100%;height:280px;margin:0 auto;max-width:400px"></canvas>
         </div>
         <div class="diagram-card">
           <h3>Frequency response</h3>
@@ -860,6 +859,10 @@ function renderContent() {
     grid.style.display = 'none';
     overlayCanvas.style.display = 'block';
     overlayCanvas.style.cssText = 'display:block;width:100%;max-width:280px;height:280px;margin:0 auto';
+    // Set canvas to a concrete px size so offsetWidth > 0
+    const _ow = overlayCanvas.parentElement ? overlayCanvas.parentElement.clientWidth || 280 : 280;
+    overlayCanvas.style.width = _ow + 'px';
+    overlayCanvas.style.height = _ow + 'px';
     requestAnimationFrame(() => drawOverlayPolar(overlayCanvas, mics, state.freq));
   } else {
     grid.style.display = '';
@@ -908,58 +911,78 @@ function toggleOverlay() {
 }
 
 function drawOverlayPolar(canvas, mics, freqHz) {
-  // Draw all mics on one polar canvas, normalized so 0dB = outer ring
+  const DB_MAX = 24;
   const dpr = window.devicePixelRatio || 1;
-  const size = canvas.offsetWidth || 240;
+  // Use explicit size so canvas renders even when just made visible
+  const size = Math.max(canvas.offsetWidth, 280);
   canvas.width = size * dpr; canvas.height = size * dpr;
+  canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
-  const cx = size/2, cy = size/2, R = size/2 - 22;
-  const dark = document.documentElement.classList.contains('dark');
-  const gc = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-  const tc = dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
+  ctx.clearRect(0, 0, size, size);
+  const cx = size/2, cy = size/2, maxR = size * 0.38;
+  const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+  const gc = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
+  const tc = dark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.36)';
 
-  // Grid
-  ctx.strokeStyle = gc; ctx.lineWidth = 0.5;
-  for (let db = 0; db <= 30; db += 6) {
-    const r = R * (1 - db/30);
-    ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2*Math.PI); ctx.stroke();
+  // Grid rings
+  [0,6,12,18,24].forEach(db => {
+    const r = maxR*(1-db/DB_MAX);
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle = gc; ctx.lineWidth = 0.5; ctx.stroke();
     if (db > 0) {
-      ctx.fillStyle = tc; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText(`-${db}`, cx, cy - r + 10);
+      ctx.font = '9px -apple-system,sans-serif';
+      ctx.fillStyle = tc; ctx.textAlign = 'center';
+      ctx.fillText('-'+db, cx+r*0.07, cy-r+10);
     }
-  }
+  });
   // Spokes
-  for (let a = 0; a < 360; a += 30) {
-    const rad = (a - 90) * Math.PI / 180;
-    ctx.beginPath(); ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + R * Math.cos(rad), cy + R * Math.sin(rad));
-    ctx.stroke();
-  }
-
-  // Curves — normalize each mic to its own 0dB at 0°
-  mics.forEach((m, mi) => {
-    const polar = getPolarAtFreq(m, freqHz);
-    if (!polar) return;
-    const color = COLORS[mi + 1];
+  [0,30,60,90,120,150].forEach(deg => {
+    const rad = (deg-90)*Math.PI/180;
     ctx.beginPath();
-    for (let i = 0; i <= 360; i++) {
-      const deg = i <= 180 ? i : 360 - i;
-      const idx = Math.round(deg / 5);
-      const atten = Math.min(30, polar[Math.min(idx, 36)] || 0);
-      const r = R * (1 - atten / 30);
-      const angle = ((i % 360) - 90) * Math.PI / 180;
-      const x = cx + r * Math.cos(angle), y = cy + r * Math.sin(angle);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
+    ctx.moveTo(cx+Math.cos(rad)*maxR*1.03, cy+Math.sin(rad)*maxR*1.03);
+    ctx.lineTo(cx-Math.cos(rad)*maxR*1.03, cy-Math.sin(rad)*maxR*1.03);
+    ctx.strokeStyle = gc; ctx.lineWidth = 0.5; ctx.stroke();
+  });
+  // Angle labels
+  const lbs={0:'0°',30:'30°',60:'60°',90:'90°',120:'120°',150:'150°'};
+  const opp={0:'180°',30:'210°',60:'240°',90:'270°',120:'300°',150:'330°'};
+  ctx.font = '9px -apple-system,sans-serif'; ctx.fillStyle = tc; ctx.textBaseline='middle';
+  [0,30,60,90,120,150].forEach(deg => {
+    const rad=(deg-90)*Math.PI/180;
+    ctx.textAlign='center';
+    ctx.fillText(lbs[deg], cx+Math.cos(rad)*(maxR+14), cy+Math.sin(rad)*(maxR+14));
+    ctx.fillText(opp[deg], cx-Math.cos(rad)*(maxR+14), cy-Math.sin(rad)*(maxR+14));
   });
 
-  // Labels
+  // Data curves — same interpolation logic as drawPolar
+  mics.forEach((m, mi) => {
+    if (!m || !m.polar_data) return;
+    const keys = Object.keys(m.polar_data).map(Number).sort((a,b)=>a-b);
+    const freq = keys.reduce((b,k) => Math.abs(k-freqHz)<Math.abs(b-freqHz)?k:b, keys[0]);
+    const vals = m.polar_data[String(freq)];
+    if (!vals) return;
+    const color = COLORS[mi + 1];
+    ctx.beginPath();
+    for (let deg=0; deg<=360; deg++) {
+      const tDeg = deg<=180 ? deg : 360-deg;
+      const idx = tDeg/5;
+      const lo = Math.floor(idx), hi = Math.min(Math.ceil(idx),36);
+      const atten = vals[lo] + (idx-lo)*(vals[hi]-vals[lo]);
+      const r = maxR*Math.max(0, 1-atten/DB_MAX);
+      const rad = (deg-90)*Math.PI/180;
+      deg===0 ? ctx.moveTo(cx+Math.cos(rad)*r, cy+Math.sin(rad)*r)
+               : ctx.lineTo(cx+Math.cos(rad)*r, cy+Math.sin(rad)*r);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+  });
+
+  // Legend labels
+  ctx.textBaseline = 'alphabetic';
   mics.forEach((m, mi) => {
     ctx.fillStyle = COLORS[mi + 1];
-    ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left';
+    ctx.font = 'bold 10px -apple-system,sans-serif'; ctx.textAlign = 'left';
     ctx.fillText(m.model, 6, 14 + mi * 14);
   });
 }
@@ -985,7 +1008,11 @@ function updateDiagrams() {
   // redraw polars
   if (state.polarOverlay) {
     const oc = document.getElementById('polar-overlay-canvas');
-    if (oc) requestAnimationFrame(() => drawOverlayPolar(oc, mics, state.freq));
+    if (oc) {
+      const _ow2 = oc.parentElement ? oc.parentElement.clientWidth || 280 : 280;
+      oc.style.width = _ow2 + 'px'; oc.style.height = _ow2 + 'px';
+      requestAnimationFrame(() => drawOverlayPolar(oc, mics, state.freq));
+    }
   } else {
     const canvases = document.querySelectorAll('.polar-canvas');
     canvases.forEach((cv,i) => { if(mics[i]) drawPolar(cv, mics[i], state.freq, COLORS[i]); });
