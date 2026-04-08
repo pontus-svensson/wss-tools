@@ -545,7 +545,15 @@ const SPEC_ROWS = [
   {key:'diameter_mm',     label:'Diameter',                fmt: v=>`${v} mm`,       compare:false},
   {key:'connector',       label:'Connector',               fmt: v=>v,               compare:false},
   {key:'freq_range_hz',   label:'Frequency range',         fmt: v=>`${v[0]} Hz – ${v[1].toLocaleString()} Hz`, compare:false},
-  {key:'data_source',     label:'Data quality',            fmt: v=>v==='vector_pdf'?'Vector PDF':'Visual read', compare:false},
+  {key:'data_source',     label:'Data quality',            fmt: v=>({
+    'vector_eps':               'Vector EPS',
+    'vector_pdf':               'Vector PDF',
+    'vector_pdf_polar':         'Vector PDF',
+    'manufacturer_measurement': 'Manufacturer data',
+    'dpa_datasheet_tabulated':  'Tabulated datasheet',
+    'visual_read_datasheet':    'Visual read',
+    'visual_read':              'Visual read',
+  }[v] || v || '\u2013'), compare:false},
 ];
 
 function buildSpecTable(mics) {
