@@ -257,6 +257,7 @@ function freqColor() {
 function buildMicSelectors(mics) {
   var out = '';
   mics.forEach(function(m, mi) {
+    if (!m) return;
     var eqOpts = m.eq_options || [];
     var patOpts = m.pattern_options || [];
     if (!eqOpts.length && !patOpts.length) return;
