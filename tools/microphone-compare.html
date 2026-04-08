@@ -254,25 +254,26 @@ function freqColor() {
 
 // ── sidebar ─────────────────────────────────────────────────
 function buildMicSelectors(mics) {
-  let out = '';
-  mics.forEach((m, mi) => {
-    const eqOpts = m.eq_options || [];
+  var out = '';
+  mics.forEach(function(m, mi) {
+    var eqOpts = m.eq_options || [];
     if (!eqOpts.length) return;
-    const current = state.eqSelections[m.id] || eqOpts[0].id;
-    const color = COLORS[mi + 1];
-    let btns = '';
-    eqOpts.forEach(opt => {
-      const active = current === opt.id;
-      btns += '<button onclick="setEqOption('' + m.id + '','' + opt.id + '')"'
+    var current = state.eqSelections[m.id] || eqOpts[0].id;
+    var color = COLORS[mi + 1];
+    var btns = '';
+    eqOpts.forEach(function(opt) {
+      var active = current === opt.id;
+      btns += '<button data-mic="' + m.id + '" data-eq="' + opt.id + '"'
+            + ' onclick="setEqOption(this.dataset.mic,this.dataset.eq)"'
             + ' style="font-size:11px;padding:2px 8px;border-radius:20px;margin-right:4px;cursor:pointer;'
             + 'border:1px solid ' + (active ? color : 'var(--border-strong)') + ';'
             + 'background:' + (active ? color : 'transparent') + ';'
-            + 'color:' + (active ? '#fff' : 'var(--text-muted)') + '">'
+            + 'color:' + (active ? '#fff' : 'var(--text-muted)') + ';">'
             + opt.label + '</button>';
     });
-    out += '<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border)">'
-         + '<span style="font-size:11px;font-weight:600;color:' + color + ';margin-right:8px">' + m.model + '</span>'
-         + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px">EQ:</span>'
+    out += '<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border);">'
+         + '<span style="font-size:11px;font-weight:600;color:' + color + ';margin-right:8px;">' + m.model + '</span>'
+         + '<span style="font-size:11px;color:var(--text-muted);margin-right:6px;">EQ:</span>'
          + btns + '</div>';
   });
   return out;
