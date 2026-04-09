@@ -90,11 +90,13 @@ body { font-family: -apple-system,'Helvetica Neue',Arial,sans-serif; background:
 .badge-supercardioid { background: #ede9fe; color: #5b21b6; }
 .badge-omni { background: #d1fae5; color: #065f46; }
 .badge-widecardioid { background: #fef3c7; color: #92400e; }
+.badge-shotgun { background: #fce7f3; color: #9d174d; }
 @media (prefers-color-scheme: dark) {
   .badge-cardioid { background: #1e3a5f; color: #93c5fd; }
   .badge-supercardioid { background: #2e1e5f; color: #c4b5fd; }
   .badge-omni { background: #064e3b; color: #6ee7b7; }
   .badge-widecardioid { background: #451a03; color: #fcd34d; }
+  .badge-shotgun { background: #4a1942; color: #f9a8d4; }
 }
 
 /* Mic image cards */
@@ -191,7 +193,7 @@ canvas.freqresp-canvas { width: 100%; display: block; }
 const POLAR_FREQS = [100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000];
 const QUICK_FREQS = [250,500,1000,2000,4000,8000];
 const COLORS = ['#2563eb','#10b981','#f59e0b','#ef4444'];
-const PATTERN_LABELS = {cardioid:'Cardioid',supercardioid:'Supercardioid',omni:'Omni',widecardioid:'Wide cardioid','figure-8':'Figure-8',multi:'Multi-pattern'};
+const PATTERN_LABELS = {cardioid:'Cardioid',supercardioid:'Supercardioid',omni:'Omni',widecardioid:'Wide cardioid','figure-8':'Figure-8',multi:'Multi-pattern',shotgun:'Shotgun'};
 const TRANSDUCER_LABELS = {condenser:'Condenser',dynamic:'Dynamic',ribbon:'Ribbon',electret:'Electret'};
 const DIAPHRAGM_LABELS = {small:'Small diaphragm',large:'Large diaphragm'};
 
@@ -221,6 +223,10 @@ function setMicImg(imgEl, placeholder, base) {
 }
 
 const MICS = Object.entries(MIC_DB).map(([name,m]) => ({...m, _name: name}));
+
+function effectivePattern(m) {
+  return m.type === 'shotgun' ? 'shotgun' : m.pattern;
+}
 
 let state = {
   selected: null,
@@ -364,7 +370,7 @@ function buildFilterRow(containerId, values, labelMap, stateKey, allLabel='All')
 }
 
 function buildSidebar() {
-  const patterns = ['all', ...new Set(MICS.map(m => m.pattern).filter(Boolean))];
+  const patterns = ['all', ...new Set(MICS.map(m => effectivePattern(m)).filter(Boolean))];
   buildFilterRow('pattern-filters', patterns, PATTERN_LABELS, 'patternFilter');
 
   const transducers = ['all', ...new Set(MICS.map(m => m.transducer).filter(Boolean))];
@@ -378,7 +384,7 @@ function buildSidebar() {
 
 function filteredMics() {
   return MICS.filter(m => {
-    if (state.patternFilter !== 'all' && m.pattern !== state.patternFilter) return false;
+    if (state.patternFilter !== 'all' && effectivePattern(m) !== state.patternFilter) return false;
     if (state.transducerFilter !== 'all' && m.transducer !== state.transducerFilter) return false;
     if (state.diaphragmFilter !== 'all' && m.diaphragm !== state.diaphragmFilter) return false;
     if (state.search && !m._name.toLowerCase().includes(state.search) && !(m.manufacturer||'').toLowerCase().includes(state.search)) return false;
@@ -403,7 +409,7 @@ function makeMicItem(m) {
     <div class="mic-dot" style="background:${color};border:1px solid ${borderColor}"></div>
     <div class="mic-item-info">
       <div class="mic-item-name">${m.model}</div>
-      <div class="mic-item-sub">${PATTERN_LABELS[m.pattern]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa${m.connector_variants ? '<br><span style="font-size:10px;color:var(--text-faint)">MV400X (XLR) · MV400L (LEMO)</span>' : ''}</div>
+      <div class="mic-item-sub">${PATTERN_LABELS[effectivePattern(m)]||m.pattern} · ${m.sensitivity_mV_Pa} mV/Pa${m.connector_variants ? '<br><span style="font-size:10px;color:var(--text-faint)">MV400X (XLR) · MV400L (LEMO)</span>' : ''}</div>
     </div>
     <input type="checkbox" class="mic-item-cb" ${isCompare ? 'checked' : ''} style="accent-color:${COLORS[isCompare ? compIdx+1 : 1]}">
   `;
@@ -526,7 +532,7 @@ function renderMicList() {
 
 // ── spec table ──────────────────────────────────────────────
 const SPEC_ROWS = [
-  {key:'pattern',         label:'Polar pattern',          fmt: v=>`<span class="spec-badge badge-${v}">${PATTERN_LABELS[v]||v}</span>`, compare:false},
+  {key:'pattern',         label:'Polar pattern',          fmt: (v,m)=>{const ep=effectivePattern(m);return `<span class="spec-badge badge-${ep}">${PATTERN_LABELS[ep]||ep}</span>`;}, compare:false},
   {key:'transducer',      label:'Principle',              fmt: v=>v==='pressure_gradient'?'Pressure gradient':'Pressure', compare:false},
   {key:'sensitivity_mV_Pa', label:'Sensitivity',          fmt: v=>`${v} mV/Pa`,    higher_better:true},
   {key:'sensitivity_dBV_Pa',label:'Sensitivity',          fmt: v=>`${v} dBV/Pa`,   higher_better:true},
