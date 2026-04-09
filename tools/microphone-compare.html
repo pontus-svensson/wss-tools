@@ -541,7 +541,11 @@ const SPEC_ROWS = [
   {key:'phantom',         label:'Phantom power',           fmt: v=>v,               compare:false},
   {key:'current_mA',      label:'Current consumption',     fmt: v=>`${v} mA`,       higher_better:false},
   {key:'weight_g',        label:'Weight',                  fmt: v=>`${v} g`,        higher_better:false},
-  {key:'length_mm',       label:'Length',                  fmt:(v,m)=>m.length_with_preamp_mm?`${v} mm (${m.length_with_preamp_mm} mm w/ preamp)`:`${v} mm`, compare:false},
+  {key:'length_mm',       label:'Length',                  fmt:(v,m)=>{
+    if (m && m.connector_variants) return m.connector_variants.map(cv=>
+      `<span style="white-space:nowrap">${cv.label}: ${cv.total_length_mm} mm</span>`).join('<br>');
+    return v ? `${v} mm` : '–';
+  }, compare:false},
   {key:'diameter_mm',     label:'Diameter',                fmt: v=>`${v} mm`,       compare:false},
   {key:'connector',       label:'Connector',               fmt: v=>v||'–',          compare:false},
   {key:'freq_range_hz',   label:'Frequency range',         fmt: v=>`${v[0]} Hz – ${v[1].toLocaleString()} Hz`, compare:false},
