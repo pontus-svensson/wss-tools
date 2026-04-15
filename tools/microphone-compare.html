@@ -742,6 +742,37 @@ function drawFreqResp(canvas, mics, markerHz) {
     const lbl=markerHz>=1000?(markerHz/1000).toFixed(markerHz%1000===0?0:1)+' kHz':markerHz+' Hz';
     ctx.font='10px -apple-system,sans-serif'; ctx.fillStyle=COLORS[1]; ctx.textAlign='left';
     ctx.fillText(lbl, Math.min(x+3, pad.l+cw-30), pad.t+12);
+
+    // dB readout per mic at marker frequency
+    mics.forEach((m,mi) => {
+      if(!m||!m.freq_response) return;
+      const fqRespData = getMicFreqResponse(m);
+      const fr = fqRespData['0deg'] || fqRespData[Object.keys(fqRespData)[0]];
+      if(!fr) return;
+      const pts = Object.entries(fr).map(([h,d])=>[+h,d]).sort((a,b)=>a[0]-b[0]).filter(p=>p[0]>=10&&p[0]<=25000);
+      if(!pts.length) return;
+      // interpolate dB at markerHz
+      let dbVal = null;
+      for(let j=0;j<pts.length-1;j++){
+        if(markerHz>=pts[j][0]&&markerHz<=pts[j+1][0]){
+          const t=(Math.log(markerHz)-Math.log(pts[j][0]))/(Math.log(pts[j+1][0])-Math.log(pts[j][0]));
+          dbVal=pts[j][1]+t*(pts[j+1][1]-pts[j][1]);
+          break;
+        }
+      }
+      if(dbVal===null){
+        // exact match or edge
+        const closest=pts.reduce((b,p)=>Math.abs(p[0]-markerHz)<Math.abs(b[0]-markerHz)?p:b);
+        dbVal=closest[1];
+      }
+      const sign=dbVal>=0?'+':'';
+      const dbTxt=sign+dbVal.toFixed(1)+' dB';
+      const color=COLORS[mi+1];
+      ctx.font='bold 10px -apple-system,sans-serif';
+      ctx.fillStyle=color;
+      ctx.textAlign='left';
+      ctx.fillText(dbTxt, Math.min(x+3, pad.l+cw-45), pad.t+24+mi*13);
+    });
   }
 
   // legend drawn dynamically in HTML below canvas
