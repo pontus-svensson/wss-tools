@@ -227,16 +227,16 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
   <div class="section-title">Högtalardata (fylls i automatiskt eller ange manuellt)</div>
   <div class="inputs-grid">
     <div class="field">
-      <label>Kontinuerlig effekt (AES/RMS)</label>
+      <label>LF kontinuerlig effekt (AES/RMS)</label>
       <div class="unit">
-        <input type="number" id="powerCont" placeholder="t.ex. 800" min="1">
+        <input type="number" id="powerCont" placeholder="t.ex. 450" min="1">
         <span class="unit-label">W</span>
       </div>
     </div>
     <div class="field">
-      <label>Program / Max effekt</label>
+      <label>HF kontinuerlig effekt (AES/RMS)</label>
       <div class="unit">
-        <input type="number" id="powerProg" placeholder="t.ex. 1600 (2× cont om tom)">
+        <input type="number" id="powerHF" placeholder="t.ex. 80 (valfritt)">
         <span class="unit-label">W</span>
       </div>
     </div>
@@ -250,7 +250,7 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     <div class="field">
       <label>HPF / Lägsta frekvens (excursion)</label>
       <div class="unit">
-        <input type="number" id="hpfHz" placeholder="t.ex. 40" min="1">
+        <input type="number" id="hpfHz" placeholder="t.ex. 60" min="1">
         <span class="unit-label">Hz</span>
       </div>
     </div>
@@ -515,7 +515,7 @@ function highlightItem(items){
 document.getElementById('clearBtn').addEventListener('click', () => {
   selectedSpeaker = null;
   selectedBadge.classList.remove('show');
-  ['powerCont','powerProg','impedance','hpfHz','xoverHz','driverSize'].forEach(id => document.getElementById(id).value = '');
+  ['powerCont','powerHF','impedance','hpfHz','xoverHz','driverSize'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('results').classList.remove('show');
 });
 
@@ -580,35 +580,68 @@ document.getElementById('calcBtn').addEventListener('click', calculate);
 function getNum(id){ return parseFloat(document.getElementById(id).value) || null; }
 
 function calculate(){
-  const pCont = getNum('powerCont'), pProg = getNum('powerProg');
-  const imp = getNum('impedance'), hpf = getNum('hpfHz');
-  const xover = getNum('xoverHz'), driver = getNum('driverSize');
+  const pLF  = getNum('powerCont');
+  const pHF  = getNum('powerHF');
+  const imp  = getNum('impedance');
+  const hpf  = getNum('hpfHz');
+  const xover = getNum('xoverHz');
+  const driver = getNum('driverSize');
   const ampGain = getNum('ampGain') || 0;
   const vxMode = document.getElementById('vxMode').value;
 
-  if (!pCont || !imp){ alert('Ange åtminstone kontinuerlig effekt (W) och impedans (Ω).'); return; }
+  if (!pLF || !imp){ alert('Ange åtminstone LF kontinuerlig effekt (W) och impedans (Ω).'); return; }
 
-  const VMD = Math.sqrt(pCont * imp);
-  const tMaxV = VMD * 0.8913, tMaxDbu = v2dbu(tMaxV), tMaxCtrl = tMaxDbu - ampGain;
-  const progPower = pProg || (pCont * 2), VMax = Math.sqrt(progPower * imp);
-  const vxV = pProg ? VMax : (tMaxV * 1.414), vxDbu = v2dbu(vxV), vxCtrl = vxDbu - ampGain;
+  // === Matchar Linea Research Excel-kalkylator exakt ===
+  // LF VMD = √(LF_W × Z)
+  const vmdLF  = Math.sqrt(pLF * imp);
+  const dbuLF  = v2dbu(vmdLF);
 
-  let overshoot = '6–8 dB (standard)';
-  if (driver){ if (driver <= 10) overshoot = '8 dB (≤10″ driver)'; else overshoot = '6 dB (≥15″ driver)'; }
+  // TMax threshold = VMD_LF (inga -1dB marginal per LR Excel)
+  const tMaxV    = vmdLF;
+  const tMaxDbu  = dbuLF;
+  const tMaxCtrl = tMaxDbu - ampGain;
 
+  // VX threshold = √2 × TMax = VMD_LF × √2  (motsvarar 2× cont power)
+  const vxV    = Math.sqrt(2) * tMaxV;
+  const vxDbu  = v2dbu(vxV);
+  const vxCtrl = vxDbu - ampGain;
+
+  // Overshoot (per LR Excel: 8 dB rekommenderas)
+  let overshoot = '8 dB (rekommenderat)';
+  if (driver){
+    if (driver <= 10) overshoot = '8 dB (≤10″ driver)';
+    else if (driver <= 15) overshoot = '6–8 dB (15″ driver)';
+    else overshoot = '6 dB (≥18″ driver)';
+  }
+
+  // VX Thresh Hi = dBu(HF_VMD) − dBu(LF_VMD)  — relativ HF-threshold
+  let threshHiDbr = null;
+  let vmdHF = null;
+  if (pHF) {
+    vmdHF = Math.sqrt(pHF * imp);
+    threshHiDbr = v2dbu(vmdHF) - dbuLF;
+  }
+
+  // Excursion: attack = 100 / HPF, max V = VMD_LF
   const attackS = hpf ? (100 / hpf) : null;
-  const exV = VMD, exDbu = v2dbu(exV);
+  const exV    = vmdLF;
+  const exDbu  = v2dbu(exV);
 
+  // Populate result cards
   document.getElementById('vx-v').textContent    = fmt1(vxV) + ' V';
   document.getElementById('vx-dbu').textContent  = fmt1(vxDbu) + ' dBu';
   document.getElementById('vx-ctrl').textContent = fmt1(vxCtrl) + ' dBu';
   document.getElementById('vx-overshoot').textContent = overshoot;
   document.getElementById('vx-split').textContent = xover ? xover + ' Hz' : '—';
-  document.getElementById('vx-hi').textContent = '-3 dBr (HF)';
+  document.getElementById('vx-hi').textContent = threshHiDbr !== null
+    ? fmt1(threshHiDbr) + ' dBr (HF)'
+    : '— (ange HF-effekt)';
+
   document.getElementById('tx-v').textContent    = fmt1(tMaxV) + ' V';
   document.getElementById('tx-dbu').textContent  = fmt1(tMaxDbu) + ' dBu';
   document.getElementById('tx-ctrl').textContent = fmt1(tMaxCtrl) + ' dBu';
-  document.getElementById('tx-basis').textContent = pCont + ' W cont, ' + imp + ' Ω';
+  document.getElementById('tx-basis').textContent = pLF + ' W LF cont, ' + imp + ' Ω';
+
   document.getElementById('ex-attack').textContent = attackS ? attackS.toFixed(3) + ' s' : '—';
   document.getElementById('ex-hpf').textContent    = hpf ? hpf + ' Hz' : '—';
   document.getElementById('ex-v').textContent      = fmt1(exV) + ' V';
@@ -618,30 +651,31 @@ function calculate(){
   document.getElementById('vx-splitrow').style.display = vxOn ? '' : 'none';
   document.getElementById('vx-hirow').style.display    = vxOn ? '' : 'none';
 
-  // Alla LR-enheter har X-Max — visa alltid excursion-kortet
   document.getElementById('ex-card').style.display = '';
   document.getElementById('ex-note').style.display = 'none';
 
   const modelVal = document.getElementById('lrModel').value;
   const isProcessor = PROCESSORS.includes(modelVal);
-  document.getElementById('resultSpeakerName').textContent = selectedSpeaker ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : 'Manuella värden';
+  document.getElementById('resultSpeakerName').textContent = selectedSpeaker
+    ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : 'Manuella värden';
 
+  // Trace
   const trace = [];
-  trace.push(`<div class="trace-step">Ingångsvärden: <span>${pCont} W cont | ${progPower} W program | ${imp} Ω | HPF ${hpf||'?'} Hz | Gain ${ampGain} dB</span></div>`);
-  trace.push(`<div class="trace-step">VMD = √(${pCont} × ${imp}) = <b>${fmt1(VMD)} V</b>  →  <span>maxspänning vid drivare vid kontinuerlig effekt</span></div>`);
-  trace.push(`<div class="trace-step">TMax threshold = ${fmt1(VMD)} × 0.8913 (−1 dB) = <b>${fmt1(tMaxV)} V</b>  = <b>${fmt1(tMaxDbu)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">LF VMD = √(${pLF} × ${imp}) = <b>${fmt1(vmdLF)} V</b> = <b>${fmt1(dbuLF)} dBu</b>  →  maxspänning vid LF-drivare</div>`);
+  if (pHF) trace.push(`<div class="trace-step">HF VMD = √(${pHF} × ${imp}) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
+  trace.push(`<div class="trace-step">TMax threshold = VMD_LF = <b>${fmt1(tMaxV)} V</b> = <b>${fmt1(tMaxDbu)} dBu</b></div>`);
   trace.push(`<div class="trace-step">TMax threshold @ controller = ${fmt1(tMaxDbu)} − ${ampGain} dB gain = <b>${fmt1(tMaxCtrl)} dBu</b></div>`);
-  trace.push(`<div class="trace-step">VMax = √(${progPower} × ${imp}) = <b>${fmt1(VMax)} V</b>  (${pProg ? 'angivet program' : 'beräknat 2× cont'})</div>`);
-  trace.push(`<div class="trace-step">VX threshold = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b>  (${pProg ? 'program power' : 'TMax × √2'})</div>`);
+  trace.push(`<div class="trace-step">VX threshold = √2 × TMax = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b></div>`);
   trace.push(`<div class="trace-step">VX threshold @ controller = ${fmt1(vxDbu)} − ${ampGain} dB gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
+  if (threshHiDbr !== null) trace.push(`<div class="trace-step">VX Thresh Hi = dBu(HF_VMD) − dBu(LF_VMD) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)} = <b>${fmt1(threshHiDbr)} dBr</b></div>`);
   if (hpf) trace.push(`<div class="trace-step">Excursion attack = 100 ÷ ${hpf} Hz = <b>${(100/hpf).toFixed(3)} s</b></div>`);
   else trace.push(`<div class="trace-step">Excursion attack: <span>HPF-frekvens saknas – ange HPF för beräkning</span></div>`);
   if (vxOn && xover) trace.push(`<div class="trace-step">VX Split-frekvens = <b>${xover} Hz</b>  (passiv crossover)</div>`);
   if (isProcessor) trace.push(`<div class="trace-step">Processor-läge: <span>Threshold @ controller beräknas med gain från efterföljande förstärkare (${ampGain} dB)</span></div>`);
 
   let warn = '';
-  if (!pProg) warn += '• Program-effekt saknas – beräknat som 2× kontinuerlig. Ange rätt värde om tillgängligt.<br>';
-  if (!hpf)   warn += '• HPF-frekvens saknas – excursion attack-tid kan ej beräknas.<br>';
+  if (!pHF && vxMode === 'on') warn += '• HF-effekt saknas – Thresh Hi kan ej beräknas. Fyll i HF AES-effekt för korrekt VX-mode-beräkning.<br>';
+  if (!hpf) warn += '• HPF-frekvens saknas – excursion attack-tid kan ej beräknas.<br>';
   if (ampGain === 0) warn += '• Förstärkarens gain angiven som 0 dB – kontrollera om controller-threshold är korrekt.<br>';
   if (warn) trace.push(`<div class="trace-warn">${warn}</div>`);
 
