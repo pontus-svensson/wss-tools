@@ -384,7 +384,7 @@ let SPEAKERS = [];
 
 (async function loadDB(){
   try {
-    const r = await fetch('speakers-db.js');
+    const r = await fetch('../database/speakers-db.js');
     if (!r.ok) throw new Error('not found');
     const text = await r.text();
     const mod = {};
@@ -651,6 +651,6 @@ function calculate(){
 }
 </script>
 
-<script src="speakers-db.js" onerror="console.log('speakers-db.js not in same dir')"></script>
+<script src="../database/speakers-db.js" onerror="console.log('speakers-db.js not found')"></script>
 </body>
 </html>
