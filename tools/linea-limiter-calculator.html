@@ -270,22 +270,47 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     </div>
   </div>
 
-  <div class="section-title">Förstärkarinställningar</div>
+  <div class="section-title">Förstärkar- / processorinställningar</div>
   <div class="amp-row">
     <div class="field">
-      <label>Förstärkarens gain (dB)</label>
+      <label id="gainLabel">Förstärkarens gain (dB)</label>
       <input type="number" id="ampGain" placeholder="t.ex. 32" value="32">
     </div>
     <div class="field">
-      <label>Linea Research modell</label>
+      <label>Linea Research enhet</label>
       <select id="lrModel">
         <option value="">— Välj modell (valfritt) —</option>
-        <option value="44m20">44m20 (5000W × 2 @ 2Ω)</option>
-        <option value="48m10">48m10 (2500W × 4 @ 2Ω)</option>
-        <option value="44m08">44m08 (2000W × 2 @ 4Ω)</option>
-        <option value="48m04">48m04 (1000W × 4 @ 4Ω)</option>
-        <option value="44m04">44m04 (1000W × 2 @ 4Ω)</option>
-        <option value="custom">Ange max spänning manuellt</option>
+        <optgroup label="44M-serie — 4-kanal touring (VX + TMax + Excursion)">
+          <option value="44m06">44M06 — 4× 1500W @ 2Ω</option>
+          <option value="44m10">44M10 — 4× 2500W @ 2Ω</option>
+          <option value="44m20">44M20 — 4× 5000W @ 2Ω</option>
+        </optgroup>
+        <optgroup label="48M-serie — 8-kanal touring (VX + TMax + Excursion)">
+          <option value="48m03">48M03 — 8× 400W @ 2Ω</option>
+          <option value="48m06">48M06 — 8× 750W @ 2Ω</option>
+          <option value="48m10">48M10 — 8× 1250W @ 2Ω</option>
+          <option value="48m20">48M20 — 8× 2500W @ 4Ω</option>
+        </optgroup>
+        <optgroup label="44C-serie — 4-kanal installation (VX + TMax + Excursion)">
+          <option value="44c06">44C06 — 4× 1500W @ 2Ω</option>
+          <option value="44c10">44C10 — 4× 2500W @ 2Ω</option>
+          <option value="44c20">44C20 — 4× 5000W @ 2Ω</option>
+        </optgroup>
+        <optgroup label="88C-serie — 8-kanal installation (VX + TMax + Excursion)">
+          <option value="88c03">88C03 — 8× 400W @ 2Ω</option>
+          <option value="88c06">88C06 — 8× 750W @ 2Ω</option>
+          <option value="88c10">88C10 — 8× 1250W @ 2Ω</option>
+          <option value="88c20">88C20 — 8× 2500W @ 4Ω</option>
+        </optgroup>
+        <optgroup label="Processor + extern förstärkare (ange gain nedan)">
+          <option value="asc48">ASC48 — 4 in / 8 ut processor</option>
+          <option value="nsc24">NSC24 — 2 in / 4 ut processor</option>
+          <option value="nsc46">NSC46 — 4 in / 6 ut processor</option>
+          <option value="nsc48">NSC48 — 4 in / 8 ut processor</option>
+        </optgroup>
+        <optgroup label="Övrigt">
+          <option value="custom">Ange max spänning manuellt</option>
+        </optgroup>
       </select>
     </div>
     <div class="field" id="ampVoltField" style="display:none;">
@@ -333,13 +358,17 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
         <div class="lcard-row"><span class="lcard-key">Threshold @ ctrl (dBu)</span><span class="lcard-val" id="tx-ctrl">—</span></div>
         <div class="lcard-row"><span class="lcard-key">Baserat på</span><span class="lcard-val" id="tx-basis">—</span></div>
       </div>
-      <div class="lcard ex">
+      <div class="lcard ex" id="ex-card">
         <div class="lcard-title">Excursion Limiter</div>
         <div class="lcard-name">Mekaniskt rörelseskydd</div>
         <div class="lcard-row"><span class="lcard-key">Attack-tid (s)</span><span class="lcard-val" id="ex-attack">—</span></div>
         <div class="lcard-row"><span class="lcard-key">HPF-frekvens</span><span class="lcard-val" id="ex-hpf">—</span></div>
         <div class="lcard-row"><span class="lcard-key">Max spänning (V)</span><span class="lcard-val" id="ex-v">—</span></div>
         <div class="lcard-row"><span class="lcard-key">Max spänning (dBu)</span><span class="lcard-val" id="ex-dbu">—</span></div>
+      </div>
+      <div id="ex-note" style="background:var(--tag-bg); border:1px solid var(--border); border-radius:10px; padding:1rem; display:none;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px;">Excursion Limiter</div>
+        <div style="font-size:13px;color:var(--text-muted);">C-serien saknar X-Max excursion-limiter. Endast VX-Lim och TMax är tillgängliga på denna modell.</div>
       </div>
     </div>
 
@@ -490,13 +519,52 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.getElementById('results').classList.remove('show');
 });
 
-const AMP_PRESETS = { '44m20':{maxW:5000,ohm:2},'48m10':{maxW:2500,ohm:2},'44m08':{maxW:2000,ohm:4},'48m04':{maxW:1000,ohm:4},'44m04':{maxW:1000,ohm:4} };
+const AMP_PRESETS = {
+  // 44M-serie, rated @ 2Ω
+  '44m06': {maxW:1500, ohm:2},
+  '44m10': {maxW:2500, ohm:2},
+  '44m20': {maxW:5000, ohm:2},
+  // 48M-serie, rated @ 2Ω except 48M20 @ 4Ω
+  '48m03': {maxW:400,  ohm:2},
+  '48m06': {maxW:750,  ohm:2},
+  '48m10': {maxW:1250, ohm:2},
+  '48m20': {maxW:2500, ohm:4},
+  // 44C-serie, rated @ 2Ω
+  '44c06': {maxW:1500, ohm:2},
+  '44c10': {maxW:2500, ohm:2},
+  '44c20': {maxW:5000, ohm:2},
+  // 88C-serie, rated @ 2Ω except 88C20 @ 4Ω
+  '88c03': {maxW:400,  ohm:2},
+  '88c06': {maxW:750,  ohm:2},
+  '88c10': {maxW:1250, ohm:2},
+  '88c20': {maxW:2500, ohm:4},
+  // Processorer — ingen inbyggd förstärkare, gain anges manuellt
+  'asc48': {processor:true},
+  'nsc24': {processor:true},
+  'nsc46': {processor:true},
+  'nsc48': {processor:true},
+};
+
+const PROCESSORS = ['asc48','nsc24','nsc46','nsc48'];
+
+function ampHasXmax(){ return true; } // alla LR-modeller har X-Max
+
 document.getElementById('lrModel').addEventListener('change', function(){
-  const custom = this.value === 'custom';
+  const val = this.value;
+  const custom = val === 'custom';
+  const isProcessor = PROCESSORS.includes(val);
+  const preset = AMP_PRESETS[val];
+
   document.getElementById('ampVoltField').style.display = custom ? '' : 'none';
-  if (this.value && !custom && AMP_PRESETS[this.value]){
-    const p = AMP_PRESETS[this.value];
-    document.getElementById('ampMaxV').value = Math.round(Math.sqrt(p.maxW * p.ohm));
+
+  // Gain label: processor = "Efterföljande förstärkarens gain", amp = "Förstärkarens gain"
+  document.getElementById('gainLabel').textContent = isProcessor
+    ? 'Efterföljande förstärkarens gain (dB)'
+    : 'Förstärkarens gain (dB)';
+
+  if (preset && !custom && !isProcessor) {
+    // Auto-beräkna max spänning och visa som info
+    document.getElementById('ampMaxV').value = Math.round(Math.sqrt(preset.maxW * preset.ohm));
   }
 });
 document.getElementById('vxMode').addEventListener('change', function(){
@@ -549,6 +617,13 @@ function calculate(){
   const vxOn = vxMode === 'on';
   document.getElementById('vx-splitrow').style.display = vxOn ? '' : 'none';
   document.getElementById('vx-hirow').style.display    = vxOn ? '' : 'none';
+
+  // Alla LR-enheter har X-Max — visa alltid excursion-kortet
+  document.getElementById('ex-card').style.display = '';
+  document.getElementById('ex-note').style.display = 'none';
+
+  const modelVal = document.getElementById('lrModel').value;
+  const isProcessor = PROCESSORS.includes(modelVal);
   document.getElementById('resultSpeakerName').textContent = selectedSpeaker ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : 'Manuella värden';
 
   const trace = [];
@@ -562,6 +637,7 @@ function calculate(){
   if (hpf) trace.push(`<div class="trace-step">Excursion attack = 100 ÷ ${hpf} Hz = <b>${(100/hpf).toFixed(3)} s</b></div>`);
   else trace.push(`<div class="trace-step">Excursion attack: <span>HPF-frekvens saknas – ange HPF för beräkning</span></div>`);
   if (vxOn && xover) trace.push(`<div class="trace-step">VX Split-frekvens = <b>${xover} Hz</b>  (passiv crossover)</div>`);
+  if (isProcessor) trace.push(`<div class="trace-step">Processor-läge: <span>Threshold @ controller beräknas med gain från efterföljande förstärkare (${ampGain} dB)</span></div>`);
 
   let warn = '';
   if (!pProg) warn += '• Program-effekt saknas – beräknat som 2× kontinuerlig. Ange rätt värde om tillgängligt.<br>';
