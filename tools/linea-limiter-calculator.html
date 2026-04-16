@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linea Research — Limiter Calculator</title>
+<style>
+:root {
+  --bg: #f9f9f7;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.1);
+  --border-strong: rgba(0,0,0,0.18);
+  --text: #1a1a1a;
+  --text-muted: #6b6b68;
+  --text-faint: #a0a09c;
+  --accent: #2563eb;
+  --accent-bg: #eff6ff;
+  --tag-bg: #f1f0ea;
+  --c-vx: #2563eb;
+  --c-tx: #d97706;
+  --c-ex: #059669;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141414; --surface: #1e1e1e;
+    --border: rgba(255,255,255,0.1); --border-strong: rgba(255,255,255,0.18);
+    --text: #e8e8e4; --text-muted: #8a8a86; --text-faint: #555552;
+    --accent: #60a5fa; --accent-bg: #1e2d44; --tag-bg: #2a2a28;
+    --c-vx: #60a5fa; --c-tx: #fbbf24; --c-ex: #34d399;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system,'Helvetica Neue',Arial,sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+header {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo-mark {
+  width: 30px; height: 30px; border-radius: 6px; background: var(--accent);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 16px; height: 16px; }
+header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem; font-size: 13px; }
+
+.main { max-width: 900px; margin: 0 auto; padding: 1.75rem 1.5rem 4rem; }
+
+.section-title {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem;
+}
+
+.search-wrapper { position: relative; margin-bottom: 0.75rem; }
+.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; font-size: 14px; }
+#speakerSearch {
+  width: 100%; padding: 7px 10px 7px 30px;
+  border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg); color: var(--text);
+  font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.15s;
+}
+#speakerSearch:focus { border-color: var(--accent); }
+#speakerSearch::placeholder { color: var(--text-faint); }
+
+#dropdown {
+  background: var(--surface); border: 1px solid var(--border-strong);
+  border-radius: 6px; max-height: 260px; overflow-y: auto;
+  display: none; position: absolute; width: 100%; z-index: 200;
+  top: calc(100% + 3px); box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+#dropdown.open { display: block; }
+.drop-item {
+  padding: 7px 12px; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border); transition: background 0.1s;
+}
+.drop-item:last-child { border-bottom: none; }
+.drop-item:hover, .drop-item.active { background: var(--tag-bg); }
+.drop-brand { color: var(--text-muted); font-size: 11px; min-width: 90px; }
+.drop-model { font-weight: 500; }
+.drop-type { margin-left: auto; font-size: 11px; color: var(--text-faint); }
+.drop-warn { font-size: 11px; color: #dc2626; }
+.no-results { padding: 1.25rem; color: var(--text-muted); font-size: 13px; text-align: center; }
+
+#selectedBadge {
+  display: none; align-items: center; gap: 0.75rem;
+  background: var(--accent-bg); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 8px 12px; margin-bottom: 1.25rem;
+}
+#selectedBadge.show { display: flex; }
+.badge-info { flex: 1; }
+.badge-name { font-weight: 600; font-size: 14px; }
+.badge-sub { color: var(--text-muted); font-size: 11px; margin-top: 1px; }
+.clear-btn {
+  background: none; border: 1px solid var(--border-strong);
+  color: var(--text-muted); border-radius: 20px; padding: 3px 10px;
+  cursor: pointer; font-size: 11px; transition: all 0.12s;
+}
+.clear-btn:hover { border-color: #dc2626; color: #dc2626; }
+
+.inputs-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem; margin-bottom: 1.25rem;
+}
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 11px; color: var(--text-muted); }
+.field input, .field select {
+  padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg); color: var(--text);
+  font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.15s;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field .unit { position: relative; }
+.field .unit input { padding-right: 2rem; width: 100%; }
+.field .unit-label {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; color: var(--text-faint); pointer-events: none;
+}
+
+.amp-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem; padding: 1rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px; margin-bottom: 1.5rem;
+}
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
+
+#results { display: none; }
+#results.show { display: block; }
+
+.results-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+}
+
+.limiter-cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem; margin-bottom: 1.5rem;
+}
+.lcard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem; position: relative; overflow: hidden;
+}
+.lcard::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.lcard.vx::before { background: var(--c-vx); }
+.lcard.tx::before { background: var(--c-tx); }
+.lcard.ex::before { background: var(--c-ex); }
+
+.lcard-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.lcard.vx .lcard-title { color: var(--c-vx); }
+.lcard.tx .lcard-title { color: var(--c-tx); }
+.lcard.ex .lcard-title { color: var(--c-ex); }
+.lcard-name { font-weight: 500; font-size: 13px; color: var(--text-muted); margin-bottom: 0.9rem; }
+
+.lcard-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 5px 0; border-bottom: 1px solid var(--border); gap: 0.5rem;
+}
+.lcard-row:last-child { border-bottom: none; }
+.lcard-key { font-size: 11px; color: var(--text-muted); }
+.lcard-val { font-size: 13px; font-weight: 600; text-align: right; }
+.lcard.vx .lcard-val { color: var(--c-vx); }
+.lcard.tx .lcard-val { color: var(--c-tx); }
+.lcard.ex .lcard-val { color: var(--c-ex); }
+
+.trace-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem;
+  font-family: 'Menlo','Monaco','Consolas',monospace;
+  font-size: 11.5px; line-height: 1.9; margin-bottom: 2rem;
+}
+.trace-step { color: var(--text-muted); }
+.trace-step span { color: var(--text); }
+.trace-step b { color: var(--accent); font-weight: 600; }
+.trace-warn {
+  margin-top: 0.75rem; padding: 8px 12px;
+  background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 6px; color: #b91c1c; font-size: 11px; line-height: 1.7;
+}
+@media (prefers-color-scheme: dark) {
+  .trace-warn { background: #2d1515; border-color: #7f1d1d; color: #fca5a5; }
+}
+
+#calcBtn {
+  background: var(--accent); color: #fff; border: none; border-radius: 6px;
+  font-family: inherit; font-weight: 600; font-size: 14px;
+  padding: 8px 24px; cursor: pointer; transition: opacity 0.12s; margin-bottom: 1.5rem;
+}
+#calcBtn:hover { opacity: 0.88; }
+
+@media (max-width: 600px) {
+  .main { padding: 1.25rem 1rem 4rem; }
+  .limiter-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">
+    <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="4" height="10" rx="1" fill="#fff"/><rect x="8" y="4" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="1" width="4" height="17" rx="1" fill="#fff"/></svg>
+  </div>
+  <h1>Linea Research — Limiter Calculator <span>VX / TMax / Excursion</span></h1>
+</header>
+
+<div class="main">
+
+  <div class="section-title">Välj högtalare</div>
+  <div class="search-wrapper">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="speakerSearch" placeholder="Sök brand eller modell, t.ex. L-Acoustics K2 ..." autocomplete="off">
+    <div id="dropdown"></div>
+  </div>
+  <div id="selectedBadge">
+    <div class="badge-info">
+      <div class="badge-name" id="badgeName">—</div>
+      <div class="badge-sub" id="badgeSub">—</div>
+    </div>
+    <button class="clear-btn" id="clearBtn">Rensa</button>
+  </div>
+
+  <div class="section-title">Högtalardata (fylls i automatiskt eller ange manuellt)</div>
+  <div class="inputs-grid">
+    <div class="field">
+      <label>Kontinuerlig effekt (AES/RMS)</label>
+      <div class="unit">
+        <input type="number" id="powerCont" placeholder="t.ex. 800" min="1">
+        <span class="unit-label">W</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Program / Max effekt</label>
+      <div class="unit">
+        <input type="number" id="powerProg" placeholder="t.ex. 1600 (2× cont om tom)">
+        <span class="unit-label">W</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Impedans</label>
+      <div class="unit">
+        <input type="number" id="impedance" placeholder="t.ex. 8" min="1">
+        <span class="unit-label">Ω</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>HPF / Lägsta frekvens (excursion)</label>
+      <div class="unit">
+        <input type="number" id="hpfHz" placeholder="t.ex. 40" min="1">
+        <span class="unit-label">Hz</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Passiv crossover-freq (VX-mode)</label>
+      <div class="unit">
+        <input type="number" id="xoverHz" placeholder="t.ex. 1800 (valfritt)">
+        <span class="unit-label">Hz</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Största drivare</label>
+      <div class="unit">
+        <input type="number" id="driverSize" placeholder="t.ex. 15" min="1">
+        <span class="unit-label">"</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Förstärkarinställningar</div>
+  <div class="amp-row">
+    <div class="field">
+      <label>Förstärkarens gain (dB)</label>
+      <input type="number" id="ampGain" placeholder="t.ex. 32" value="32">
+    </div>
+    <div class="field">
+      <label>Linea Research modell</label>
+      <select id="lrModel">
+        <option value="">— Välj modell (valfritt) —</option>
+        <option value="44m20">44m20 (5000W × 2 @ 2Ω)</option>
+        <option value="48m10">48m10 (2500W × 4 @ 2Ω)</option>
+        <option value="44m08">44m08 (2000W × 2 @ 4Ω)</option>
+        <option value="48m04">48m04 (1000W × 4 @ 4Ω)</option>
+        <option value="44m04">44m04 (1000W × 2 @ 4Ω)</option>
+        <option value="custom">Ange max spänning manuellt</option>
+      </select>
+    </div>
+    <div class="field" id="ampVoltField" style="display:none;">
+      <label>Max förstärkarspänning per kanal</label>
+      <div class="unit">
+        <input type="number" id="ampMaxV" placeholder="t.ex. 100">
+        <span class="unit-label">V</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Typ av limiter (VX-mode)</label>
+      <select id="vxMode">
+        <option value="off">VX-mode OFF (vanlig limiter)</option>
+        <option value="on">VX-mode ON (virtuell crossover)</option>
+      </select>
+    </div>
+  </div>
+
+  <button id="calcBtn">Beräkna limiters →</button>
+
+  <hr class="divider">
+
+  <div id="results">
+    <div class="results-header">
+      <div class="section-title" style="margin:0;">Resultat</div>
+      <span id="resultSpeakerName" style="font-size:11px;color:var(--text-muted);"></span>
+    </div>
+
+    <div class="limiter-cards">
+      <div class="lcard vx">
+        <div class="lcard-title">VX Limiter</div>
+        <div class="lcard-name">Virtual Xover — pseudo-peak</div>
+        <div class="lcard-row"><span class="lcard-key">Threshold (V)</span><span class="lcard-val" id="vx-v">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Threshold (dBu)</span><span class="lcard-val" id="vx-dbu">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Threshold @ ctrl (dBu)</span><span class="lcard-val" id="vx-ctrl">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Overshoot</span><span class="lcard-val" id="vx-overshoot">—</span></div>
+        <div class="lcard-row" id="vx-splitrow" style="display:none;"><span class="lcard-key">Split freq (VX-mode)</span><span class="lcard-val" id="vx-split">—</span></div>
+        <div class="lcard-row" id="vx-hirow" style="display:none;"><span class="lcard-key">Threshold Hi (dBr)</span><span class="lcard-val" id="vx-hi">—</span></div>
+      </div>
+      <div class="lcard tx">
+        <div class="lcard-title">TMax / Thermal Limiter</div>
+        <div class="lcard-name">Röstspole-värmeskydd (RMS)</div>
+        <div class="lcard-row"><span class="lcard-key">Threshold (V)</span><span class="lcard-val" id="tx-v">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Threshold (dBu)</span><span class="lcard-val" id="tx-dbu">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Threshold @ ctrl (dBu)</span><span class="lcard-val" id="tx-ctrl">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Baserat på</span><span class="lcard-val" id="tx-basis">—</span></div>
+      </div>
+      <div class="lcard ex">
+        <div class="lcard-title">Excursion Limiter</div>
+        <div class="lcard-name">Mekaniskt rörelseskydd</div>
+        <div class="lcard-row"><span class="lcard-key">Attack-tid (s)</span><span class="lcard-val" id="ex-attack">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">HPF-frekvens</span><span class="lcard-val" id="ex-hpf">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Max spänning (V)</span><span class="lcard-val" id="ex-v">—</span></div>
+        <div class="lcard-row"><span class="lcard-key">Max spänning (dBu)</span><span class="lcard-val" id="ex-dbu">—</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Beräkningssteg</div>
+    <div class="trace-box" id="traceBox"></div>
+  </div>
+
+</div>
+
+<script>
+const DB_BRANDS = {};
+let SPEAKERS = [];
+
+(async function loadDB(){
+  try {
+    const r = await fetch('speakers-db.js');
+    if (!r.ok) throw new Error('not found');
+    const text = await r.text();
+    const mod = {};
+    const fn = new Function('module','exports', text);
+    fn(mod, mod.exports = {});
+    SPEAKERS = (mod.exports.SPEAKER_DATABASE || {}).speakers || [];
+  } catch {
+    if (typeof SPEAKER_DATABASE !== 'undefined') {
+      SPEAKERS = SPEAKER_DATABASE.speakers || [];
+    }
+  }
+  buildIndex();
+})();
+
+function buildIndex(){
+  SPEAKERS.forEach(s => {
+    const b = s.brand;
+    if (!DB_BRANDS[b]) DB_BRANDS[b] = [];
+    DB_BRANDS[b].push(s);
+  });
+}
+
+const searchInput = document.getElementById('speakerSearch');
+const dropdown = document.getElementById('dropdown');
+const selectedBadge = document.getElementById('selectedBadge');
+let selectedSpeaker = null;
+let activeIdx = -1;
+
+function hasData(s){ const e = s.electrical || {}; return e.powerHandlingContinuous && e.impedance; }
+
+function getDriverInfo(s){
+  const ac = s.acoustic || {};
+  const du = ac.driveUnits || ac.drivers || [];
+  const sizes = du.map(d=>d.sizeInch||d.size).filter(Boolean);
+  return { maxSize: sizes.length ? Math.max(...sizes) : null, crossover: getXover(s) };
+}
+
+function getXover(s){
+  const xp = (s.electrical || {}).crossoverPoints;
+  if (Array.isArray(xp) && xp.length) return xp[0].frequencyHz || null;
+  return null;
+}
+
+function getFreqLow(s){
+  const fr = (s.electrical || {}).frequencyResponseMinus3dB;
+  if (Array.isArray(fr)) return fr[0];
+  if (fr && typeof fr === 'object') return fr.low || null;
+  return null;
+}
+
+function isEligible(s){
+  if (s.type === 'line-array-element') return false;
+  const ap = s.system && s.system.activePassive;
+  if (ap === 'active') return false;
+  const builtIn = s.system && s.system.amplifierBuiltIn;
+  if (builtIn && builtIn.powerW) return false;
+  return true;
+}
+
+function renderDropdown(query){
+  const q = query.toLowerCase().trim();
+  if (!q){ dropdown.innerHTML=''; dropdown.classList.remove('open'); return; }
+  let matches = SPEAKERS.filter(s =>
+    isEligible(s) && (
+      s.brand.toLowerCase().includes(q) ||
+      s.model.toLowerCase().includes(q) ||
+      (s.brand + ' ' + s.model).toLowerCase().includes(q)
+    )
+  ).slice(0, 50);
+
+  if (!matches.length){
+    dropdown.innerHTML = '<div class="no-results">Inga träffar</div>';
+  } else {
+    dropdown.innerHTML = matches.map((s,i) => {
+      const ok = hasData(s);
+      return `<div class="drop-item" data-idx="${i}">
+        <span class="drop-brand">${s.brand}</span>
+        <span class="drop-model">${s.model}</span>
+        ${s.productLine ? `<span class="drop-type">${s.productLine}</span>` : ''}
+        ${!ok ? '<span class="drop-warn">saknar data</span>' : ''}
+      </div>`;
+    }).join('');
+    dropdown._matches = matches;
+    dropdown.querySelectorAll('.drop-item').forEach((el, i) => {
+      el.addEventListener('mousedown', e => { e.preventDefault(); selectSpeaker(matches[i]); });
+    });
+  }
+  dropdown.classList.add('open');
+  activeIdx = -1;
+}
+
+function selectSpeaker(s){
+  selectedSpeaker = s;
+  searchInput.value = '';
+  dropdown.classList.remove('open');
+  dropdown.innerHTML = '';
+
+  document.getElementById('badgeName').textContent = `${s.brand} ${s.model}`;
+  const e = s.electrical || {};
+  const info = getDriverInfo(s);
+  const parts = [s.type||'', e.impedance?e.impedance+' Ω':'', e.powerHandlingContinuous?e.powerHandlingContinuous+' W cont':''].filter(Boolean);
+  document.getElementById('badgeSub').textContent = parts.join(' · ');
+  selectedBadge.classList.add('show');
+
+  if (e.powerHandlingContinuous) document.getElementById('powerCont').value = e.powerHandlingContinuous;
+  if (e.powerHandlingProgram)    document.getElementById('powerProg').value = e.powerHandlingProgram;
+  if (e.impedance)               document.getElementById('impedance').value = e.impedance;
+  if (info.crossover)            document.getElementById('xoverHz').value = info.crossover;
+  if (info.maxSize)              document.getElementById('driverSize').value = info.maxSize;
+  const freqLow = getFreqLow(s);
+  if (freqLow)                   document.getElementById('hpfHz').value = freqLow;
+}
+
+searchInput.addEventListener('input', e => renderDropdown(e.target.value));
+searchInput.addEventListener('keydown', e => {
+  const items = dropdown.querySelectorAll('.drop-item');
+  if (e.key === 'ArrowDown'){ activeIdx = Math.min(activeIdx+1, items.length-1); highlightItem(items); }
+  else if (e.key === 'ArrowUp'){ activeIdx = Math.max(activeIdx-1, 0); highlightItem(items); }
+  else if (e.key === 'Enter' && activeIdx >= 0 && dropdown._matches){ selectSpeaker(dropdown._matches[activeIdx]); }
+  else if (e.key === 'Escape'){ dropdown.classList.remove('open'); }
+});
+document.addEventListener('click', e => { if (!e.target.closest('.search-wrapper')) dropdown.classList.remove('open'); });
+function highlightItem(items){
+  items.forEach((el,i) => el.classList.toggle('active', i===activeIdx));
+  if (items[activeIdx]) items[activeIdx].scrollIntoView({block:'nearest'});
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  selectedSpeaker = null;
+  selectedBadge.classList.remove('show');
+  ['powerCont','powerProg','impedance','hpfHz','xoverHz','driverSize'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('results').classList.remove('show');
+});
+
+const AMP_PRESETS = { '44m20':{maxW:5000,ohm:2},'48m10':{maxW:2500,ohm:2},'44m08':{maxW:2000,ohm:4},'48m04':{maxW:1000,ohm:4},'44m04':{maxW:1000,ohm:4} };
+document.getElementById('lrModel').addEventListener('change', function(){
+  const custom = this.value === 'custom';
+  document.getElementById('ampVoltField').style.display = custom ? '' : 'none';
+  if (this.value && !custom && AMP_PRESETS[this.value]){
+    const p = AMP_PRESETS[this.value];
+    document.getElementById('ampMaxV').value = Math.round(Math.sqrt(p.maxW * p.ohm));
+  }
+});
+document.getElementById('vxMode').addEventListener('change', function(){
+  const on = this.value === 'on';
+  document.getElementById('vx-splitrow').style.display = on ? '' : 'none';
+  document.getElementById('vx-hirow').style.display = on ? '' : 'none';
+});
+
+const v2dbu = v => 20 * Math.log10(v / 0.775);
+const fmt1  = n => isNaN(n) ? '—' : n.toFixed(1);
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+function getNum(id){ return parseFloat(document.getElementById(id).value) || null; }
+
+function calculate(){
+  const pCont = getNum('powerCont'), pProg = getNum('powerProg');
+  const imp = getNum('impedance'), hpf = getNum('hpfHz');
+  const xover = getNum('xoverHz'), driver = getNum('driverSize');
+  const ampGain = getNum('ampGain') || 0;
+  const vxMode = document.getElementById('vxMode').value;
+
+  if (!pCont || !imp){ alert('Ange åtminstone kontinuerlig effekt (W) och impedans (Ω).'); return; }
+
+  const VMD = Math.sqrt(pCont * imp);
+  const tMaxV = VMD * 0.8913, tMaxDbu = v2dbu(tMaxV), tMaxCtrl = tMaxDbu - ampGain;
+  const progPower = pProg || (pCont * 2), VMax = Math.sqrt(progPower * imp);
+  const vxV = pProg ? VMax : (tMaxV * 1.414), vxDbu = v2dbu(vxV), vxCtrl = vxDbu - ampGain;
+
+  let overshoot = '6–8 dB (standard)';
+  if (driver){ if (driver <= 10) overshoot = '8 dB (≤10″ driver)'; else overshoot = '6 dB (≥15″ driver)'; }
+
+  const attackS = hpf ? (100 / hpf) : null;
+  const exV = VMD, exDbu = v2dbu(exV);
+
+  document.getElementById('vx-v').textContent    = fmt1(vxV) + ' V';
+  document.getElementById('vx-dbu').textContent  = fmt1(vxDbu) + ' dBu';
+  document.getElementById('vx-ctrl').textContent = fmt1(vxCtrl) + ' dBu';
+  document.getElementById('vx-overshoot').textContent = overshoot;
+  document.getElementById('vx-split').textContent = xover ? xover + ' Hz' : '—';
+  document.getElementById('vx-hi').textContent = '-3 dBr (HF)';
+  document.getElementById('tx-v').textContent    = fmt1(tMaxV) + ' V';
+  document.getElementById('tx-dbu').textContent  = fmt1(tMaxDbu) + ' dBu';
+  document.getElementById('tx-ctrl').textContent = fmt1(tMaxCtrl) + ' dBu';
+  document.getElementById('tx-basis').textContent = pCont + ' W cont, ' + imp + ' Ω';
+  document.getElementById('ex-attack').textContent = attackS ? attackS.toFixed(3) + ' s' : '—';
+  document.getElementById('ex-hpf').textContent    = hpf ? hpf + ' Hz' : '—';
+  document.getElementById('ex-v').textContent      = fmt1(exV) + ' V';
+  document.getElementById('ex-dbu').textContent    = fmt1(exDbu) + ' dBu';
+
+  const vxOn = vxMode === 'on';
+  document.getElementById('vx-splitrow').style.display = vxOn ? '' : 'none';
+  document.getElementById('vx-hirow').style.display    = vxOn ? '' : 'none';
+  document.getElementById('resultSpeakerName').textContent = selectedSpeaker ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : 'Manuella värden';
+
+  const trace = [];
+  trace.push(`<div class="trace-step">Ingångsvärden: <span>${pCont} W cont | ${progPower} W program | ${imp} Ω | HPF ${hpf||'?'} Hz | Gain ${ampGain} dB</span></div>`);
+  trace.push(`<div class="trace-step">VMD = √(${pCont} × ${imp}) = <b>${fmt1(VMD)} V</b>  →  <span>maxspänning vid drivare vid kontinuerlig effekt</span></div>`);
+  trace.push(`<div class="trace-step">TMax threshold = ${fmt1(VMD)} × 0.8913 (−1 dB) = <b>${fmt1(tMaxV)} V</b>  = <b>${fmt1(tMaxDbu)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">TMax threshold @ controller = ${fmt1(tMaxDbu)} − ${ampGain} dB gain = <b>${fmt1(tMaxCtrl)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">VMax = √(${progPower} × ${imp}) = <b>${fmt1(VMax)} V</b>  (${pProg ? 'angivet program' : 'beräknat 2× cont'})</div>`);
+  trace.push(`<div class="trace-step">VX threshold = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b>  (${pProg ? 'program power' : 'TMax × √2'})</div>`);
+  trace.push(`<div class="trace-step">VX threshold @ controller = ${fmt1(vxDbu)} − ${ampGain} dB gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
+  if (hpf) trace.push(`<div class="trace-step">Excursion attack = 100 ÷ ${hpf} Hz = <b>${(100/hpf).toFixed(3)} s</b></div>`);
+  else trace.push(`<div class="trace-step">Excursion attack: <span>HPF-frekvens saknas – ange HPF för beräkning</span></div>`);
+  if (vxOn && xover) trace.push(`<div class="trace-step">VX Split-frekvens = <b>${xover} Hz</b>  (passiv crossover)</div>`);
+
+  let warn = '';
+  if (!pProg) warn += '• Program-effekt saknas – beräknat som 2× kontinuerlig. Ange rätt värde om tillgängligt.<br>';
+  if (!hpf)   warn += '• HPF-frekvens saknas – excursion attack-tid kan ej beräknas.<br>';
+  if (ampGain === 0) warn += '• Förstärkarens gain angiven som 0 dB – kontrollera om controller-threshold är korrekt.<br>';
+  if (warn) trace.push(`<div class="trace-warn">${warn}</div>`);
+
+  document.getElementById('traceBox').innerHTML = trace.join('');
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+
+<script src="speakers-db.js" onerror="console.log('speakers-db.js not in same dir')"></script>
+</body>
+</html>
