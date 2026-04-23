@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,13 +45,14 @@ header {
 header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
 header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem; font-size: 13px; }
 
-.main { max-width: 900px; margin: 0 auto; padding: 1.75rem 1.5rem 4rem; }
+.main { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
 
 .section-title {
   font-size: 11px; font-weight: 600; color: var(--text-muted);
   text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem;
 }
 
+/* SEARCH */
 .search-wrapper { position: relative; margin-bottom: 0.75rem; }
 .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; font-size: 14px; }
 #speakerSearch {
@@ -99,8 +100,9 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
 }
 .clear-btn:hover { border-color: #dc2626; color: #dc2626; }
 
+/* INPUT GRID */
 .inputs-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem; margin-bottom: 1.25rem;
 }
 .field { display: flex; flex-direction: column; gap: 4px; }
@@ -118,61 +120,82 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
   font-size: 11px; color: var(--text-faint); pointer-events: none;
 }
 
+/* AMP ROW */
 .amp-row {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 0.75rem; padding: 1rem; background: var(--surface);
   border: 1px solid var(--border); border-radius: 10px; margin-bottom: 1.5rem;
 }
 
-.divider { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
 
-#results { display: none; }
-#results.show { display: block; }
-
-.results-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+/* ── RESULTS LAYOUT (mirrors SE8 UI) ── */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
 }
 
-.limiter-cards {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.75rem; margin-bottom: 1.5rem;
+.limiter-panel {
+  background: var(--surface);
+  padding: 1rem;
 }
-.lcard {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1rem; position: relative; overflow: hidden;
-}
-.lcard::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-}
-.lcard.vx::before { background: var(--c-vx); }
-.lcard.tx::before { background: var(--c-tx); }
-.lcard.ex::before { background: var(--c-ex); }
 
-.lcard-title {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; margin-bottom: 3px;
+.panel-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 0.9rem; padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--border);
 }
-.lcard.vx .lcard-title { color: var(--c-vx); }
-.lcard.tx .lcard-title { color: var(--c-tx); }
-.lcard.ex .lcard-title { color: var(--c-ex); }
-.lcard-name { font-weight: 500; font-size: 13px; color: var(--text-muted); margin-bottom: 0.9rem; }
+.panel-title.vx  { border-color: var(--c-vx); color: var(--c-vx); }
+.panel-title.tx  { border-color: var(--c-tx); color: var(--c-tx); }
+.panel-title.ex  { border-color: var(--c-ex); color: var(--c-ex); }
 
-.lcard-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 5px 0; border-bottom: 1px solid var(--border); gap: 0.5rem;
+/* Each "field" inside a limiter panel mirrors SE8 exactly */
+.se-field {
+  margin-bottom: 0.6rem;
 }
-.lcard-row:last-child { border-bottom: none; }
-.lcard-key { font-size: 11px; color: var(--text-muted); }
-.lcard-val { font-size: 13px; font-weight: 600; text-align: right; }
-.lcard.vx .lcard-val { color: var(--c-vx); }
-.lcard.tx .lcard-val { color: var(--c-tx); }
-.lcard.ex .lcard-val { color: var(--c-ex); }
+.se-field:last-child { margin-bottom: 0; }
+.se-label {
+  font-size: 10px; color: var(--text-muted); margin-bottom: 3px;
+}
+.se-value {
+  background: var(--tag-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  padding: 5px 9px;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Menlo','Monaco','Consolas',monospace;
+  min-height: 30px; display: flex; align-items: center;
+}
+.se-value.vx  { color: var(--c-vx); }
+.se-value.tx  { color: var(--c-tx); }
+.se-value.ex  { color: var(--c-ex); }
+.se-value.dim { color: var(--text-faint); font-style: italic; font-size: 11px; }
 
+/* VX mode toggle row */
+.vx-mode-row {
+  display: flex; gap: 6px; margin-bottom: 0.75rem;
+}
+.mode-btn {
+  flex: 1; padding: 5px; border: 1px solid var(--border-strong);
+  border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer;
+  background: var(--tag-bg); color: var(--text-muted); transition: all 0.12s;
+  text-align: center;
+}
+.mode-btn.active.normal { background: var(--c-vx); border-color: var(--c-vx); color: #fff; }
+.mode-btn.active.vxmode { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+
+/* TRACE / FORMULA */
 .trace-box {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; padding: 1rem;
   font-family: 'Menlo','Monaco','Consolas',monospace;
-  font-size: 11.5px; line-height: 1.9; margin-bottom: 2rem;
+  font-size: 11.5px; line-height: 1.9; margin-bottom: 1.5rem;
 }
 .trace-step { color: var(--text-muted); }
 .trace-step span { color: var(--text); }
@@ -186,16 +209,17 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
   .trace-warn { background: #2d1515; border-color: #7f1d1d; color: #fca5a5; }
 }
 
-#calcBtn {
-  background: var(--accent); color: #fff; border: none; border-radius: 6px;
-  font-family: inherit; font-weight: 600; font-size: 14px;
-  padding: 8px 24px; cursor: pointer; transition: opacity 0.12s; margin-bottom: 1.5rem;
+/* Amp info note */
+.amp-note {
+  font-size: 11px; color: var(--text-muted);
+  background: var(--tag-bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 10px; margin-top: 4px;
+  line-height: 1.5;
 }
-#calcBtn:hover { opacity: 0.88; }
 
-@media (max-width: 600px) {
-  .main { padding: 1.25rem 1rem 4rem; }
-  .limiter-cards { grid-template-columns: 1fr; }
+@media (max-width: 700px) {
+  .results-grid { grid-template-columns: 1fr; }
+  .main { padding: 1rem 1rem 4rem; }
 }
 </style>
 </head>
@@ -210,10 +234,11 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
 
 <div class="main">
 
-  <div class="section-title">Välj högtalare</div>
+  <!-- SPEAKER SEARCH -->
+  <div class="section-title">Select loudspeaker</div>
   <div class="search-wrapper">
     <span class="search-icon">⌕</span>
-    <input type="text" id="speakerSearch" placeholder="Sök brand eller modell, t.ex. L-Acoustics K2 ..." autocomplete="off">
+    <input type="text" id="speakerSearch" placeholder="Search brand or model, e.g. Martin Audio SX118..." autocomplete="off">
     <div id="dropdown"></div>
   </div>
   <div id="selectedBadge">
@@ -221,180 +246,232 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
       <div class="badge-name" id="badgeName">—</div>
       <div class="badge-sub" id="badgeSub">—</div>
     </div>
-    <button class="clear-btn" id="clearBtn">Rensa</button>
+    <button class="clear-btn" id="clearBtn">Clear</button>
   </div>
 
-  <div class="section-title">Högtalardata (fylls i automatiskt eller ange manuellt)</div>
+  <!-- LOUDSPEAKER PARAMETERS -->
+  <div class="section-title">Loudspeaker parameters</div>
   <div class="inputs-grid">
     <div class="field">
-      <label>LF kontinuerlig effekt (AES/RMS)</label>
+      <label>LF power (AES continuous)</label>
       <div class="unit">
-        <input type="number" id="powerCont" placeholder="t.ex. 450" min="1">
+        <input type="number" id="powerLF" placeholder="e.g. 450" min="1">
         <span class="unit-label">W</span>
       </div>
     </div>
     <div class="field">
-      <label>HF kontinuerlig effekt (AES/RMS)</label>
+      <label>HF power (AES continuous)</label>
       <div class="unit">
-        <input type="number" id="powerHF" placeholder="t.ex. 80 (valfritt)">
+        <input type="number" id="powerHF" placeholder="e.g. 80 (optional)">
         <span class="unit-label">W</span>
       </div>
     </div>
     <div class="field">
-      <label>Impedans</label>
+      <label>Impedance</label>
       <div class="unit">
-        <input type="number" id="impedance" placeholder="t.ex. 8" min="1">
+        <input type="number" id="impedance" placeholder="e.g. 8" min="1">
         <span class="unit-label">Ω</span>
       </div>
     </div>
     <div class="field">
-      <label>HPF / Lägsta frekvens (excursion)</label>
+      <label>HPF / lowest frequency</label>
       <div class="unit">
-        <input type="number" id="hpfHz" placeholder="t.ex. 60" min="1">
+        <input type="number" id="hpfHz" placeholder="e.g. 60" min="1">
         <span class="unit-label">Hz</span>
       </div>
     </div>
     <div class="field">
-      <label>Passiv crossover-freq (VX-mode)</label>
+      <label>Passive crossover frequency</label>
       <div class="unit">
-        <input type="number" id="xoverHz" placeholder="t.ex. 1800 (valfritt)">
+        <input type="number" id="xoverHz" placeholder="e.g. 1800 (optional)">
         <span class="unit-label">Hz</span>
       </div>
     </div>
     <div class="field">
-      <label>Största drivare</label>
+      <label>Largest driver</label>
       <div class="unit">
-        <input type="number" id="driverSize" placeholder="t.ex. 15" min="1">
+        <input type="number" id="driverSize" placeholder="e.g. 15" min="1">
         <span class="unit-label">"</span>
       </div>
     </div>
   </div>
 
-  <div class="section-title">Förstärkar- / processorinställningar</div>
+  <!-- AMPLIFIER / PROCESSOR -->
+  <div class="section-title">Amplifier / processor</div>
   <div class="amp-row">
     <div class="field">
-      <label id="gainLabel">Förstärkarens gain (dB)</label>
-      <input type="number" id="ampGain" placeholder="t.ex. 32" value="32">
+      <label id="gainLabel">Amplifier gain</label>
+      <div class="unit">
+        <input type="number" id="ampGain" placeholder="e.g. 32" value="32">
+        <span class="unit-label">dB</span>
+      </div>
+      <div class="amp-note" id="ampNote" style="display:none;"></div>
     </div>
     <div class="field">
-      <label>Linea Research enhet</label>
+      <label>Linea Research unit</label>
       <select id="lrModel">
-        <option value="">— Välj modell (valfritt) —</option>
-        <optgroup label="44M-serie — 4-kanal touring (VX + TMax + Excursion)">
+        <option value="">— Select model (optional) —</option>
+        <optgroup label="44M series — 4-ch touring (VX + TMax + Excursion)">
           <option value="44m06">44M06 — 4× 1500W @ 2Ω</option>
           <option value="44m10">44M10 — 4× 2500W @ 2Ω</option>
           <option value="44m20">44M20 — 4× 5000W @ 2Ω</option>
         </optgroup>
-        <optgroup label="48M-serie — 8-kanal touring (VX + TMax + Excursion)">
+        <optgroup label="48M series — 8-ch touring (VX + TMax + Excursion)">
           <option value="48m03">48M03 — 8× 400W @ 2Ω</option>
           <option value="48m06">48M06 — 8× 750W @ 2Ω</option>
           <option value="48m10">48M10 — 8× 1250W @ 2Ω</option>
           <option value="48m20">48M20 — 8× 2500W @ 4Ω</option>
         </optgroup>
-        <optgroup label="44C-serie — 4-kanal installation (VX + TMax + Excursion)">
+        <optgroup label="44C series — 4-ch installation (VX + TMax + Excursion)">
           <option value="44c06">44C06 — 4× 1500W @ 2Ω</option>
           <option value="44c10">44C10 — 4× 2500W @ 2Ω</option>
           <option value="44c20">44C20 — 4× 5000W @ 2Ω</option>
         </optgroup>
-        <optgroup label="88C-serie — 8-kanal installation (VX + TMax + Excursion)">
+        <optgroup label="88C series — 8-ch installation (VX + TMax + Excursion)">
           <option value="88c03">88C03 — 8× 400W @ 2Ω</option>
           <option value="88c06">88C06 — 8× 750W @ 2Ω</option>
           <option value="88c10">88C10 — 8× 1250W @ 2Ω</option>
           <option value="88c20">88C20 — 8× 2500W @ 4Ω</option>
         </optgroup>
-        <optgroup label="Processor + extern förstärkare (ange gain nedan)">
-          <option value="asc48">ASC48 — 4 in / 8 ut processor</option>
-          <option value="nsc24">NSC24 — 2 in / 4 ut processor</option>
-          <option value="nsc46">NSC46 — 4 in / 6 ut processor</option>
-          <option value="nsc48">NSC48 — 4 in / 8 ut processor</option>
+        <optgroup label="Processor + external amplifier (enter amp gain above)">
+          <option value="asc48">ASC48 — 4 in / 8 out processor</option>
+          <option value="nsc24">NSC24 — 2 in / 4 out processor</option>
+          <option value="nsc46">NSC46 — 4 in / 6 out processor</option>
+          <option value="nsc48">NSC48 — 4 in / 8 out processor</option>
         </optgroup>
-        <optgroup label="Övrigt">
-          <option value="custom">Ange max spänning manuellt</option>
+        <optgroup label="Other">
+          <option value="custom">Enter max voltage manually</option>
         </optgroup>
       </select>
     </div>
     <div class="field" id="ampVoltField" style="display:none;">
-      <label>Max förstärkarspänning per kanal</label>
+      <label>Max amplifier voltage per channel</label>
       <div class="unit">
-        <input type="number" id="ampMaxV" placeholder="t.ex. 100">
+        <input type="number" id="ampMaxV" placeholder="e.g. 100">
         <span class="unit-label">V</span>
       </div>
     </div>
-    <div class="field">
-      <label>Typ av limiter (VX-mode)</label>
-      <select id="vxMode">
-        <option value="off">VX-mode OFF (vanlig limiter)</option>
-        <option value="on">VX-mode ON (virtuell crossover)</option>
-      </select>
-    </div>
   </div>
-
-  <button id="calcBtn">Beräkna limiters →</button>
 
   <hr class="divider">
 
-  <div id="results">
-    <div class="results-header">
-      <div class="section-title" style="margin:0;">Resultat</div>
-      <span id="resultSpeakerName" style="font-size:11px;color:var(--text-muted);"></span>
-    </div>
-
-    <div class="limiter-cards">
-      <div class="lcard vx">
-        <div class="lcard-title">VX Limiter</div>
-        <div class="lcard-name">Virtual Xover — pseudo-peak</div>
-        <div class="lcard-row"><span class="lcard-key">Threshold (V)</span><span class="lcard-val" id="vx-v">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Threshold (dBu)</span><span class="lcard-val" id="vx-dbu">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Threshold @ ctrl (dBu)</span><span class="lcard-val" id="vx-ctrl">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Overshoot</span><span class="lcard-val" id="vx-overshoot">—</span></div>
-        <div class="lcard-row" id="vx-splitrow" style="display:none;"><span class="lcard-key">Split freq (VX-mode)</span><span class="lcard-val" id="vx-split">—</span></div>
-        <div class="lcard-row" id="vx-hirow" style="display:none;"><span class="lcard-key">Threshold Hi (dBr)</span><span class="lcard-val" id="vx-hi">—</span></div>
-      </div>
-      <div class="lcard tx">
-        <div class="lcard-title">TMax / Thermal Limiter</div>
-        <div class="lcard-name">Röstspole-värmeskydd (RMS)</div>
-        <div class="lcard-row"><span class="lcard-key">Threshold (V)</span><span class="lcard-val" id="tx-v">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Threshold (dBu)</span><span class="lcard-val" id="tx-dbu">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Threshold @ ctrl (dBu)</span><span class="lcard-val" id="tx-ctrl">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Baserat på</span><span class="lcard-val" id="tx-basis">—</span></div>
-      </div>
-      <div class="lcard ex" id="ex-card">
-        <div class="lcard-title">Excursion Limiter</div>
-        <div class="lcard-name">Mekaniskt rörelseskydd</div>
-        <div class="lcard-row"><span class="lcard-key">Attack-tid (s)</span><span class="lcard-val" id="ex-attack">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">HPF-frekvens</span><span class="lcard-val" id="ex-hpf">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Max spänning (V)</span><span class="lcard-val" id="ex-v">—</span></div>
-        <div class="lcard-row"><span class="lcard-key">Max spänning (dBu)</span><span class="lcard-val" id="ex-dbu">—</span></div>
-      </div>
-      <div id="ex-note" style="background:var(--tag-bg); border:1px solid var(--border); border-radius:10px; padding:1rem; display:none;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px;">Excursion Limiter</div>
-        <div style="font-size:13px;color:var(--text-muted);">C-serien saknar X-Max excursion-limiter. Endast VX-Lim och TMax är tillgängliga på denna modell.</div>
-      </div>
-    </div>
-
-    <div class="section-title">Beräkningssteg</div>
-    <div class="trace-box" id="traceBox"></div>
+  <!-- RESULTS — mirrors SE8 layout -->
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
+    <div class="section-title" style="margin:0;">Suggested limiter settings</div>
+    <span id="resultSpeakerName" style="font-size:11px;color:var(--text-muted);"></span>
   </div>
 
-</div>
+  <div class="results-grid">
+
+    <!-- VX LIMITER -->
+    <div class="limiter-panel">
+      <div class="panel-title vx">Virtual X-Over Limiter (VX)</div>
+
+      <div class="se-field">
+        <div class="se-label">Mode</div>
+        <div class="vx-mode-row">
+          <div class="mode-btn active normal" id="btnNormal" onclick="setVxMode('normal')">Normal</div>
+          <div class="mode-btn vxmode" id="btnVX" onclick="setVxMode('vx')">VX</div>
+        </div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Vx Frequency</div>
+        <div class="se-value vx" id="vx-freq">12.00 kHz</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Threshold</div>
+        <div class="se-value vx" id="vx-thresh">—</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Overshoot</div>
+        <div class="se-value vx" id="vx-overshoot">—</div>
+      </div>
+
+      <div id="vx-hi-section">
+        <div class="se-field">
+          <div class="se-label">Threshold Hi</div>
+          <div class="se-value vx" id="vx-thresh-hi">—</div>
+        </div>
+        <div class="se-field">
+          <div class="se-label">Overshoot Hi</div>
+          <div class="se-value vx" id="vx-overshoot-hi">8 dB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THERMAL LIMITER (TMax) -->
+    <div class="limiter-panel">
+      <div class="panel-title tx">Thermal Limiter (Tmax)</div>
+
+      <div class="se-field">
+        <div class="se-label">Threshold</div>
+        <div class="se-value tx" id="tx-thresh">—</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Attack</div>
+        <div class="se-value tx" id="tx-attack">—</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Release</div>
+        <div class="se-value tx" id="tx-release">2X</div>
+      </div>
+
+      <div class="se-field" style="margin-top:0.75rem;">
+        <div class="se-label">Also set in controller @ output</div>
+        <div class="se-value tx dim" id="tx-ctrl">—</div>
+      </div>
+    </div>
+
+    <!-- EXCURSION LIMITER (Xmax) -->
+    <div class="limiter-panel" id="ex-card">
+      <div class="panel-title ex">Excursion Limiter (Xmax)</div>
+
+      <div class="se-field">
+        <div class="se-label">Threshold</div>
+        <div class="se-value ex" id="ex-thresh">—</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">at Frequency</div>
+        <div class="se-value ex" id="ex-freq">—</div>
+      </div>
+
+      <div class="se-field">
+        <div class="se-label">Min Frequency</div>
+        <div class="se-value ex" id="ex-minfreq">5 Hz</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FORMULA TRACE -->
+  <div class="section-title">Calculation steps</div>
+  <div class="trace-box" id="traceBox">
+    <span style="color:var(--text-faint);">Enter loudspeaker parameters above to see calculations.</span>
+  </div>
+
+</div><!-- /main -->
 
 <script>
+// ── DB LOADING ──────────────────────────────────────────────
 const DB_BRANDS = {};
 let SPEAKERS = [];
 
 (async function loadDB(){
   try {
     const r = await fetch('../database/speakers-db.js');
-    if (!r.ok) throw new Error('not found');
+    if (!r.ok) throw new Error();
     const text = await r.text();
-    const mod = {};
-    const fn = new Function('module','exports', text);
+    const mod = {}; const fn = new Function('module','exports', text);
     fn(mod, mod.exports = {});
     SPEAKERS = (mod.exports.SPEAKER_DATABASE || {}).speakers || [];
   } catch {
-    if (typeof SPEAKER_DATABASE !== 'undefined') {
-      SPEAKERS = SPEAKER_DATABASE.speakers || [];
-    }
+    if (typeof SPEAKER_DATABASE !== 'undefined') SPEAKERS = SPEAKER_DATABASE.speakers || [];
   }
   buildIndex();
 })();
@@ -407,34 +484,7 @@ function buildIndex(){
   });
 }
 
-const searchInput = document.getElementById('speakerSearch');
-const dropdown = document.getElementById('dropdown');
-const selectedBadge = document.getElementById('selectedBadge');
-let selectedSpeaker = null;
-let activeIdx = -1;
-
-function hasData(s){ const e = s.electrical || {}; return e.powerHandlingContinuous && e.impedance; }
-
-function getDriverInfo(s){
-  const ac = s.acoustic || {};
-  const du = ac.driveUnits || ac.drivers || [];
-  const sizes = du.map(d=>d.sizeInch||d.size).filter(Boolean);
-  return { maxSize: sizes.length ? Math.max(...sizes) : null, crossover: getXover(s) };
-}
-
-function getXover(s){
-  const xp = (s.electrical || {}).crossoverPoints;
-  if (Array.isArray(xp) && xp.length) return xp[0].frequencyHz || null;
-  return null;
-}
-
-function getFreqLow(s){
-  const fr = (s.electrical || {}).frequencyResponseMinus3dB;
-  if (Array.isArray(fr)) return fr[0];
-  if (fr && typeof fr === 'object') return fr.low || null;
-  return null;
-}
-
+// ── SPEAKER FILTERING ───────────────────────────────────────
 function isEligible(s){
   if (s.type === 'line-array-element') return false;
   const ap = s.system && s.system.activePassive;
@@ -444,19 +494,46 @@ function isEligible(s){
   return true;
 }
 
+function hasData(s){ const e = s.electrical||{}; return e.powerHandlingContinuous && e.impedance; }
+
+function getDriverInfo(s){
+  const ac = s.acoustic || {};
+  const du = ac.driveUnits || ac.drivers || [];
+  const sizes = du.map(d=>d.sizeInch||d.size).filter(Boolean);
+  return { maxSize: sizes.length ? Math.max(...sizes) : null, crossover: getXover(s) };
+}
+function getXover(s){
+  const xp = (s.electrical||{}).crossoverPoints;
+  if (Array.isArray(xp) && xp.length) return xp[0].frequencyHz || null;
+  return null;
+}
+function getFreqLow(s){
+  const fr = (s.electrical||{}).frequencyResponseMinus3dB;
+  if (Array.isArray(fr)) return fr[0];
+  if (fr && typeof fr === 'object') return fr.low || null;
+  return null;
+}
+
+// ── SEARCH UI ───────────────────────────────────────────────
+const searchInput = document.getElementById('speakerSearch');
+const dropdown    = document.getElementById('dropdown');
+const selectedBadge = document.getElementById('selectedBadge');
+let selectedSpeaker = null;
+let activeIdx = -1;
+
 function renderDropdown(query){
   const q = query.toLowerCase().trim();
   if (!q){ dropdown.innerHTML=''; dropdown.classList.remove('open'); return; }
-  let matches = SPEAKERS.filter(s =>
+  const matches = SPEAKERS.filter(s =>
     isEligible(s) && (
       s.brand.toLowerCase().includes(q) ||
       s.model.toLowerCase().includes(q) ||
-      (s.brand + ' ' + s.model).toLowerCase().includes(q)
+      (s.brand+' '+s.model).toLowerCase().includes(q)
     )
-  ).slice(0, 50);
+  ).slice(0,50);
 
   if (!matches.length){
-    dropdown.innerHTML = '<div class="no-results">Inga träffar</div>';
+    dropdown.innerHTML = '<div class="no-results">No results found</div>';
   } else {
     dropdown.innerHTML = matches.map((s,i) => {
       const ok = hasData(s);
@@ -464,11 +541,11 @@ function renderDropdown(query){
         <span class="drop-brand">${s.brand}</span>
         <span class="drop-model">${s.model}</span>
         ${s.productLine ? `<span class="drop-type">${s.productLine}</span>` : ''}
-        ${!ok ? '<span class="drop-warn">saknar data</span>' : ''}
+        ${!ok ? '<span class="drop-warn">missing data</span>' : ''}
       </div>`;
     }).join('');
     dropdown._matches = matches;
-    dropdown.querySelectorAll('.drop-item').forEach((el, i) => {
+    dropdown.querySelectorAll('.drop-item').forEach((el,i) => {
       el.addEventListener('mousedown', e => { e.preventDefault(); selectSpeaker(matches[i]); });
     });
   }
@@ -485,204 +562,222 @@ function selectSpeaker(s){
   document.getElementById('badgeName').textContent = `${s.brand} ${s.model}`;
   const e = s.electrical || {};
   const info = getDriverInfo(s);
-  const parts = [s.type||'', e.impedance?e.impedance+' Ω':'', e.powerHandlingContinuous?e.powerHandlingContinuous+' W cont':''].filter(Boolean);
+  const parts = [s.type||'', e.impedance?e.impedance+' Ω':'', e.powerHandlingContinuous?e.powerHandlingContinuous+' W AES':''].filter(Boolean);
   document.getElementById('badgeSub').textContent = parts.join(' · ');
   selectedBadge.classList.add('show');
 
-  if (e.powerHandlingContinuous) document.getElementById('powerCont').value = e.powerHandlingContinuous;
-  if (e.powerHandlingProgram)    document.getElementById('powerProg').value = e.powerHandlingProgram;
+  if (e.powerHandlingContinuous) document.getElementById('powerLF').value = e.powerHandlingContinuous;
   if (e.impedance)               document.getElementById('impedance').value = e.impedance;
   if (info.crossover)            document.getElementById('xoverHz').value = info.crossover;
   if (info.maxSize)              document.getElementById('driverSize').value = info.maxSize;
   const freqLow = getFreqLow(s);
   if (freqLow)                   document.getElementById('hpfHz').value = freqLow;
+  recalc();
 }
 
 searchInput.addEventListener('input', e => renderDropdown(e.target.value));
 searchInput.addEventListener('keydown', e => {
   const items = dropdown.querySelectorAll('.drop-item');
-  if (e.key === 'ArrowDown'){ activeIdx = Math.min(activeIdx+1, items.length-1); highlightItem(items); }
-  else if (e.key === 'ArrowUp'){ activeIdx = Math.max(activeIdx-1, 0); highlightItem(items); }
-  else if (e.key === 'Enter' && activeIdx >= 0 && dropdown._matches){ selectSpeaker(dropdown._matches[activeIdx]); }
-  else if (e.key === 'Escape'){ dropdown.classList.remove('open'); }
+  if (e.key==='ArrowDown'){ activeIdx=Math.min(activeIdx+1,items.length-1); highlightItem(items); }
+  else if (e.key==='ArrowUp'){ activeIdx=Math.max(activeIdx-1,0); highlightItem(items); }
+  else if (e.key==='Enter' && activeIdx>=0 && dropdown._matches){ selectSpeaker(dropdown._matches[activeIdx]); }
+  else if (e.key==='Escape'){ dropdown.classList.remove('open'); }
 });
 document.addEventListener('click', e => { if (!e.target.closest('.search-wrapper')) dropdown.classList.remove('open'); });
 function highlightItem(items){
-  items.forEach((el,i) => el.classList.toggle('active', i===activeIdx));
+  items.forEach((el,i)=>el.classList.toggle('active',i===activeIdx));
   if (items[activeIdx]) items[activeIdx].scrollIntoView({block:'nearest'});
 }
-
-document.getElementById('clearBtn').addEventListener('click', () => {
+document.getElementById('clearBtn').addEventListener('click', ()=>{
   selectedSpeaker = null;
   selectedBadge.classList.remove('show');
-  ['powerCont','powerHF','impedance','hpfHz','xoverHz','driverSize'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('results').classList.remove('show');
+  ['powerLF','powerHF','impedance','hpfHz','xoverHz','driverSize'].forEach(id=>document.getElementById(id).value='');
+  recalc();
 });
 
+// ── AMP PRESETS ─────────────────────────────────────────────
 const AMP_PRESETS = {
-  // 44M-serie, rated @ 2Ω
-  '44m06': {maxW:1500, ohm:2},
-  '44m10': {maxW:2500, ohm:2},
-  '44m20': {maxW:5000, ohm:2},
-  // 48M-serie, rated @ 2Ω except 48M20 @ 4Ω
-  '48m03': {maxW:400,  ohm:2},
-  '48m06': {maxW:750,  ohm:2},
-  '48m10': {maxW:1250, ohm:2},
-  '48m20': {maxW:2500, ohm:4},
-  // 44C-serie, rated @ 2Ω
-  '44c06': {maxW:1500, ohm:2},
-  '44c10': {maxW:2500, ohm:2},
-  '44c20': {maxW:5000, ohm:2},
-  // 88C-serie, rated @ 2Ω except 88C20 @ 4Ω
-  '88c03': {maxW:400,  ohm:2},
-  '88c06': {maxW:750,  ohm:2},
-  '88c10': {maxW:1250, ohm:2},
-  '88c20': {maxW:2500, ohm:4},
-  // Processorer — ingen inbyggd förstärkare, gain anges manuellt
-  'asc48': {processor:true},
-  'nsc24': {processor:true},
-  'nsc46': {processor:true},
-  'nsc48': {processor:true},
+  '44m06':{maxW:1500,ohm:2}, '44m10':{maxW:2500,ohm:2}, '44m20':{maxW:5000,ohm:2},
+  '48m03':{maxW:400, ohm:2}, '48m06':{maxW:750, ohm:2}, '48m10':{maxW:1250,ohm:2}, '48m20':{maxW:2500,ohm:4},
+  '44c06':{maxW:1500,ohm:2}, '44c10':{maxW:2500,ohm:2}, '44c20':{maxW:5000,ohm:2},
+  '88c03':{maxW:400, ohm:2}, '88c06':{maxW:750, ohm:2}, '88c10':{maxW:1250,ohm:2}, '88c20':{maxW:2500,ohm:4},
 };
-
 const PROCESSORS = ['asc48','nsc24','nsc46','nsc48'];
-
-function ampHasXmax(){ return true; } // alla LR-modeller har X-Max
 
 document.getElementById('lrModel').addEventListener('change', function(){
   const val = this.value;
   const custom = val === 'custom';
-  const isProcessor = PROCESSORS.includes(val);
+  const isProc = PROCESSORS.includes(val);
   const preset = AMP_PRESETS[val];
-
   document.getElementById('ampVoltField').style.display = custom ? '' : 'none';
+  document.getElementById('gainLabel').textContent = isProc
+    ? 'External amplifier gain' : 'Amplifier gain';
 
-  // Gain label: processor = "Efterföljande förstärkarens gain", amp = "Förstärkarens gain"
-  document.getElementById('gainLabel').textContent = isProcessor
-    ? 'Efterföljande förstärkarens gain (dB)'
-    : 'Förstärkarens gain (dB)';
-
-  if (preset && !custom && !isProcessor) {
-    // Auto-beräkna max spänning och visa som info
-    document.getElementById('ampMaxV').value = Math.round(Math.sqrt(preset.maxW * preset.ohm));
+  const note = document.getElementById('ampNote');
+  if (preset && !isProc) {
+    const maxV = Math.round(Math.sqrt(preset.maxW * preset.ohm));
+    note.textContent = `Max output: ${maxV} V RMS (${preset.maxW} W @ ${preset.ohm} Ω)`;
+    note.style.display = '';
+  } else if (isProc) {
+    note.textContent = 'Limiter thresholds are calibrated at the amplifier output. Enter the gain of the amplifier connected after this processor.';
+    note.style.display = '';
+  } else {
+    note.style.display = 'none';
   }
-});
-document.getElementById('vxMode').addEventListener('change', function(){
-  const on = this.value === 'on';
-  document.getElementById('vx-splitrow').style.display = on ? '' : 'none';
-  document.getElementById('vx-hirow').style.display = on ? '' : 'none';
+  recalc();
 });
 
+// ── VX MODE ─────────────────────────────────────────────────
+let vxMode = 'normal';
+function setVxMode(mode){
+  vxMode = mode;
+  document.getElementById('btnNormal').classList.toggle('active', mode==='normal');
+  document.getElementById('btnVX').classList.toggle('active', mode==='vx');
+  document.getElementById('vx-hi-section').style.display = mode==='vx' ? '' : 'none';
+  recalc();
+}
+// Init: hide VX hi section
+document.getElementById('vx-hi-section').style.display = 'none';
+
+// ── MATH ────────────────────────────────────────────────────
 const v2dbu = v => 20 * Math.log10(v / 0.775);
-const fmt1  = n => isNaN(n) ? '—' : n.toFixed(1);
-
-document.getElementById('calcBtn').addEventListener('click', calculate);
+const fmt1  = n => isNaN(n)||n===null ? '—' : n.toFixed(1);
 function getNum(id){ return parseFloat(document.getElementById(id).value) || null; }
 
-function calculate(){
-  const pLF  = getNum('powerCont');
-  const pHF  = getNum('powerHF');
-  const imp  = getNum('impedance');
-  const hpf  = getNum('hpfHz');
-  const xover = getNum('xoverHz');
+// ── LIVE RECALC ─────────────────────────────────────────────
+['powerLF','powerHF','impedance','hpfHz','xoverHz','driverSize','ampGain','ampMaxV']
+  .forEach(id => document.getElementById(id).addEventListener('input', recalc));
+
+function recalc(){
+  const pLF    = getNum('powerLF');
+  const pHF    = getNum('powerHF');
+  const imp    = getNum('impedance');
+  const hpf    = getNum('hpfHz');
+  const xover  = getNum('xoverHz');
   const driver = getNum('driverSize');
   const ampGain = getNum('ampGain') || 0;
-  const vxMode = document.getElementById('vxMode').value;
 
-  if (!pLF || !imp){ alert('Ange åtminstone LF kontinuerlig effekt (W) och impedans (Ω).'); return; }
+  const modelVal = document.getElementById('lrModel').value;
+  const isProc   = PROCESSORS.includes(modelVal);
 
-  // === Matchar Linea Research Excel-kalkylator exakt ===
-  // LF VMD = √(LF_W × Z)
-  const vmdLF  = Math.sqrt(pLF * imp);
-  const dbuLF  = v2dbu(vmdLF);
+  // Speaker label
+  document.getElementById('resultSpeakerName').textContent = selectedSpeaker
+    ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : '';
 
-  // TMax threshold = VMD_LF (inga -1dB marginal per LR Excel)
-  const tMaxV    = vmdLF;
-  const tMaxDbu  = dbuLF;
-  const tMaxCtrl = tMaxDbu - ampGain;
-
-  // VX threshold = √2 × TMax = VMD_LF × √2  (motsvarar 2× cont power)
-  const vxV    = Math.sqrt(2) * tMaxV;
-  const vxDbu  = v2dbu(vxV);
-  const vxCtrl = vxDbu - ampGain;
-
-  // Overshoot (per LR Excel: 8 dB rekommenderas)
-  let overshoot = '8 dB (rekommenderat)';
-  if (driver){
-    if (driver <= 10) overshoot = '8 dB (≤10″ driver)';
-    else if (driver <= 15) overshoot = '6–8 dB (15″ driver)';
-    else overshoot = '6 dB (≥18″ driver)';
+  if (!pLF || !imp){
+    // Clear all output fields
+    ['vx-thresh','vx-overshoot','vx-thresh-hi','tx-thresh','tx-attack','tx-ctrl',
+     'ex-thresh','ex-freq'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.textContent = '—'; el.className = el.className.replace(' dim',''); }
+    });
+    document.getElementById('traceBox').innerHTML =
+      '<span style="color:var(--text-faint);">Enter loudspeaker parameters above to see calculations.</span>';
+    return;
   }
 
-  // VX Thresh Hi = dBu(HF_VMD) − dBu(LF_VMD)  — relativ HF-threshold
-  let threshHiDbr = null;
-  let vmdHF = null;
+  // === Core calculations — matches Linea Research Excel exactly ===
+  const vmdLF   = Math.sqrt(pLF * imp);
+  const dbuLF   = v2dbu(vmdLF);
+
+  // TMax = VMD_LF (no -1dB margin, per LR Excel)
+  const tMaxV   = vmdLF;
+  const tMaxDbu = dbuLF;
+  const tMaxCtrl = tMaxDbu - ampGain;
+
+  // VX threshold = √2 × VMD_LF
+  const vxV     = Math.sqrt(2) * vmdLF;
+  const vxDbu   = v2dbu(vxV);
+  const vxCtrl  = vxDbu - ampGain;
+
+  // HF VMD for Thresh Hi
+  let vmdHF = null, threshHiDbr = null;
   if (pHF) {
     vmdHF = Math.sqrt(pHF * imp);
     threshHiDbr = v2dbu(vmdHF) - dbuLF;
   }
 
-  // Excursion: attack = 100 / HPF, max V = VMD_LF
-  const attackS = hpf ? (100 / hpf) : null;
-  const exV    = vmdLF;
-  const exDbu  = v2dbu(exV);
+  // Overshoot
+  let overshoot = '8 dB';
+  if (driver){
+    if (driver <= 10) overshoot = '8 dB';
+    else if (driver <= 15) overshoot = '6–8 dB';
+    else overshoot = '6 dB';
+  }
 
-  // Populate result cards
-  document.getElementById('vx-v').textContent    = fmt1(vxV) + ' V';
-  document.getElementById('vx-dbu').textContent  = fmt1(vxDbu) + ' dBu';
-  document.getElementById('vx-ctrl').textContent = fmt1(vxCtrl) + ' dBu';
+  // Excursion
+  const exV   = vmdLF;
+  const exDbu = v2dbu(exV);
+
+  // Vx Frequency label
+  const vxFreqLabel = xover ? `${xover} Hz` : '12.00 kHz';
+
+  // ── Populate VX panel ──────────────────────────────
+  // Threshold: show in V for amp (calibrated at speaker),
+  // show in dBu adjusted for controller if processor
+  const vxThreshDisplay = isProc
+    ? `${fmt1(vxCtrl)} dBu`
+    : `${fmt1(vxV)} V`;
+  const txThreshDisplay = isProc
+    ? `${fmt1(tMaxCtrl)} dBu`
+    : `${fmt1(tMaxV)} V`;
+  const exThreshDisplay = isProc
+    ? `${fmt1(v2dbu(exV) - ampGain)} dBu`
+    : `${fmt1(exV)} V`;
+
+  document.getElementById('vx-freq').textContent = vxFreqLabel;
+  document.getElementById('vx-thresh').textContent = vxThreshDisplay;
   document.getElementById('vx-overshoot').textContent = overshoot;
-  document.getElementById('vx-split').textContent = xover ? xover + ' Hz' : '—';
-  document.getElementById('vx-hi').textContent = threshHiDbr !== null
-    ? fmt1(threshHiDbr) + ' dBr (HF)'
-    : '— (ange HF-effekt)';
 
-  document.getElementById('tx-v').textContent    = fmt1(tMaxV) + ' V';
-  document.getElementById('tx-dbu').textContent  = fmt1(tMaxDbu) + ' dBu';
-  document.getElementById('tx-ctrl').textContent = fmt1(tMaxCtrl) + ' dBu';
-  document.getElementById('tx-basis').textContent = pLF + ' W LF cont, ' + imp + ' Ω';
+  if (threshHiDbr !== null){
+    document.getElementById('vx-thresh-hi').textContent = `${fmt1(threshHiDbr)} dBr`;
+    document.getElementById('vx-thresh-hi').classList.remove('dim');
+  } else {
+    document.getElementById('vx-thresh-hi').textContent = 'enter HF power';
+    document.getElementById('vx-thresh-hi').classList.add('dim');
+  }
+  document.getElementById('vx-overshoot-hi').textContent = '8 dB';
 
-  document.getElementById('ex-attack').textContent = attackS ? attackS.toFixed(3) + ' s' : '—';
-  document.getElementById('ex-hpf').textContent    = hpf ? hpf + ' Hz' : '—';
-  document.getElementById('ex-v').textContent      = fmt1(exV) + ' V';
-  document.getElementById('ex-dbu').textContent    = fmt1(exDbu) + ' dBu';
+  // ── Populate TMax panel ────────────────────────────
+  document.getElementById('tx-thresh').textContent = txThreshDisplay;
+  const attackS = hpf ? (100/hpf) : null;
+  document.getElementById('tx-attack').textContent = attackS ? `${attackS.toFixed(2)} s` : '—';
+  document.getElementById('tx-release').textContent = '2X';
 
-  const vxOn = vxMode === 'on';
-  document.getElementById('vx-splitrow').style.display = vxOn ? '' : 'none';
-  document.getElementById('vx-hirow').style.display    = vxOn ? '' : 'none';
+  // Controller dBu always shown as supplementary
+  document.getElementById('tx-ctrl').textContent = isProc
+    ? `(already shown above)`
+    : `${fmt1(tMaxCtrl)} dBu @ controller`;
 
-  document.getElementById('ex-card').style.display = '';
-  document.getElementById('ex-note').style.display = 'none';
+  // ── Populate Excursion panel ───────────────────────
+  document.getElementById('ex-thresh').textContent = exThreshDisplay;
+  document.getElementById('ex-freq').textContent = hpf ? `${hpf} Hz` : '—';
+  document.getElementById('ex-minfreq').textContent = '5 Hz';
 
-  const modelVal = document.getElementById('lrModel').value;
-  const isProcessor = PROCESSORS.includes(modelVal);
-  document.getElementById('resultSpeakerName').textContent = selectedSpeaker
-    ? `${selectedSpeaker.brand} ${selectedSpeaker.model}` : 'Manuella värden';
-
-  // Trace
+  // ── Formula trace ──────────────────────────────────
   const trace = [];
-  trace.push(`<div class="trace-step">LF VMD = √(${pLF} × ${imp}) = <b>${fmt1(vmdLF)} V</b> = <b>${fmt1(dbuLF)} dBu</b>  →  maxspänning vid LF-drivare</div>`);
-  if (pHF) trace.push(`<div class="trace-step">HF VMD = √(${pHF} × ${imp}) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
-  trace.push(`<div class="trace-step">TMax threshold = VMD_LF = <b>${fmt1(tMaxV)} V</b> = <b>${fmt1(tMaxDbu)} dBu</b></div>`);
-  trace.push(`<div class="trace-step">TMax threshold @ controller = ${fmt1(tMaxDbu)} − ${ampGain} dB gain = <b>${fmt1(tMaxCtrl)} dBu</b></div>`);
-  trace.push(`<div class="trace-step">VX threshold = √2 × TMax = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b></div>`);
-  trace.push(`<div class="trace-step">VX threshold @ controller = ${fmt1(vxDbu)} − ${ampGain} dB gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
-  if (threshHiDbr !== null) trace.push(`<div class="trace-step">VX Thresh Hi = dBu(HF_VMD) − dBu(LF_VMD) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)} = <b>${fmt1(threshHiDbr)} dBr</b></div>`);
-  if (hpf) trace.push(`<div class="trace-step">Excursion attack = 100 ÷ ${hpf} Hz = <b>${(100/hpf).toFixed(3)} s</b></div>`);
-  else trace.push(`<div class="trace-step">Excursion attack: <span>HPF-frekvens saknas – ange HPF för beräkning</span></div>`);
-  if (vxOn && xover) trace.push(`<div class="trace-step">VX Split-frekvens = <b>${xover} Hz</b>  (passiv crossover)</div>`);
-  if (isProcessor) trace.push(`<div class="trace-step">Processor-läge: <span>Threshold @ controller beräknas med gain från efterföljande förstärkare (${ampGain} dB)</span></div>`);
+  trace.push(`<div class="trace-step">LF VMD = √(${pLF} W × ${imp} Ω) = <b>${fmt1(vmdLF)} V</b> = <b>${fmt1(dbuLF)} dBu</b></div>`);
+  if (pHF) trace.push(`<div class="trace-step">HF VMD = √(${pHF} W × ${imp} Ω) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
+  trace.push(`<div class="trace-step">TMax threshold = VMD_LF = <b>${fmt1(tMaxV)} V</b>  →  calibrated at amplifier output</div>`);
+  trace.push(`<div class="trace-step">TMax @ controller = ${fmt1(tMaxDbu)} dBu − ${ampGain} dB gain = <b>${fmt1(tMaxCtrl)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">VX threshold = √2 × VMD_LF = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">VX @ controller = ${fmt1(vxDbu)} dBu − ${ampGain} dB gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
+  if (threshHiDbr !== null)
+    trace.push(`<div class="trace-step">VX Thresh Hi = dBu(HF_VMD) − dBu(LF_VMD) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)} = <b>${fmt1(threshHiDbr)} dBr</b></div>`);
+  if (hpf) trace.push(`<div class="trace-step">Excursion at frequency = HPF = <b>${hpf} Hz</b>,  attack = 100 ÷ ${hpf} = <b>${(100/hpf).toFixed(2)} s</b></div>`);
+  else trace.push(`<div class="trace-step">Excursion at frequency: <span>enter HPF to calculate</span></div>`);
 
   let warn = '';
-  if (!pHF && vxMode === 'on') warn += '• HF-effekt saknas – Thresh Hi kan ej beräknas. Fyll i HF AES-effekt för korrekt VX-mode-beräkning.<br>';
-  if (!hpf) warn += '• HPF-frekvens saknas – excursion attack-tid kan ej beräknas.<br>';
-  if (ampGain === 0) warn += '• Förstärkarens gain angiven som 0 dB – kontrollera om controller-threshold är korrekt.<br>';
+  if (!hpf)             warn += '• HPF frequency missing — excursion at frequency and TMax attack cannot be calculated.<br>';
+  if (!pHF && vxMode==='vx') warn += '• HF power missing — Threshold Hi cannot be calculated (required for VX mode).<br>';
+  if (ampGain === 0)    warn += '• Amplifier gain is 0 dB — check if controller threshold is correct.<br>';
   if (warn) trace.push(`<div class="trace-warn">${warn}</div>`);
 
   document.getElementById('traceBox').innerHTML = trace.join('');
-  document.getElementById('results').classList.add('show');
-  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 }
+
+// Initial render
+recalc();
 </script>
 
 <script src="../database/speakers-db.js" onerror="console.log('speakers-db.js not found')"></script>
