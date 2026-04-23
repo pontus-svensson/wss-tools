@@ -709,8 +709,9 @@ function recalc(){
     else overshoot = '6 dB';
   }
 
-  // Excursion
-  const exV   = vmdLF;
+  // Excursion threshold = VMD_LF × 1.414 (peak value, per LR app note)
+  // "since this limiter uses the peak value, first multiply the RMS voltage by 1.414"
+  const exV   = vmdLF * 1.414;
   const exDbu = v2dbu(exV);
 
   // Vx Frequency label
@@ -774,9 +775,9 @@ function recalc(){
     trace.push(`<div class="trace-step">VX @ controller output = ${fmt1(vxDbu)} dBu − ${ampGain} dB amp gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
   trace.push(`<div class="trace-step">VX Thresh Hi = <b>${fmt1(threshHiDbr)} dBr</b>${hfIsEstimated ? '  (estimated — enter HF power for exact value)' : `  (dBu(HF) − dBu(LF) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)})`}</div>`);
   if (hpf)
-    trace.push(`<div class="trace-step">Excursion at frequency = HPF = <b>${hpf} Hz</b>,  TMax attack = 100 ÷ ${hpf} = <b>${(100/hpf).toFixed(2)} s</b></div>`);
+    trace.push(`<div class="trace-step">Excursion threshold = VMD_LF × 1.414 (peak) = <b>${fmt1(exV)} V</b>,  at frequency = <b>${hpf} Hz</b>,  TMax attack = 100 ÷ ${hpf} = <b>${(100/hpf).toFixed(2)} s</b></div>`);
   else
-    trace.push(`<div class="trace-step">Excursion at frequency: <span>enter HPF frequency to calculate</span></div>`);
+    trace.push(`<div class="trace-step">Excursion threshold = VMD_LF × 1.414 (peak) = <b>${fmt1(exV)} V</b>  —  enter HPF frequency for attack time</div>`);
 
   let warn = '';
   if (!hpf)          warn += '• HPF frequency missing — excursion frequency and TMax attack cannot be calculated.<br>';
