@@ -299,8 +299,8 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
   <!-- AMPLIFIER / PROCESSOR -->
   <div class="section-title">Amplifier / processor</div>
   <div class="amp-row">
-    <div class="field">
-      <label id="gainLabel">Amplifier gain</label>
+    <div class="field" id="gainField" style="display:none;">
+      <label>External amplifier gain</label>
       <div class="unit">
         <input type="number" id="ampGain" placeholder="e.g. 32" value="32">
         <span class="unit-label">dB</span>
@@ -593,8 +593,8 @@ document.getElementById('lrModel').addEventListener('change', function(){
   const info = SERIES_INFO[val];
   const isProc = info ? info.isProc : false;
 
-  document.getElementById('gainLabel').textContent = isProc
-    ? 'External amplifier gain' : 'Amplifier gain';
+  document.getElementById('gainField').style.display = isProc ? '' : 'none';
+  document.getElementById('gainLabel').textContent = 'External amplifier gain';
 
   const note = document.getElementById('ampNote');
   if (info) {
@@ -634,12 +634,12 @@ function recalc(){
   const hpf    = getNum('hpfHz');
   const xover  = getNum('xoverHz');
   const driver = getNum('driverSize');
-  const ampGain = getNum('ampGain') || 0;
-
-  const modelVal  = document.getElementById('lrModel').value;
+  const modelVal   = document.getElementById('lrModel').value;
   const seriesInfo = SERIES_INFO[modelVal] || { hasXmax: true, isProc: false };
-  const isProc    = seriesInfo.isProc;
-  const hasXmax   = seriesInfo.hasXmax;
+  const isProc     = seriesInfo.isProc;
+  const hasXmax    = seriesInfo.hasXmax;
+
+  const ampGain = isProc ? (getNum('ampGain') || 0) : 0;
 
   // Show/hide Excursion card based on series
   document.getElementById('ex-card').style.display = hasXmax ? '' : 'none';
