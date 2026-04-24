@@ -395,7 +395,7 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     </div>
 
     <!-- EXCURSION LIMITER (Xmax) -->
-    <div class="limiter-panel" id="ex-card" style="display:none;">
+    <div class="limiter-panel" id="ex-card">
       <div class="panel-title ex">Excursion Limiter (Xmax)</div>
 
       <div class="se-field">
@@ -592,9 +592,10 @@ document.getElementById('lrModel').addEventListener('change', function(){
   const val = this.value;
   const info = SERIES_INFO[val];
   const isProc = info ? info.isProc : false;
+  const hasXmax = info ? info.hasXmax : true;
 
   document.getElementById('gainField').style.display = isProc ? '' : 'none';
-  document.getElementById('gainLabel').textContent = 'External amplifier gain';
+  document.getElementById('ex-card').style.display = hasXmax ? '' : 'none';
 
   const note = document.getElementById('ampNote');
   if (info) {
@@ -640,9 +641,6 @@ function recalc(){
   const hasXmax    = seriesInfo.hasXmax;
 
   const ampGain = isProc ? (getNum('ampGain') || 0) : 0;
-
-  // Show/hide Excursion card based on series
-  document.getElementById('ex-card').style.display = hasXmax ? '' : 'none';
 
   // Speaker label
   document.getElementById('resultSpeakerName').textContent = selectedSpeaker
