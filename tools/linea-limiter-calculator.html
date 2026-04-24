@@ -313,8 +313,7 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
         <option value="">— Select series (optional) —</option>
         <option value="m">M series — touring (VX + TMax + Excursion)</option>
         <option value="c">C series — installation (VX + TMax)</option>
-        <option value="asc48">ASC48 processor</option>
-        <option value="nsc">NSC processor (NSC24 / NSC46 / NSC48)</option>
+        <option value="processor">Processor — ASC48 / NSC24 / NSC46 / NSC48</option>
         <option value="custom">Other / manual</option>
       </select>
       <div class="amp-note" id="ampNote" style="display:none;"></div>
@@ -579,22 +578,15 @@ const SERIES_INFO = {
     hasXmax: false,
     isProc: false,
   },
-  'asc48': {
-    label: 'ASC48 — processor + external amplifier',
-    models: 'ASC48',
-    limiters: 'VX + TMax + Excursion (Xmax). Enter the gain of the amplifier connected after this processor.',
-    hasXmax: true,
-    isProc: true,
-  },
-  'nsc': {
-    label: 'NSC processor + external amplifier',
-    models: 'NSC24, NSC46, NSC48',
+  'processor': {
+    label: 'Processor + external amplifier',
+    models: 'ASC48, NSC24, NSC46, NSC48',
     limiters: 'VX + TMax + Excursion (Xmax). Enter the gain of the amplifier connected after this processor.',
     hasXmax: true,
     isProc: true,
   },
 };
-const PROCESSORS = ['asc48','nsc'];
+const PROCESSORS = ['processor'];
 
 document.getElementById('lrModel').addEventListener('change', function(){
   const val = this.value;
