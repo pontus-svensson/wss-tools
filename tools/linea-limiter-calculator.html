@@ -395,7 +395,7 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     </div>
 
     <!-- EXCURSION LIMITER (Xmax) -->
-    <div class="limiter-panel" id="ex-card">
+    <div class="limiter-panel" id="ex-card" style="display:none;">
       <div class="panel-title ex">Excursion Limiter (Xmax)</div>
 
       <div class="se-field">
@@ -772,7 +772,8 @@ function recalc(){
   document.getElementById('traceBox').innerHTML = trace.join('');
 }
 
-// Initial render
+// Initial render — run after all event listeners are attached
+window.addEventListener('DOMContentLoaded', recalc);
 recalc();
 </script>
 
