@@ -310,46 +310,14 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     <div class="field">
       <label>Linea Research unit</label>
       <select id="lrModel">
-        <option value="">— Select model (optional) —</option>
-        <optgroup label="44M series — 4-ch touring (VX + TMax + Excursion)">
-          <option value="44m06">44M06 — 4× 1500W @ 2Ω</option>
-          <option value="44m10">44M10 — 4× 2500W @ 2Ω</option>
-          <option value="44m20">44M20 — 4× 5000W @ 2Ω</option>
-        </optgroup>
-        <optgroup label="48M series — 8-ch touring (VX + TMax + Excursion)">
-          <option value="48m03">48M03 — 8× 400W @ 2Ω</option>
-          <option value="48m06">48M06 — 8× 750W @ 2Ω</option>
-          <option value="48m10">48M10 — 8× 1250W @ 2Ω</option>
-          <option value="48m20">48M20 — 8× 2500W @ 4Ω</option>
-        </optgroup>
-        <optgroup label="44C series — 4-ch installation (VX + TMax + Excursion)">
-          <option value="44c06">44C06 — 4× 1500W @ 2Ω</option>
-          <option value="44c10">44C10 — 4× 2500W @ 2Ω</option>
-          <option value="44c20">44C20 — 4× 5000W @ 2Ω</option>
-        </optgroup>
-        <optgroup label="88C series — 8-ch installation (VX + TMax + Excursion)">
-          <option value="88c03">88C03 — 8× 400W @ 2Ω</option>
-          <option value="88c06">88C06 — 8× 750W @ 2Ω</option>
-          <option value="88c10">88C10 — 8× 1250W @ 2Ω</option>
-          <option value="88c20">88C20 — 8× 2500W @ 4Ω</option>
-        </optgroup>
-        <optgroup label="Processor + external amplifier (enter amp gain above)">
-          <option value="asc48">ASC48 — 4 in / 8 out processor</option>
-          <option value="nsc24">NSC24 — 2 in / 4 out processor</option>
-          <option value="nsc46">NSC46 — 4 in / 6 out processor</option>
-          <option value="nsc48">NSC48 — 4 in / 8 out processor</option>
-        </optgroup>
-        <optgroup label="Other">
-          <option value="custom">Enter max voltage manually</option>
-        </optgroup>
+        <option value="">— Select series (optional) —</option>
+        <option value="m">M series — touring (VX + TMax + Excursion)</option>
+        <option value="c">C series — installation (VX + TMax)</option>
+        <option value="asc48">ASC48 processor</option>
+        <option value="nsc">NSC processor (NSC24 / NSC46 / NSC48)</option>
+        <option value="custom">Other / manual</option>
       </select>
-    </div>
-    <div class="field" id="ampVoltField" style="display:none;">
-      <label>Max amplifier voltage per channel</label>
-      <div class="unit">
-        <input type="number" id="ampMaxV" placeholder="e.g. 100">
-        <span class="unit-label">V</span>
-      </div>
+      <div class="amp-note" id="ampNote" style="display:none;"></div>
     </div>
   </div>
 
@@ -595,31 +563,50 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
   recalc();
 });
 
-// ── AMP PRESETS ─────────────────────────────────────────────
-const AMP_PRESETS = {
-  '44m06':{maxW:1500,ohm:2}, '44m10':{maxW:2500,ohm:2}, '44m20':{maxW:5000,ohm:2},
-  '48m03':{maxW:400, ohm:2}, '48m06':{maxW:750, ohm:2}, '48m10':{maxW:1250,ohm:2}, '48m20':{maxW:2500,ohm:4},
-  '44c06':{maxW:1500,ohm:2}, '44c10':{maxW:2500,ohm:2}, '44c20':{maxW:5000,ohm:2},
-  '88c03':{maxW:400, ohm:2}, '88c06':{maxW:750, ohm:2}, '88c10':{maxW:1250,ohm:2}, '88c20':{maxW:2500,ohm:4},
+// ── AMP SERIES ───────────────────────────────────────────────
+const SERIES_INFO = {
+  'm': {
+    label: 'M series — touring amplifier',
+    models: '44M06, 44M10, 44M20, 48M03, 48M06, 48M10, 48M20',
+    limiters: 'VX + TMax + Excursion (Xmax)',
+    hasXmax: true,
+    isProc: false,
+  },
+  'c': {
+    label: 'C series — installation amplifier',
+    models: '44C06, 44C10, 44C20, 88C03, 88C06, 88C10, 88C20',
+    limiters: 'VX + TMax only (no Excursion)',
+    hasXmax: false,
+    isProc: false,
+  },
+  'asc48': {
+    label: 'ASC48 — processor + external amplifier',
+    models: 'ASC48',
+    limiters: 'VX + TMax + Excursion (Xmax). Enter the gain of the amplifier connected after this processor.',
+    hasXmax: true,
+    isProc: true,
+  },
+  'nsc': {
+    label: 'NSC processor + external amplifier',
+    models: 'NSC24, NSC46, NSC48',
+    limiters: 'VX + TMax + Excursion (Xmax). Enter the gain of the amplifier connected after this processor.',
+    hasXmax: true,
+    isProc: true,
+  },
 };
-const PROCESSORS = ['asc48','nsc24','nsc46','nsc48'];
+const PROCESSORS = ['asc48','nsc'];
 
 document.getElementById('lrModel').addEventListener('change', function(){
   const val = this.value;
-  const custom = val === 'custom';
-  const isProc = PROCESSORS.includes(val);
-  const preset = AMP_PRESETS[val];
-  document.getElementById('ampVoltField').style.display = custom ? '' : 'none';
+  const info = SERIES_INFO[val];
+  const isProc = info ? info.isProc : false;
+
   document.getElementById('gainLabel').textContent = isProc
     ? 'External amplifier gain' : 'Amplifier gain';
 
   const note = document.getElementById('ampNote');
-  if (preset && !isProc) {
-    const maxV = Math.round(Math.sqrt(preset.maxW * preset.ohm));
-    note.textContent = `Max output: ${maxV} V RMS (${preset.maxW} W @ ${preset.ohm} Ω)`;
-    note.style.display = '';
-  } else if (isProc) {
-    note.textContent = 'Limiter thresholds are calibrated at the amplifier output. Enter the gain of the amplifier connected after this processor.';
+  if (info) {
+    note.innerHTML = `<strong>${info.models}</strong><br>${info.limiters}`;
     note.style.display = '';
   } else {
     note.style.display = 'none';
@@ -657,8 +644,13 @@ function recalc(){
   const driver = getNum('driverSize');
   const ampGain = getNum('ampGain') || 0;
 
-  const modelVal = document.getElementById('lrModel').value;
-  const isProc   = PROCESSORS.includes(modelVal);
+  const modelVal  = document.getElementById('lrModel').value;
+  const seriesInfo = SERIES_INFO[modelVal] || { hasXmax: true, isProc: false };
+  const isProc    = seriesInfo.isProc;
+  const hasXmax   = seriesInfo.hasXmax;
+
+  // Show/hide Excursion card based on series
+  document.getElementById('ex-card').style.display = hasXmax ? '' : 'none';
 
   // Speaker label
   document.getElementById('resultSpeakerName').textContent = selectedSpeaker
