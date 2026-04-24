@@ -699,15 +699,21 @@ function recalc(){
   // Vx Frequency label
   const vxFreqLabel = xover ? `${xover} Hz` : '12.00 kHz';
 
-  // Threshold display:
-  // Amp with built-in DSP → V (calibrated at speaker terminals)
-  // Processor → dBu (subtract amp gain, set in controller output)
-  const vxThreshDisplay = isProc ? `${fmt1(vxCtrl)} dBu`  : `${fmt1(vxV)} V`;
-  const txThreshDisplay = isProc ? `${fmt1(tMaxCtrl)} dBu` : `${fmt1(tMaxV)} V`;
-  const exThreshDisplay = isProc ? `${fmt1(v2dbu(exV) - ampGain)} dBu` : `${fmt1(exV)} V`;
+  // Threshold display per LR app note:
+  // - VX limiter in ASC48/NSC: calibrated in dBu at processor output → subtract amp gain
+  // - TMax and Xmax in ASC48/NSC: have a built-in Amplifier Gain field in the processor UI
+  //   → enter voltage directly, processor compensates automatically. No subtraction needed.
+  // - M/C series amplifiers: all limiters calibrated in V at speaker terminals.
+  const vxThreshDisplay = isProc ? `${fmt1(vxCtrl)} dBu` : `${fmt1(vxV)} V`;
+  const txThreshDisplay = `${fmt1(tMaxV)} V`;
+  const exThreshDisplay = `${fmt1(exV)} V`;
+
+  const vxThreshNote = isProc
+    ? `<div style="font-size:10px;color:var(--text-muted);margin-top:3px;">Enter amp gain (${ampGain} dB) in the processor's Amplifier Gain field</div>`
+    : '';
 
   document.getElementById('vx-freq').textContent    = vxFreqLabel;
-  document.getElementById('vx-thresh').textContent  = vxThreshDisplay;
+  document.getElementById('vx-thresh').innerHTML    = vxThreshDisplay + vxThreshNote;
   document.getElementById('vx-overshoot').textContent = overshoot;
 
   // Thresh Hi
@@ -749,22 +755,20 @@ function recalc(){
     trace.push(`<div class="trace-step">HF VMD = √(${pHF} W × ${imp} Ω) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
   else
     trace.push(`<div class="trace-step">HF VMD: <span>no HF power entered — Threshold Hi defaulted to −3 dBr (estimate)</span></div>`);
-  trace.push(`<div class="trace-step">TMax threshold = VMD_LF = <b>${fmt1(tMaxV)} V</b></div>`);
-  if (isProc)
-    trace.push(`<div class="trace-step">TMax @ controller output = ${fmt1(tMaxDbu)} dBu − ${ampGain} dB amp gain = <b>${fmt1(tMaxCtrl)} dBu</b></div>`);
+  trace.push(`<div class="trace-step">TMax threshold = VMD_LF = <b>${fmt1(tMaxV)} V</b>${isProc ? '  → enter this value in V; set amp gain (' + ampGain + ' dB) in the processor\'s Amplifier Gain field' : ''}</div>`);
   trace.push(`<div class="trace-step">VX threshold = √2 × VMD_LF = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b></div>`);
   if (isProc)
-    trace.push(`<div class="trace-step">VX @ controller output = ${fmt1(vxDbu)} dBu − ${ampGain} dB amp gain = <b>${fmt1(vxCtrl)} dBu</b></div>`);
+    trace.push(`<div class="trace-step">VX @ processor output = ${fmt1(vxDbu)} dBu − ${ampGain} dB amp gain = <b>${fmt1(vxCtrl)} dBu</b>  → VX has no built-in gain field, must subtract manually</div>`);
   trace.push(`<div class="trace-step">VX Thresh Hi = <b>${fmt1(threshHiDbr)} dBr</b>${hfIsEstimated ? '  (estimated — enter HF power for exact value)' : `  (dBu(HF) − dBu(LF) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)})`}</div>`);
   if (hpf)
-    trace.push(`<div class="trace-step">Excursion threshold = VMD_LF × 1.414 (peak) = <b>${fmt1(exV)} V</b>,  at frequency = <b>${hpf} Hz</b>,  TMax attack = 100 ÷ ${hpf} = <b>${(100/hpf).toFixed(2)} s</b></div>`);
+    trace.push(`<div class="trace-step">Excursion threshold = VMD_LF × 1.414 (peak) = <b>${fmt1(exV)} V</b>,  at frequency = <b>${hpf} Hz</b>${isProc ? '  → enter in V; set amp gain in processor' : ''},  TMax attack = 100 ÷ ${hpf} = <b>${(100/hpf).toFixed(2)} s</b></div>`);
   else
     trace.push(`<div class="trace-step">Excursion threshold = VMD_LF × 1.414 (peak) = <b>${fmt1(exV)} V</b>  —  enter HPF frequency for attack time</div>`);
 
   let warn = '';
   if (!hpf)          warn += '• HPF frequency missing — excursion frequency and TMax attack cannot be calculated.<br>';
   if (hfIsEstimated) warn += '• HF power not entered — Threshold Hi is estimated at −3 dBr. Enter HF AES power for an exact value.<br>';
-  if (ampGain === 0) warn += '• Amplifier gain is 0 dB — verify this is correct before using controller thresholds.<br>';
+  if (isProc && ampGain === 0) warn += '• Amplifier gain is 0 dB — VX threshold will not be compensated correctly.<br>';
   if (warn) trace.push(`<div class="trace-warn">${warn}</div>`);
 
   document.getElementById('traceBox').innerHTML = trace.join('');
