@@ -493,18 +493,28 @@ function recalc(){
     const ampW=ampData.watts[imp];
     if(ampW){
       const ampMaxV=Math.sqrt(ampW*imp);
-      // TMax = amp clip V × mf
-      const ampTMaxV=ampMaxV*mf;
-      // VX = TMax × 4/3 (Martin Audio method)
-      const ampVxV=ampTMaxV*(4/3);
-      const ampExV=ampMaxV*1.414*mf;
-      ampTxDisplay=`${fmt1(ampTMaxV)} V`;
-      ampVxDisplay=`${fmt1(ampVxV)} V`;
-      ampExDisplay=`${fmt1(ampExV)} V`;
+      const spkVmdV=vmdLF; // speaker VMD = what the speaker needs
+      const ampLimits=ampMaxV<spkVmdV; // amp can't reach speaker AES rating
+
+      if(ampLimits){
+        // Amp is the limiting factor — cap thresholds to amp capability
+        const ampTMaxV=ampMaxV*mf;
+        const ampVxV=ampTMaxV*(4/3);
+        const ampExV=ampMaxV*1.414*mf;
+        ampTxDisplay=`${fmt1(ampTMaxV)} V`;
+        ampVxDisplay=`${fmt1(ampVxV)} V`;
+        ampExDisplay=`${fmt1(ampExV)} V`;
+        ampVxNote=`⚑ Amp max ${fmt1(ampMaxV)}V < speaker VMD ${fmt1(spkVmdV)}V — amp is limiting factor`;
+        ampTxNote=ampVxNote;
+      } else {
+        // Amp can deliver full speaker rating — values are identical to speaker column
+        ampTxDisplay=spkTxDisplay;
+        ampVxDisplay=spkVxDisplay;
+        ampExDisplay=spkExDisplay;
+        ampVxNote=`✓ Amp delivers ${fmt1(ampMaxV)}V — no limitation`;
+        ampTxNote='';
+      }
       if(thHi!==null)ampThHiDisplay=`${fmt1(thHi)} dBr${hfEst?' (est.)':''}`;
-      // Warning if amp undersized
-      ampVxNote=ampVxV<vxV?'⚑ amp limits before speaker max':'';
-      ampTxNote=ampTMaxV<tMaxV?'⚑ amp limits before speaker max':'';
     }
   } else if(isProc){
     const procVxCtrl=vxDbu-ampGain;
@@ -573,10 +583,15 @@ function recalc(){
 
   if(ampData&&imp&&ampData.watts[imp]){
     const ampMaxV=Math.sqrt(ampData.watts[imp]*imp);
+    const ampLimits=ampMaxV<vmdLF;
     trace.push(`<hr class="trace-sep">`);
-    trace.push(`<div class="trace-step">${modelKey} max output = √(${ampData.watts[imp]}W × ${imp}Ω) = <b class="amp">${fmt1(ampMaxV)} V</b></div>`);
-    trace.push(`<div class="trace-step">Amp-matched TMax = ${fmt1(ampMaxV)}${mStr} = <b class="amp">${fmt1(ampMaxV*mf)} V</b></div>`);
-    trace.push(`<div class="trace-step">Amp-matched VX = TMax × 4/3 = <b class="amp">${fmt1(ampMaxV*mf*4/3)} V</b>  <span>(Martin Audio method — vs ×√2 = ${fmt1(ampMaxV*mf*Math.sqrt(2))} V in speaker column)</span></div>`);
+    trace.push(`<div class="trace-step">${modelKey} max output into ${imp}Ω = √(${ampData.watts[imp]}W × ${imp}Ω) = <b class="amp">${fmt1(ampMaxV)} V</b>${ampLimits?` — <span style="color:var(--c-warn)">less than speaker VMD ${fmt1(vmdLF)}V → amp is limiting factor</span>`:` — <span>sufficient (≥ speaker VMD ${fmt1(vmdLF)}V)</span>`}</div>`);
+    if(ampLimits){
+      trace.push(`<div class="trace-step">Amp-limited TMax = ${fmt1(ampMaxV)}${useMargin?' × 0.891':''} = <b class="amp">${fmt1(ampMaxV*mf)} V</b></div>`);
+      trace.push(`<div class="trace-step">Amp-limited VX = TMax × 4/3 = <b class="amp">${fmt1(ampMaxV*mf*4/3)} V</b></div>`);
+    } else {
+      trace.push(`<div class="trace-step"><span>Amp can deliver full speaker rating — speaker-based thresholds apply unchanged.</span></div>`);
+    }
   }
 
   let warn='';
