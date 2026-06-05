@@ -490,28 +490,33 @@ function recalc(){
   let ampTxNote='',ampVxNote='';
 
   if(ampData&&imp){
-    const ampW=ampData.watts[imp];
+    // Find best matching impedance — use exact match, else nearest available
+    const availOhms=Object.keys(ampData.watts).map(Number).sort((a,b)=>a-b);
+    let matchOhm=ampData.watts[imp]!=null ? imp : availOhms.reduce((best,z)=>Math.abs(z-imp)<Math.abs(best-imp)?z:best, availOhms[0]);
+    const ampW=ampData.watts[matchOhm];
+    const ohmsNote=matchOhm!==imp?`rated @ ${matchOhm}Ω (no ${imp}Ω spec)`:null;
     if(ampW){
-      const ampMaxV=Math.sqrt(ampW*imp);
-      const spkVmdV=vmdLF; // speaker VMD = what the speaker needs
-      const ampLimits=ampMaxV<spkVmdV; // amp can't reach speaker AES rating
-
+      const ampMaxV=Math.sqrt(ampW*matchOhm);
+      // At higher impedance the amp delivers the same or more voltage but less current
+      // Recalculate actual voltage the amp can deliver into the actual speaker impedance
+      // V is voltage-limited by the amp's rail, so we use the voltage from the rated impedance
+      const ampMaxVActual=ampMaxV; // voltage swing is the same regardless of load (above rated ohm)
+      const spkVmdV=vmdLF;
+      const ampLimits=ampMaxVActual<spkVmdV;
       if(ampLimits){
-        // Amp is the limiting factor — cap thresholds to amp capability
-        const ampTMaxV=ampMaxV*mf;
+        const ampTMaxV=ampMaxVActual*mf;
         const ampVxV=ampTMaxV*(4/3);
-        const ampExV=ampMaxV*1.414*mf;
+        const ampExV=ampMaxVActual*1.414*mf;
         ampTxDisplay=`${fmt1(ampTMaxV)} V`;
         ampVxDisplay=`${fmt1(ampVxV)} V`;
         ampExDisplay=`${fmt1(ampExV)} V`;
-        ampVxNote=`⚑ Amp max ${fmt1(ampMaxV)}V < speaker VMD ${fmt1(spkVmdV)}V — amp is limiting factor`;
+        ampVxNote=`⚑ Amp max ~${fmt1(ampMaxVActual)}V${ohmsNote?' ('+ohmsNote+')':''} < speaker VMD ${fmt1(spkVmdV)}V`;
         ampTxNote=ampVxNote;
       } else {
-        // Amp can deliver full speaker rating — values are identical to speaker column
         ampTxDisplay=spkTxDisplay;
         ampVxDisplay=spkVxDisplay;
         ampExDisplay=spkExDisplay;
-        ampVxNote=`✓ Amp delivers ${fmt1(ampMaxV)}V — no limitation`;
+        ampVxNote=`✓ Amp delivers ~${fmt1(ampMaxVActual)}V${ohmsNote?' ('+ohmsNote+')':''} — no limitation`;
         ampTxNote='';
       }
       if(thHi!==null)ampThHiDisplay=`${fmt1(thHi)} dBr${hfEst?' (est.)':''}`;
@@ -581,16 +586,22 @@ function recalc(){
   trace.push(`<div class="trace-step">VX = √2 × VMD${mStr} = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b>${isProc?` → @ processor output: <b>${fmt1(vxDbu-ampGain)} dBu</b>`:''}</div>`);
   trace.push(`<div class="trace-step">Excursion = VMD × 1.414 (peak)${mStr} = <b>${fmt1(exV)} V</b>${hpf?`,  attack = 100 ÷ ${hpf} = <b>${fmt2(100/hpf)} s</b>`:''}</div>`);
 
-  if(ampData&&imp&&ampData.watts[imp]){
-    const ampMaxV=Math.sqrt(ampData.watts[imp]*imp);
-    const ampLimits=ampMaxV<vmdLF;
-    trace.push(`<hr class="trace-sep">`);
-    trace.push(`<div class="trace-step">${modelKey} max output into ${imp}Ω = √(${ampData.watts[imp]}W × ${imp}Ω) = <b class="amp">${fmt1(ampMaxV)} V</b>${ampLimits?` — <span style="color:var(--c-warn)">less than speaker VMD ${fmt1(vmdLF)}V → amp is limiting factor</span>`:` — <span>sufficient (≥ speaker VMD ${fmt1(vmdLF)}V)</span>`}</div>`);
-    if(ampLimits){
-      trace.push(`<div class="trace-step">Amp-limited TMax = ${fmt1(ampMaxV)}${useMargin?' × 0.891':''} = <b class="amp">${fmt1(ampMaxV*mf)} V</b></div>`);
-      trace.push(`<div class="trace-step">Amp-limited VX = TMax × 4/3 = <b class="amp">${fmt1(ampMaxV*mf*4/3)} V</b></div>`);
-    } else {
-      trace.push(`<div class="trace-step"><span>Amp can deliver full speaker rating — speaker-based thresholds apply unchanged.</span></div>`);
+  if(ampData&&imp){
+    const availOhms=Object.keys(ampData.watts).map(Number).sort((a,b)=>a-b);
+    const matchOhm=ampData.watts[imp]!=null?imp:availOhms.reduce((best,z)=>Math.abs(z-imp)<Math.abs(best-imp)?z:best,availOhms[0]);
+    const ampW=ampData.watts[matchOhm];
+    if(ampW){
+      const ampMaxV=Math.sqrt(ampW*matchOhm);
+      const ampLimits=ampMaxV<vmdLF;
+      const ohmsNote=matchOhm!==imp?` (no ${imp}Ω spec — using ${matchOhm}Ω rating)`:'';
+      trace.push(`<hr class="trace-sep">`);
+      trace.push(`<div class="trace-step">${modelKey} max output${ohmsNote} = √(${ampW}W × ${matchOhm}Ω) = <b class="amp">${fmt1(ampMaxV)} V</b>${ampLimits?` — <span style="color:var(--c-warn)">below speaker VMD ${fmt1(vmdLF)}V → amp limits</span>`:` — <span>sufficient (≥ speaker VMD ${fmt1(vmdLF)}V)</span>`}</div>`);
+      if(ampLimits){
+        trace.push(`<div class="trace-step">Amp-limited TMax = ${fmt1(ampMaxV)}${useMargin?' × 0.891':''} = <b class="amp">${fmt1(ampMaxV*mf)} V</b></div>`);
+        trace.push(`<div class="trace-step">Amp-limited VX = TMax × 4/3 = <b class="amp">${fmt1(ampMaxV*mf*4/3)} V</b></div>`);
+      } else {
+        trace.push(`<div class="trace-step"><span>Amp can deliver full speaker rating — speaker-based thresholds apply unchanged.</span></div>`);
+      }
     }
   }
 
