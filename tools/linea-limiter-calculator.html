@@ -21,161 +21,137 @@
   --c-ex: #059669;
   --c-amp: #7c3aed;
   --c-amp-bg: #f5f3ff;
+  --c-warn: #dc2626;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #141414; --surface: #1e1e1e;
-    --border: rgba(255,255,255,0.1); --border-strong: rgba(255,255,255,0.18);
-    --text: #e8e8e4; --text-muted: #8a8a86; --text-faint: #555552;
-    --accent: #60a5fa; --accent-bg: #1e2d44; --tag-bg: #2a2a28;
-    --c-vx: #60a5fa; --c-tx: #fbbf24; --c-ex: #34d399;
-    --c-amp: #a78bfa; --c-amp-bg: #1e1a2e;
+    --bg:#141414;--surface:#1e1e1e;--border:rgba(255,255,255,0.1);--border-strong:rgba(255,255,255,0.18);
+    --text:#e8e8e4;--text-muted:#8a8a86;--text-faint:#555552;
+    --accent:#60a5fa;--accent-bg:#1e2d44;--tag-bg:#2a2a28;
+    --c-vx:#60a5fa;--c-tx:#fbbf24;--c-ex:#34d399;--c-amp:#a78bfa;--c-amp-bg:#1e1a2e;
   }
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system,'Helvetica Neue',Arial,sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;}
 
-header {
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  padding: 0.85rem 1.5rem; display: flex; align-items: center; gap: 0.75rem;
-  position: sticky; top: 0; z-index: 100;
-}
-.logo-mark { width: 30px; height: 30px; border-radius: 6px; background: var(--accent); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.logo-mark svg { width: 16px; height: 16px; }
-header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
-header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem; font-size: 13px; }
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1.5rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;}
+.logo-mark{width:30px;height:30px;border-radius:6px;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.logo-mark svg{width:16px;height:16px;}
+header h1{font-size:15px;font-weight:600;letter-spacing:-.01em;}
+header h1 span{color:var(--text-muted);font-weight:400;margin-left:.4rem;font-size:13px;}
 
-.main { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
-
-.section-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+.main{max-width:1040px;margin:0 auto;padding:1.5rem 1.5rem 4rem;}
+.section-title{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;}
 
 /* SEARCH */
-.search-wrapper { position: relative; margin-bottom: 0.75rem; }
-.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; font-size: 14px; }
-#speakerSearch { width: 100%; padding: 7px 10px 7px 30px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.15s; }
-#speakerSearch:focus { border-color: var(--accent); }
-#speakerSearch::placeholder { color: var(--text-faint); }
-#dropdown { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 6px; max-height: 260px; overflow-y: auto; display: none; position: absolute; width: 100%; z-index: 200; top: calc(100% + 3px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-#dropdown.open { display: block; }
-.drop-item { padding: 7px 12px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
-.drop-item:last-child { border-bottom: none; }
-.drop-item:hover, .drop-item.active { background: var(--tag-bg); }
-.drop-brand { color: var(--text-muted); font-size: 11px; min-width: 90px; }
-.drop-model { font-weight: 500; }
-.drop-type { margin-left: auto; font-size: 11px; color: var(--text-faint); }
-.drop-warn { font-size: 11px; color: #dc2626; }
-.no-results { padding: 1.25rem; color: var(--text-muted); font-size: 13px; text-align: center; }
+.search-wrapper{position:relative;margin-bottom:.75rem;}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-faint);pointer-events:none;font-size:14px;}
+#speakerSearch{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--border-strong);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .15s;}
+#speakerSearch:focus{border-color:var(--accent);}
+#speakerSearch::placeholder{color:var(--text-faint);}
+#dropdown{background:var(--surface);border:1px solid var(--border-strong);border-radius:6px;max-height:260px;overflow-y:auto;display:none;position:absolute;width:100%;z-index:200;top:calc(100% + 3px);box-shadow:0 4px 16px rgba(0,0,0,.12);}
+#dropdown.open{display:block;}
+.drop-item{padding:7px 12px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);transition:background .1s;}
+.drop-item:last-child{border-bottom:none;}
+.drop-item:hover,.drop-item.active{background:var(--tag-bg);}
+.drop-brand{color:var(--text-muted);font-size:11px;min-width:90px;}
+.drop-model{font-weight:500;}
+.drop-type{margin-left:auto;font-size:11px;color:var(--text-faint);}
+.drop-warn{font-size:11px;color:#dc2626;}
+.no-results{padding:1.25rem;color:var(--text-muted);font-size:13px;text-align:center;}
 
-#selectedBadge { display: none; align-items: center; gap: 0.75rem; background: var(--accent-bg); border: 1px solid var(--accent); border-radius: 6px; padding: 8px 12px; margin-bottom: 1.25rem; }
-#selectedBadge.show { display: flex; }
-.badge-info { flex: 1; }
-.badge-name { font-weight: 600; font-size: 14px; }
-.badge-sub { color: var(--text-muted); font-size: 11px; margin-top: 1px; }
-.clear-btn { background: none; border: 1px solid var(--border-strong); color: var(--text-muted); border-radius: 20px; padding: 3px 10px; cursor: pointer; font-size: 11px; transition: all 0.12s; }
-.clear-btn:hover { border-color: #dc2626; color: #dc2626; }
+#selectedBadge{display:none;align-items:center;gap:.75rem;background:var(--accent-bg);border:1px solid var(--accent);border-radius:6px;padding:8px 12px;margin-bottom:1.25rem;}
+#selectedBadge.show{display:flex;}
+.badge-info{flex:1;}
+.badge-name{font-weight:600;font-size:14px;}
+.badge-sub{color:var(--text-muted);font-size:11px;margin-top:1px;}
+.clear-btn{background:none;border:1px solid var(--border-strong);color:var(--text-muted);border-radius:20px;padding:3px 10px;cursor:pointer;font-size:11px;transition:all .12s;}
+.clear-btn:hover{border-color:#dc2626;color:#dc2626;}
 
 /* INPUTS */
-.inputs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem; }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field label { font-size: 11px; color: var(--text-muted); }
-.field input, .field select { padding: 6px 8px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.15s; }
-.field input:focus, .field select:focus { border-color: var(--accent); }
-.field .unit { position: relative; }
-.field .unit input { padding-right: 2rem; width: 100%; }
-.field .unit-label { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--text-faint); pointer-events: none; }
+.inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin-bottom:1.25rem;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:11px;color:var(--text-muted);}
+.field input,.field select{padding:6px 8px;border:1px solid var(--border-strong);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.field .unit{position:relative;}
+.field .unit input{padding-right:2rem;width:100%;}
+.field .unit-label{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text-faint);pointer-events:none;}
 
 /* AMP ROW */
-.amp-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; }
-.amp-note { font-size: 11px; color: var(--text-muted); background: var(--tag-bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; margin-top: 4px; line-height: 1.5; }
+.amp-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:.75rem;}
+.amp-note{font-size:11px;color:var(--text-muted);background:var(--tag-bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;margin-top:4px;line-height:1.5;}
 
-/* CHECKBOX ROW */
-.options-row { display: flex; align-items: center; gap: 1.5rem; padding: 0.6rem 0; margin-bottom: 1.25rem; flex-wrap: wrap; }
-.check-label { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-muted); cursor: pointer; user-select: none; }
-.check-label input[type=checkbox] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; }
-.check-label:hover { color: var(--text); }
-.check-label strong { color: var(--text); }
+/* AMP WARNING */
+.amp-warn{font-size:11px;color:var(--c-warn);background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:6px 10px;margin-top:4px;}
+@media(prefers-color-scheme:dark){.amp-warn{background:#2d1515;border-color:#7f1d1d;color:#fca5a5;}}
 
-.divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+/* OPTIONS */
+.options-row{display:flex;align-items:center;gap:1.5rem;padding:.5rem 0;margin-bottom:1.25rem;flex-wrap:wrap;}
+.check-label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-muted);cursor:pointer;user-select:none;}
+.check-label input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;}
+.check-label:hover{color:var(--text);}
+.check-label strong{color:var(--text);}
 
-/* RESULTS */
-/* Two-column layout: speaker max | amp-matched */
-.results-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  align-items: start;
+.divider{border:none;border-top:1px solid var(--border);margin:1.25rem 0;}
+
+/* ── COMPARISON TABLE ── */
+.cmp-table-wrap{overflow-x:auto;margin-bottom:1.5rem;}
+.cmp-table{width:100%;border-collapse:collapse;font-size:13px;}
+
+/* Column headers */
+.cmp-table th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid var(--border-strong);white-space:nowrap;}
+.cmp-table th.col-label{color:var(--text-muted);font-weight:400;width:140px;}
+.cmp-table th.col-speaker{color:var(--text-muted);background:var(--tag-bg);}
+.cmp-table th.col-amp{color:var(--c-amp);background:var(--c-amp-bg);}
+.cmp-table th .th-sub{display:block;font-size:10px;font-weight:400;color:var(--text-faint);margin-top:2px;text-transform:none;letter-spacing:0;}
+
+/* Section rows */
+.cmp-table tr.section-row td{padding:10px 12px 4px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--bg);border-top:1px solid var(--border);}
+.cmp-table tr.section-row td.vx-color{color:var(--c-vx);}
+.cmp-table tr.section-row td.tx-color{color:var(--c-tx);}
+.cmp-table tr.section-row td.ex-color{color:var(--c-ex);}
+
+/* Data rows */
+.cmp-table tr.data-row td{padding:6px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.cmp-table tr.data-row:last-child td{border-bottom:none;}
+.cmp-table td.col-label{font-size:11px;color:var(--text-muted);}
+.cmp-table td.col-speaker{background:rgba(0,0,0,.02);font-family:'Menlo','Monaco','Consolas',monospace;font-weight:600;}
+.cmp-table td.col-amp{background:var(--c-amp-bg);background:rgba(124,58,237,.04);font-family:'Menlo','Monaco','Consolas',monospace;font-weight:600;}
+@media(prefers-color-scheme:dark){
+  .cmp-table td.col-speaker{background:rgba(255,255,255,.02);}
+  .cmp-table td.col-amp{background:rgba(167,139,250,.06);}
 }
-.results-column-header {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
-  padding: 7px 12px; border-radius: 6px; margin-bottom: 0.6rem;
-  display: flex; align-items: center; gap: 7px;
-}
-.results-column-header.speaker { background: var(--tag-bg); color: var(--text-muted); }
-.results-column-header.amp     { background: var(--c-amp-bg); color: var(--c-amp); }
-.results-column-header .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.results-column-header.speaker .dot { background: var(--text-faint); }
-.results-column-header.amp .dot { background: var(--c-amp); }
+.val-vx{color:var(--c-vx);}
+.val-tx{color:var(--c-tx);}
+.val-ex{color:var(--c-ex);}
+.val-amp{color:var(--c-amp);}
+.val-dim{color:var(--text-faint);font-style:italic;font-size:11px;}
+.val-same{color:var(--text-muted);}
 
-.results-grid {
-  display: flex; flex-direction: column; gap: 1px;
-  background: var(--border-strong); border: 1px solid var(--border-strong);
-  border-radius: 10px; overflow: hidden;
-}
-
-.limiter-panel { background: var(--surface); padding: 1rem; }
-
-.panel-title { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--border); }
-.panel-title.vx { border-color: var(--c-vx); color: var(--c-vx); }
-.panel-title.tx { border-color: var(--c-tx); color: var(--c-tx); }
-.panel-title.ex { border-color: var(--c-ex); color: var(--c-ex); }
-
-.se-field { margin-bottom: 0.6rem; }
-.se-field:last-child { margin-bottom: 0; }
-.se-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
-.se-value {
-  background: var(--tag-bg); border: 1px solid var(--border-strong); border-radius: 5px;
-  padding: 5px 9px; font-size: 13px; font-weight: 600;
-  font-family: 'Menlo','Monaco','Consolas',monospace;
-  min-height: 30px; display: flex; align-items: center;
-}
-.se-value.vx  { color: var(--c-vx); }
-.se-value.tx  { color: var(--c-tx); }
-.se-value.ex  { color: var(--c-ex); }
-.se-value.amp { color: var(--c-amp); }
-.se-value.dim { color: var(--text-faint); font-style: italic; font-size: 11px; }
-
-/* VX mode toggle */
-.vx-mode-row { display: flex; gap: 6px; margin-bottom: 0.75rem; }
-.mode-btn { flex: 1; padding: 5px; border: 1px solid var(--border-strong); border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; background: var(--tag-bg); color: var(--text-muted); transition: all 0.12s; text-align: center; }
-.mode-btn.active.normal { background: var(--c-vx); border-color: var(--c-vx); color: #fff; }
-.mode-btn.active.vxmode { background: #7c3aed; border-color: #7c3aed; color: #fff; }
-
-/* Amp-column: no amp selected state */
-.no-amp-msg { font-size: 12px; color: var(--text-faint); font-style: italic; padding: 1rem; text-align: center; background: var(--surface); border: 1px dashed var(--border-strong); border-radius: 10px; }
+/* VX mode toggle inside table */
+.vx-mode-row{display:flex;gap:5px;margin-bottom:2px;}
+.mode-btn{padding:3px 10px;border:1px solid var(--border-strong);border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;background:var(--tag-bg);color:var(--text-muted);transition:all .12s;white-space:nowrap;}
+.mode-btn.active.normal{background:var(--c-vx);border-color:var(--c-vx);color:#fff;}
+.mode-btn.active.vxmode{background:#7c3aed;border-color:#7c3aed;color:#fff;}
 
 /* TRACE */
-.trace-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; font-family: 'Menlo','Monaco','Consolas',monospace; font-size: 11.5px; line-height: 1.9; margin-bottom: 1.5rem; }
-.trace-step { color: var(--text-muted); }
-.trace-step span { color: var(--text); }
-.trace-step b { color: var(--accent); font-weight: 600; }
-.trace-step b.amp { color: var(--c-amp); }
-.trace-sep { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
-.trace-warn { margin-top: 0.75rem; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; color: #b91c1c; font-size: 11px; line-height: 1.7; }
-@media (prefers-color-scheme: dark) { .trace-warn { background: #2d1515; border-color: #7f1d1d; color: #fca5a5; } }
+.trace-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'Menlo','Monaco','Consolas',monospace;font-size:11.5px;line-height:1.9;margin-bottom:1.5rem;}
+.trace-step{color:var(--text-muted);}
+.trace-step span{color:var(--text);}
+.trace-step b{color:var(--accent);font-weight:600;}
+.trace-step b.amp{color:var(--c-amp);}
+.trace-sep{border:none;border-top:1px solid var(--border);margin:6px 0;}
+.trace-warn{margin-top:.75rem;padding:8px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;color:#b91c1c;font-size:11px;line-height:1.7;}
+@media(prefers-color-scheme:dark){.trace-warn{background:#2d1515;border-color:#7f1d1d;color:#fca5a5;}}
 
-@media (max-width: 700px) {
-  .results-columns { grid-template-columns: 1fr; }
-  .main { padding: 1rem 1rem 4rem; }
-}
+@media(max-width:640px){.main{padding:1rem 1rem 4rem;}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-mark">
-    <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="4" height="10" rx="1" fill="#fff"/><rect x="8" y="4" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="1" width="4" height="17" rx="1" fill="#fff"/></svg>
-  </div>
+  <div class="logo-mark"><svg viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="4" height="10" rx="1" fill="#fff"/><rect x="8" y="4" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="1" width="4" height="17" rx="1" fill="#fff"/></svg></div>
   <h1>Linea Research — Limiter Calculator <span>VX / TMax / Excursion</span></h1>
 </header>
 
@@ -188,455 +164,433 @@ header h1 span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem
     <div id="dropdown"></div>
   </div>
   <div id="selectedBadge">
-    <div class="badge-info">
-      <div class="badge-name" id="badgeName">—</div>
-      <div class="badge-sub" id="badgeSub">—</div>
-    </div>
+    <div class="badge-info"><div class="badge-name" id="badgeName">—</div><div class="badge-sub" id="badgeSub">—</div></div>
     <button class="clear-btn" id="clearBtn">Clear</button>
   </div>
 
   <div class="section-title">Loudspeaker parameters</div>
   <div class="inputs-grid">
-    <div class="field">
-      <label>LF power (AES continuous)</label>
-      <div class="unit"><input type="number" id="powerLF" placeholder="e.g. 450" min="1"><span class="unit-label">W</span></div>
-    </div>
-    <div class="field">
-      <label>HF power (AES continuous)</label>
-      <div class="unit"><input type="number" id="powerHF" placeholder="e.g. 80 (optional)"><span class="unit-label">W</span></div>
-    </div>
-    <div class="field">
-      <label>Impedance</label>
-      <div class="unit"><input type="number" id="impedance" placeholder="e.g. 8" min="1"><span class="unit-label">Ω</span></div>
-    </div>
-    <div class="field">
-      <label>HPF / lowest frequency</label>
-      <div class="unit"><input type="number" id="hpfHz" placeholder="e.g. 60" min="1"><span class="unit-label">Hz</span></div>
-    </div>
-    <div class="field">
-      <label>Passive crossover frequency</label>
-      <div class="unit"><input type="number" id="xoverHz" placeholder="e.g. 1800 (optional)"><span class="unit-label">Hz</span></div>
-    </div>
-    <div class="field">
-      <label>Largest driver</label>
-      <div class="unit"><input type="number" id="driverSize" placeholder="e.g. 15" min="1"><span class="unit-label">"</span></div>
-    </div>
+    <div class="field"><label>LF power (AES continuous)</label><div class="unit"><input type="number" id="powerLF" placeholder="e.g. 450" min="1"><span class="unit-label">W</span></div></div>
+    <div class="field"><label>HF power (AES continuous)</label><div class="unit"><input type="number" id="powerHF" placeholder="e.g. 80 (optional)"><span class="unit-label">W</span></div></div>
+    <div class="field"><label>Impedance</label><div class="unit"><input type="number" id="impedance" placeholder="e.g. 8" min="1"><span class="unit-label">Ω</span></div></div>
+    <div class="field"><label>HPF / lowest frequency</label><div class="unit"><input type="number" id="hpfHz" placeholder="e.g. 60" min="1"><span class="unit-label">Hz</span></div></div>
+    <div class="field"><label>Passive crossover frequency</label><div class="unit"><input type="number" id="xoverHz" placeholder="e.g. 1800 (optional)"><span class="unit-label">Hz</span></div></div>
+    <div class="field"><label>Largest driver</label><div class="unit"><input type="number" id="driverSize" placeholder="e.g. 15" min="1"><span class="unit-label">"</span></div></div>
   </div>
 
   <div class="section-title">Amplifier / processor</div>
   <div class="amp-row">
     <div class="field">
-      <label>Linea Research unit</label>
-      <select id="lrModel">
+      <label>Series</label>
+      <select id="lrSeries">
         <option value="">— Select series (optional) —</option>
-        <option value="m">M series — touring (VX + TMax + Excursion)</option>
-        <option value="c">C series — installation (VX + TMax)</option>
-        <option value="processor">Processor — ASC48 / NSC24 / NSC46 / NSC48</option>
+        <optgroup label="M series — touring (VX + TMax + Excursion)">
+          <option value="m">44M / 48M series</option>
+        </optgroup>
+        <optgroup label="C series — installation (VX + TMax)">
+          <option value="c">44C / 88C series</option>
+        </optgroup>
+        <optgroup label="Processor + external amplifier">
+          <option value="proc">ASC48 / NSC24 / NSC46 / NSC48</option>
+        </optgroup>
       </select>
-      <div class="amp-note" id="ampNote" style="display:none;"></div>
+    </div>
+    <div class="field" id="modelField" style="display:none;">
+      <label>Model</label>
+      <select id="lrModel"><option value="">— Select model —</option></select>
+      <div id="ampNote" class="amp-note" style="display:none;"></div>
+      <div id="ampWarn" class="amp-warn" style="display:none;"></div>
     </div>
     <div class="field" id="gainField" style="display:none;">
       <label>External amplifier gain</label>
-      <div class="unit"><input type="number" id="ampGain" placeholder="e.g. 32" value="32"><span class="unit-label">dB</span></div>
+      <div class="unit"><input type="number" id="ampGain" value="32"><span class="unit-label">dB</span></div>
     </div>
   </div>
 
-  <!-- OPTIONS -->
   <div class="options-row">
     <label class="check-label">
       <input type="checkbox" id="chkMargin">
-      Apply <strong>−1 dB safety margin</strong> to TMax &amp; Xmax thresholds
-      <span style="color:var(--text-faint);font-size:10px;margin-left:3px;">(×0.891, optional per LR app note)</span>
+      Apply <strong>−1 dB safety margin</strong> to TMax &amp; Xmax
+      <span style="color:var(--text-faint);font-size:10px;margin-left:2px;">(×0.891, optional per LR app note)</span>
     </label>
   </div>
 
   <hr class="divider">
 
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
     <div class="section-title" style="margin:0;">Suggested limiter settings</div>
     <span id="resultSpeakerName" style="font-size:11px;color:var(--text-muted);"></span>
   </div>
 
-  <div class="results-columns">
-
-    <!-- LEFT: speaker-based thresholds -->
-    <div>
-      <div class="results-column-header speaker">
-        <span class="dot"></span>
-        Speaker protection — based on AES power rating
-      </div>
-      <div class="results-grid" id="grid-speaker">
-
-        <!-- VX -->
-        <div class="limiter-panel">
-          <div class="panel-title vx">Virtual X-Over Limiter (VX)</div>
-          <div class="se-field">
-            <div class="se-label">Mode</div>
-            <div class="vx-mode-row">
-              <div class="mode-btn active normal" id="btnNormal" onclick="setVxMode('normal')">Normal</div>
-              <div class="mode-btn vxmode" id="btnVX" onclick="setVxMode('vx')">VX</div>
-            </div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Vx Frequency</div>
-            <div class="se-value vx" id="vx-freq">12.00 kHz</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Threshold</div>
-            <div class="se-value vx" id="vx-thresh">—</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Overshoot</div>
-            <div class="se-value vx" id="vx-overshoot">—</div>
-          </div>
-          <div id="vx-hi-section" style="display:none;">
-            <div class="se-field">
-              <div class="se-label">Threshold Hi</div>
-              <div class="se-value vx" id="vx-thresh-hi">—</div>
-            </div>
-            <div class="se-field">
-              <div class="se-label">Overshoot Hi</div>
-              <div class="se-value vx" id="vx-overshoot-hi">8 dB</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TMax -->
-        <div class="limiter-panel">
-          <div class="panel-title tx">Thermal Limiter (Tmax)</div>
-          <div class="se-field">
-            <div class="se-label">Threshold</div>
-            <div class="se-value tx" id="tx-thresh">—</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Attack</div>
-            <div class="se-value tx" id="tx-attack">—</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Release</div>
-            <div class="se-value tx" id="tx-release">2X</div>
-          </div>
-        </div>
-
-        <!-- Excursion -->
-        <div class="limiter-panel" id="ex-card">
-          <div class="panel-title ex">Excursion Limiter (Xmax)</div>
-          <div class="se-field">
-            <div class="se-label">Threshold</div>
-            <div class="se-value ex" id="ex-thresh">—</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">at Frequency</div>
-            <div class="se-value ex" id="ex-freq">—</div>
-          </div>
-          <div class="se-field">
-            <div class="se-label">Min Frequency</div>
-            <div class="se-value ex" id="ex-minfreq">5 Hz</div>
-          </div>
-        </div>
-
-      </div>
+  <!-- VX mode toggle sits above the table -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:.85rem;">
+    <span style="font-size:11px;color:var(--text-muted);">VX mode:</span>
+    <div class="vx-mode-row">
+      <div class="mode-btn active normal" id="btnNormal" onclick="setVxMode('normal')">Normal</div>
+      <div class="mode-btn vxmode" id="btnVX" onclick="setVxMode('vx')">VX</div>
     </div>
+  </div>
 
-    <!-- RIGHT: amp-matched thresholds -->
-    <div id="amp-col">
-      <div class="results-column-header amp">
-        <span class="dot"></span>
-        <span id="amp-col-title">Amplifier-matched — limits to amp capability</span>
-      </div>
-      <div id="amp-col-body">
-        <div class="no-amp-msg">Select an amplifier series above to see amp-matched values</div>
-      </div>
-    </div>
-
+  <div class="cmp-table-wrap">
+    <table class="cmp-table" id="cmpTable">
+      <thead>
+        <tr>
+          <th class="col-label"></th>
+          <th class="col-speaker">
+            Speaker protection
+            <span class="th-sub">Based on AES power rating</span>
+          </th>
+          <th class="col-amp" id="th-amp" style="display:none;">
+            <span id="th-amp-label">Amplifier-matched</span>
+            <span class="th-sub" id="th-amp-sub">Limits to amplifier capability</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="cmpBody"></tbody>
+    </table>
   </div>
 
   <div class="section-title">Calculation steps</div>
-  <div class="trace-box" id="traceBox">
-    <span style="color:var(--text-faint);">Enter loudspeaker parameters above to see calculations.</span>
-  </div>
+  <div class="trace-box" id="traceBox"><span style="color:var(--text-faint);">Enter loudspeaker parameters above to see calculations.</span></div>
 
 </div>
 
 <script>
-// ── DB LOADING ──────────────────────────────────────────────
-let SPEAKERS = [];
-(async function loadDB(){
-  try {
-    const r = await fetch('../database/speakers-db.js');
-    if (!r.ok) throw new Error();
-    const text = await r.text();
-    const mod = {}; new Function('module','exports', text)(mod, mod.exports = {});
-    SPEAKERS = (mod.exports.SPEAKER_DATABASE||{}).speakers||[];
-  } catch {
-    if (typeof SPEAKER_DATABASE !== 'undefined') SPEAKERS = SPEAKER_DATABASE.speakers||[];
-  }
+// ── AMPLIFIER DATABASE ───────────────────────────────────────
+// watts[ohm] = power at that impedance per channel
+const AMP_DB = {
+  // 44M series — gain 32dB at all impedances
+  '44M06': { series:'m', gain:32, watts:{2:1500,4:1500,8:1500}, hasXmax:true },
+  '44M10': { series:'m', gain:32, watts:{2:2500,4:2500,8:1500}, hasXmax:true },
+  '44M20': { series:'m', gain:32, watts:{2:5000,4:3000,8:1500}, hasXmax:true },
+  // 48M series
+  '48M03': { series:'m', gain:32, watts:{2:400, 4:400, 8:400},  hasXmax:true },
+  '48M06': { series:'m', gain:32, watts:{2:750, 4:750, 8:750},  hasXmax:true },
+  '48M10': { series:'m', gain:32, watts:{2:1250,4:1250,8:1250}, hasXmax:true },
+  '48M20': { series:'m', gain:32, watts:{2:1500,4:2500,8:1500}, hasXmax:true },
+  // 44C series
+  '44C06': { series:'c', gain:32, watts:{2:1500,4:1500,8:1500}, hasXmax:false },
+  '44C10': { series:'c', gain:32, watts:{2:2500,4:2500,8:1500}, hasXmax:false },
+  '44C20': { series:'c', gain:32, watts:{2:5000,4:3000,8:1500}, hasXmax:false },
+  // 88C series
+  '88C03': { series:'c', gain:32, watts:{2:400, 4:400, 8:400},  hasXmax:false },
+  '88C06': { series:'c', gain:32, watts:{2:750, 4:750, 8:750},  hasXmax:false },
+  '88C10': { series:'c', gain:32, watts:{2:1250,4:1250,8:1250}, hasXmax:false },
+  '88C20': { series:'c', gain:32, watts:{2:1500,4:2500,8:1500}, hasXmax:false },
+};
+const MODEL_LISTS = {
+  m: ['44M06','44M10','44M20','48M03','48M06','48M10','48M20'],
+  c: ['44C06','44C10','44C20','88C03','88C06','88C10','88C20'],
+  proc: [],
+};
+
+// ── DB LOADING ───────────────────────────────────────────────
+let SPEAKERS=[];
+(async function(){
+  try{
+    const r=await fetch('../database/speakers-db.js');if(!r.ok)throw 0;
+    const t=await r.text(),m={};new Function('module','exports',t)(m,m.exports={});
+    SPEAKERS=(m.exports.SPEAKER_DATABASE||{}).speakers||[];
+  }catch{if(typeof SPEAKER_DATABASE!=='undefined')SPEAKERS=SPEAKER_DATABASE.speakers||[];}
 })();
 
 function isEligible(s){
-  if (s.type==='line-array-element') return false;
-  const ap = s.system&&s.system.activePassive;
-  if (ap==='active') return false;
-  if (s.system&&s.system.amplifierBuiltIn&&s.system.amplifierBuiltIn.powerW) return false;
+  if(s.type==='line-array-element')return false;
+  if((s.system||{}).activePassive==='active')return false;
+  if((s.system||{}).amplifierBuiltIn&&s.system.amplifierBuiltIn.powerW)return false;
   return true;
 }
-function hasData(s){ const e=s.electrical||{}; return e.powerHandlingContinuous&&e.impedance; }
+function hasData(s){const e=s.electrical||{};return e.powerHandlingContinuous&&e.impedance;}
 function getDriverInfo(s){
   const du=(s.acoustic||{}).driveUnits||(s.acoustic||{}).drivers||[];
   const sizes=du.map(d=>d.sizeInch||d.size).filter(Boolean);
   const xp=(s.electrical||{}).crossoverPoints;
-  return { maxSize:sizes.length?Math.max(...sizes):null, crossover:Array.isArray(xp)&&xp.length?xp[0].frequencyHz:null };
+  return{maxSize:sizes.length?Math.max(...sizes):null,crossover:Array.isArray(xp)&&xp.length?xp[0].frequencyHz:null};
 }
 function getFreqLow(s){
   const fr=(s.electrical||{}).frequencyResponseMinus3dB;
-  if (Array.isArray(fr)) return fr[0];
-  if (fr&&typeof fr==='object') return fr.low||null;
+  if(Array.isArray(fr))return fr[0];
+  if(fr&&typeof fr==='object')return fr.low||null;
   return null;
 }
 
-// ── SEARCH ──────────────────────────────────────────────────
-const searchInput = document.getElementById('speakerSearch');
-const dropdown = document.getElementById('dropdown');
-let selectedSpeaker = null, activeIdx = -1;
+// ── SEARCH ───────────────────────────────────────────────────
+const searchInput=document.getElementById('speakerSearch'),dropdown=document.getElementById('dropdown');
+let selectedSpeaker=null,activeIdx=-1;
 
-function renderDropdown(query){
-  const q=query.toLowerCase().trim();
-  if (!q){ dropdown.innerHTML=''; dropdown.classList.remove('open'); return; }
-  const matches=SPEAKERS.filter(s=>isEligible(s)&&(s.brand.toLowerCase().includes(q)||s.model.toLowerCase().includes(q)||(s.brand+' '+s.model).toLowerCase().includes(q))).slice(0,50);
-  if (!matches.length){
-    dropdown.innerHTML='<div class="no-results">No results found</div>';
-  } else {
-    dropdown.innerHTML=matches.map((s,i)=>`<div class="drop-item" data-idx="${i}"><span class="drop-brand">${s.brand}</span><span class="drop-model">${s.model}</span>${s.productLine?`<span class="drop-type">${s.productLine}</span>`:''} ${!hasData(s)?'<span class="drop-warn">missing data</span>':''}</div>`).join('');
-    dropdown._matches=matches;
-    dropdown.querySelectorAll('.drop-item').forEach((el,i)=>el.addEventListener('mousedown',e=>{e.preventDefault();selectSpeaker(matches[i]);}));
-  }
-  dropdown.classList.add('open'); activeIdx=-1;
+function renderDropdown(q){
+  q=q.toLowerCase().trim();
+  if(!q){dropdown.innerHTML='';dropdown.classList.remove('open');return;}
+  const m=SPEAKERS.filter(s=>isEligible(s)&&(s.brand.toLowerCase().includes(q)||s.model.toLowerCase().includes(q)||(s.brand+' '+s.model).toLowerCase().includes(q))).slice(0,50);
+  dropdown.innerHTML=m.length
+    ?m.map((s,i)=>`<div class="drop-item" data-idx="${i}"><span class="drop-brand">${s.brand}</span><span class="drop-model">${s.model}</span>${s.productLine?`<span class="drop-type">${s.productLine}</span>`:''} ${!hasData(s)?'<span class="drop-warn">missing data</span>':''}</div>`).join('')
+    :'<div class="no-results">No results found</div>';
+  dropdown._m=m;
+  dropdown.querySelectorAll('.drop-item').forEach((el,i)=>el.addEventListener('mousedown',e=>{e.preventDefault();selectSpeaker(m[i]);}));
+  dropdown.classList.add('open');activeIdx=-1;
 }
 function selectSpeaker(s){
-  selectedSpeaker=s; searchInput.value=''; dropdown.classList.remove('open'); dropdown.innerHTML='';
+  selectedSpeaker=s;searchInput.value='';dropdown.classList.remove('open');dropdown.innerHTML='';
   document.getElementById('badgeName').textContent=`${s.brand} ${s.model}`;
-  const e=s.electrical||{}, info=getDriverInfo(s);
+  const e=s.electrical||{},info=getDriverInfo(s);
   document.getElementById('badgeSub').textContent=[s.type||'',e.impedance?e.impedance+' Ω':'',e.powerHandlingContinuous?e.powerHandlingContinuous+' W AES':''].filter(Boolean).join(' · ');
   document.getElementById('selectedBadge').classList.add('show');
-  if (e.powerHandlingContinuous) document.getElementById('powerLF').value=e.powerHandlingContinuous;
-  if (e.impedance)               document.getElementById('impedance').value=e.impedance;
-  if (info.crossover)            document.getElementById('xoverHz').value=info.crossover;
-  if (info.maxSize)              document.getElementById('driverSize').value=info.maxSize;
-  const fl=getFreqLow(s); if (fl) document.getElementById('hpfHz').value=fl;
+  if(e.powerHandlingContinuous)document.getElementById('powerLF').value=e.powerHandlingContinuous;
+  if(e.impedance)document.getElementById('impedance').value=e.impedance;
+  if(info.crossover)document.getElementById('xoverHz').value=info.crossover;
+  if(info.maxSize)document.getElementById('driverSize').value=info.maxSize;
+  const fl=getFreqLow(s);if(fl)document.getElementById('hpfHz').value=fl;
   recalc();
 }
 searchInput.addEventListener('input',e=>renderDropdown(e.target.value));
 searchInput.addEventListener('keydown',e=>{
   const items=dropdown.querySelectorAll('.drop-item');
-  if (e.key==='ArrowDown'){activeIdx=Math.min(activeIdx+1,items.length-1);highlightItem(items);}
-  else if (e.key==='ArrowUp'){activeIdx=Math.max(activeIdx-1,0);highlightItem(items);}
-  else if (e.key==='Enter'&&activeIdx>=0&&dropdown._matches){selectSpeaker(dropdown._matches[activeIdx]);}
-  else if (e.key==='Escape'){dropdown.classList.remove('open');}
+  if(e.key==='ArrowDown'){activeIdx=Math.min(activeIdx+1,items.length-1);highlightItem(items);}
+  else if(e.key==='ArrowUp'){activeIdx=Math.max(activeIdx-1,0);highlightItem(items);}
+  else if(e.key==='Enter'&&activeIdx>=0&&dropdown._m){selectSpeaker(dropdown._m[activeIdx]);}
+  else if(e.key==='Escape'){dropdown.classList.remove('open');}
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.search-wrapper'))dropdown.classList.remove('open');});
-function highlightItem(items){ items.forEach((el,i)=>el.classList.toggle('active',i===activeIdx)); if(items[activeIdx])items[activeIdx].scrollIntoView({block:'nearest'}); }
+function highlightItem(items){items.forEach((el,i)=>el.classList.toggle('active',i===activeIdx));if(items[activeIdx])items[activeIdx].scrollIntoView({block:'nearest'});}
 document.getElementById('clearBtn').addEventListener('click',()=>{
-  selectedSpeaker=null; document.getElementById('selectedBadge').classList.remove('show');
+  selectedSpeaker=null;document.getElementById('selectedBadge').classList.remove('show');
   ['powerLF','powerHF','impedance','hpfHz','xoverHz','driverSize'].forEach(id=>document.getElementById(id).value='');
   recalc();
 });
 
-// ── AMP SERIES ───────────────────────────────────────────────
-const SERIES_INFO = {
-  'm': { label:'M series', models:'44M06, 44M10, 44M20, 48M03, 48M06, 48M10, 48M20', limiters:'VX + TMax + Excursion (Xmax)', hasXmax:true, isProc:false },
-  'c': { label:'C series', models:'44C06, 44C10, 44C20, 88C03, 88C06, 88C10, 88C20', limiters:'VX + TMax only (no Excursion)', hasXmax:false, isProc:false },
-  'processor': { label:'Processor', models:'ASC48, NSC24, NSC46, NSC48', limiters:'VX + TMax + Excursion. Enter gain of external amplifier.', hasXmax:true, isProc:true },
-};
+// ── SERIES / MODEL SELECTS ───────────────────────────────────
+document.getElementById('lrSeries').addEventListener('change',function(){
+  const s=this.value;
+  const modelSel=document.getElementById('lrModel');
+  const modelField=document.getElementById('modelField');
+  const gainField=document.getElementById('gainField');
+  modelSel.innerHTML='<option value="">— Select model —</option>';
 
-document.getElementById('lrModel').addEventListener('change', function(){
-  const val=this.value, info=SERIES_INFO[val];
-  const isProc=info?info.isProc:false, hasXmax=info?info.hasXmax:true;
-  document.getElementById('gainField').style.display=isProc?'':'none';
-  document.getElementById('ex-card').style.display=hasXmax?'':'none';
-  const note=document.getElementById('ampNote');
-  if (info){ note.innerHTML=`<strong>${info.models}</strong> — ${info.limiters}`; note.style.display=''; }
-  else { note.style.display='none'; }
+  if(s==='proc'){
+    modelField.style.display='none';
+    gainField.style.display='';
+    document.getElementById('ampNote').textContent='ASC48 / NSC24 / NSC46 / NSC48. TMax and Xmax thresholds are entered in V — set amp gain in the processor\'s Amplifier Gain field. VX threshold requires manual gain subtraction.';
+    document.getElementById('ampNote').style.display='';
+    document.getElementById('ampWarn').style.display='none';
+  } else if(s){
+    modelField.style.display='';
+    gainField.style.display='none';
+    document.getElementById('ampNote').style.display='none';
+    MODEL_LISTS[s].forEach(m=>{
+      const a=AMP_DB[m],maxW=Math.max(...Object.values(a.watts));
+      const opt=document.createElement('option');opt.value=m;
+      const vmax=Math.round(Math.sqrt(maxW*Math.min(...Object.keys(a.watts).map(Number))));
+      opt.textContent=`${m} — max ${maxW}W, up to ~${vmax}V`;
+      modelSel.appendChild(opt);
+    });
+  } else {
+    modelField.style.display='none';gainField.style.display='none';
+    document.getElementById('ampNote').style.display='none';
+    document.getElementById('ampWarn').style.display='none';
+  }
+  recalc();
+});
+
+document.getElementById('lrModel').addEventListener('change',function(){
+  const m=AMP_DB[this.value];
+  const note=document.getElementById('ampNote'),warn=document.getElementById('ampWarn');
+  if(m){
+    const imp=getNum('impedance');
+    const w=imp&&m.watts[imp]?m.watts[imp]:null;
+    const allW=Object.entries(m.watts).map(([z,w])=>`${w}W @ ${z}Ω`).join(', ');
+    note.textContent=`Gain: ${m.gain} dB · Power: ${allW}`;
+    note.style.display='';
+    if(imp&&w){
+      const vmd=Math.sqrt(getNum('powerLF')||0);
+      const ampV=Math.sqrt(w*imp);
+      if(getNum('powerLF')&&ampV<Math.sqrt((getNum('powerLF')||0)*imp)*0.9){
+        warn.textContent=`⚠ ${this.value} delivers ${w}W into ${imp}Ω (${ampV.toFixed(0)}V) — less than the speaker's AES rating. Amp-matched values will be lower.`;
+        warn.style.display='';
+      } else { warn.style.display='none'; }
+    } else { warn.style.display='none'; }
+  } else { note.style.display='none'; warn.style.display='none'; }
   recalc();
 });
 
 // ── VX MODE ──────────────────────────────────────────────────
 let vxMode='normal';
-function setVxMode(mode){
-  vxMode=mode;
-  document.getElementById('btnNormal').classList.toggle('active',mode==='normal');
-  document.getElementById('btnVX').classList.toggle('active',mode==='vx');
-  document.getElementById('vx-hi-section').style.display=mode==='vx'?'':'none';
+function setVxMode(m){
+  vxMode=m;
+  document.getElementById('btnNormal').classList.toggle('active',m==='normal');
+  document.getElementById('btnVX').classList.toggle('active',m==='vx');
   recalc();
 }
 
 // ── MATH ─────────────────────────────────────────────────────
-const v2dbu = v => 20*Math.log10(v/0.775);
-const fmt1   = n => (isNaN(n)||n===null)?'—':n.toFixed(1);
-const fmt2   = n => (isNaN(n)||n===null)?'—':n.toFixed(2);
-function getNum(id){ return parseFloat(document.getElementById(id).value)||null; }
+const v2dbu=v=>20*Math.log10(v/0.775);
+const fmt1=n=>(isNaN(n)||n==null)?'—':n.toFixed(1);
+const fmt2=n=>(isNaN(n)||n==null)?'—':n.toFixed(2);
+function getNum(id){return parseFloat(document.getElementById(id).value)||null;}
 
-// ── LIVE LISTENERS ───────────────────────────────────────────
-['powerLF','powerHF','impedance','hpfHz','xoverHz','driverSize','ampGain'].forEach(id=>document.getElementById(id).addEventListener('input',recalc));
+['powerLF','powerHF','impedance','hpfHz','xoverHz','driverSize','ampGain'].forEach(id=>{
+  const el=document.getElementById(id);if(el)el.addEventListener('input',recalc);
+});
 document.getElementById('chkMargin').addEventListener('change',recalc);
 
 // ── RECALC ───────────────────────────────────────────────────
 function recalc(){
-  const pLF=getNum('powerLF'), pHF=getNum('powerHF'), imp=getNum('impedance');
-  const hpf=getNum('hpfHz'), xover=getNum('xoverHz'), driver=getNum('driverSize');
-  const modelVal=document.getElementById('lrModel').value;
-  const info=SERIES_INFO[modelVal]||{hasXmax:true,isProc:false};
-  const isProc=info.isProc, hasXmax=info.hasXmax;
-  const ampGain=isProc?(getNum('ampGain')||0):0;
+  const pLF=getNum('powerLF'),pHF=getNum('powerHF'),imp=getNum('impedance');
+  const hpf=getNum('hpfHz'),xover=getNum('xoverHz'),driver=getNum('driverSize');
+  const series=document.getElementById('lrSeries').value;
+  const modelKey=document.getElementById('lrModel').value;
+  const ampData=AMP_DB[modelKey]||null;
+  const isProc=series==='proc';
+  const hasXmax=ampData?ampData.hasXmax:(series!=='c');
+  const ampGain=isProc?(getNum('ampGain')||0):32;
   const useMargin=document.getElementById('chkMargin').checked;
-  const marginFactor=useMargin?0.8913:1.0; // ×0.8913 = −1 dB
+  const mf=useMargin?0.8913:1.0;
+  const showAmpCol=!!(ampData||isProc);
 
   document.getElementById('resultSpeakerName').textContent=selectedSpeaker?`${selectedSpeaker.brand} ${selectedSpeaker.model}`:'';
 
-  if (!pLF||!imp){
-    ['vx-thresh','vx-overshoot','vx-thresh-hi','tx-thresh','tx-attack','ex-thresh','ex-freq'].forEach(id=>{
-      const el=document.getElementById(id); if(el){el.textContent='—'; el.classList.remove('dim');}
-    });
-    document.getElementById('amp-col-body').innerHTML=`<div class="no-amp-msg">Enter loudspeaker parameters to see values</div>`;
+  // Amp column header
+  document.getElementById('th-amp').style.display=showAmpCol?'':'none';
+  if(showAmpCol){
+    document.getElementById('th-amp-label').textContent=modelKey||'Processor';
+    document.getElementById('th-amp-sub').textContent=ampData
+      ?`${ampData.watts[imp]||'?'}W @ ${imp||'?'}Ω → ${ampData.watts[imp]&&imp?Math.round(Math.sqrt(ampData.watts[imp]*imp))+'V max':''}`
+      :`Processor — VX threshold with ${ampGain}dB amp gain`;
+  }
+
+  if(!pLF||!imp){
+    document.getElementById('cmpBody').innerHTML='<tr><td colspan="3" style="padding:1.5rem;text-align:center;color:var(--text-faint);font-size:12px;">Enter loudspeaker parameters above to see calculations.</td></tr>';
     document.getElementById('traceBox').innerHTML='<span style="color:var(--text-faint);">Enter loudspeaker parameters above to see calculations.</span>';
     return;
   }
 
-  // ── SPEAKER-BASED THRESHOLDS ─────────────────────────────
-  const vmdLF   = Math.sqrt(pLF*imp);
-  const dbuLF   = v2dbu(vmdLF);
+  // ── SPEAKER THRESHOLDS ───────────────────────────────────
+  const vmdLF=Math.sqrt(pLF*imp);
+  const dbuLF=v2dbu(vmdLF);
+  const tMaxV=vmdLF*mf;
+  const vxV=Math.sqrt(2)*vmdLF*mf;
+  const vxDbu=v2dbu(vxV);
+  const exV=vmdLF*1.414*mf;
 
-  // TMax = VMD × marginFactor (×1 normally, ×0.8913 if -1dB margin)
-  const tMaxV   = vmdLF * marginFactor;
-  const tMaxDbu = v2dbu(tMaxV);
+  let vmdHF=null,thHi=null,hfEst=false;
+  if(pHF){vmdHF=Math.sqrt(pHF*imp);thHi=v2dbu(vmdHF*mf)-v2dbu(vmdLF*mf);}
+  else{thHi=-3;hfEst=true;}
 
-  // VX = √2 × VMD (peak, same margin applied through tMax relationship)
-  const vxV     = Math.sqrt(2) * vmdLF * marginFactor;
-  const vxDbu   = v2dbu(vxV);
-  const vxCtrl  = vxDbu - ampGain;
-
-  // Excursion = VMD × 1.414 × marginFactor (peak)
-  const exV     = vmdLF * 1.414 * marginFactor;
-
-  // HF threshold
-  let vmdHF=null, threshHiDbr=null, hfIsEstimated=false;
-  if (pHF){ vmdHF=Math.sqrt(pHF*imp); threshHiDbr=v2dbu(vmdHF*marginFactor)-v2dbu(vmdLF*marginFactor); }
-  else { threshHiDbr=-3; hfIsEstimated=true; }
-
-  // Overshoot recommendation
   let overshoot='8 dB';
-  if (driver){ overshoot=driver<=10?'8 dB':driver<=15?'6–8 dB':'6 dB'; }
-
-  const vxFreqLabel=xover?`${xover} Hz`:'12.00 kHz';
+  if(driver){overshoot=driver<=10?'8 dB':driver<=15?'6–8 dB':'6 dB';}
   const attackS=hpf?(100/hpf):null;
+  const vxFreq=xover?`${xover} Hz`:'12.00 kHz';
 
-  // Populate speaker column
-  const vxDisplay=isProc?`${fmt1(vxCtrl)} dBu`:`${fmt1(vxV)} V`;
-  document.getElementById('vx-freq').textContent=vxFreqLabel;
-  document.getElementById('vx-thresh').textContent=vxDisplay;
-  document.getElementById('vx-overshoot').textContent=overshoot;
-  const thiEl=document.getElementById('vx-thresh-hi');
-  thiEl.textContent=`${fmt1(threshHiDbr)} dBr${hfIsEstimated?' (estimated)':''}`;
-  thiEl.classList.toggle('dim',hfIsEstimated);
-  document.getElementById('vx-overshoot-hi').textContent='8 dB';
-  document.getElementById('tx-thresh').textContent=`${fmt1(tMaxV)} V`;
-  document.getElementById('tx-attack').textContent=attackS?`${fmt2(attackS)} s`:'—';
-  document.getElementById('tx-release').textContent='2X';
-  document.getElementById('ex-thresh').textContent=`${fmt1(exV)} V`;
-  document.getElementById('ex-freq').textContent=hpf?`${hpf} Hz`:'—';
-  document.getElementById('ex-minfreq').textContent='5 Hz';
+  // VX threshold display for speaker col
+  const spkVxDisplay=isProc?`${fmt1(vxDbu-ampGain)} dBu`:`${fmt1(vxV)} V`;
+  const spkTxDisplay=`${fmt1(tMaxV)} V`;
+  const spkExDisplay=`${fmt1(exV)} V`;
 
-  // ── AMP-MATCHED COLUMN ───────────────────────────────────
-  const ampColBody=document.getElementById('amp-col-body');
-  const ampColTitle=document.getElementById('amp-col-title');
+  // ── AMP-MATCHED THRESHOLDS ───────────────────────────────
+  let ampVxDisplay='—',ampTxDisplay='—',ampExDisplay='—',ampThHiDisplay='—';
+  let ampTxNote='',ampVxNote='';
 
-  if (!modelVal||modelVal==='custom'){
-    ampColBody.innerHTML=`<div class="no-amp-msg">Select an amplifier series above to see amp-matched values</div>`;
-    ampColTitle.textContent='Amplifier-matched — limits to amp capability';
-  } else {
-    ampColTitle.textContent=`${info.label} — limits to amp capability`;
-
-    // Amp-matched thresholds follow Martin Audio method:
-    // TMax = amp clip voltage = what the amp can actually deliver
-    // For M/C series the limiting factor is the speaker AES rating itself
-    // (the amp is sized to match). We show the same VMD value but labelled differently.
-    // VX(amp) = TMax × 4/3  (MA ratio, more conservative than ×√2)
-    // For processor: VX must subtract gain (same as speaker column)
-
-    const ampTMaxV   = tMaxV;   // same — amp-matched means we trust the speaker rating
-    const ampVxV     = ampTMaxV * (4/3);
-    const ampVxDbu   = v2dbu(ampVxV);
-    const ampVxCtrl  = ampVxDbu - ampGain;
-    const ampExV     = exV;
-    const ampVxDisplay = isProc?`${fmt1(ampVxCtrl)} dBu`:`${fmt1(ampVxV)} V`;
-
-    const seVal=(id,cls,val)=>`<div class="se-field"><div class="se-label">${id}</div><div class="se-value ${cls}">${val}</div></div>`;
-
-    let vxHtml=`
-      <div class="limiter-panel">
-        <div class="panel-title vx">Virtual X-Over Limiter (VX)</div>
-        ${seVal('Vx Frequency','amp',vxFreqLabel)}
-        ${seVal('Threshold','amp',ampVxDisplay)}
-        ${seVal('Overshoot','amp',overshoot)}
-        ${vxMode==='vx'?seVal('Threshold Hi','amp dim',`${fmt1(threshHiDbr)} dBr${hfIsEstimated?' (estimated)':''}`)+seVal('Overshoot Hi','amp','8 dB'):''}
-      </div>`;
-
-    let txHtml=`
-      <div class="limiter-panel">
-        <div class="panel-title tx">Thermal Limiter (Tmax)</div>
-        ${seVal('Threshold','amp',`${fmt1(ampTMaxV)} V`)}
-        ${seVal('Attack','amp',attackS?`${fmt2(attackS)} s`:'—')}
-        ${seVal('Release','amp','2X')}
-        ${isProc?seVal('Threshold @ controller','amp dim',`${fmt1(v2dbu(ampTMaxV)-ampGain)} dBu`):''}
-      </div>`;
-
-    let exHtml='';
-    if (hasXmax){
-      exHtml=`
-        <div class="limiter-panel">
-          <div class="panel-title ex">Excursion Limiter (Xmax)</div>
-          ${seVal('Threshold','amp',`${fmt1(ampExV)} V`)}
-          ${seVal('at Frequency','amp',hpf?`${hpf} Hz`:'—')}
-          ${seVal('Min Frequency','amp','5 Hz')}
-        </div>`;
+  if(ampData&&imp){
+    const ampW=ampData.watts[imp];
+    if(ampW){
+      const ampMaxV=Math.sqrt(ampW*imp);
+      // TMax = amp clip V × mf
+      const ampTMaxV=ampMaxV*mf;
+      // VX = TMax × 4/3 (Martin Audio method)
+      const ampVxV=ampTMaxV*(4/3);
+      const ampExV=ampMaxV*1.414*mf;
+      ampTxDisplay=`${fmt1(ampTMaxV)} V`;
+      ampVxDisplay=`${fmt1(ampVxV)} V`;
+      ampExDisplay=`${fmt1(ampExV)} V`;
+      if(thHi!==null)ampThHiDisplay=`${fmt1(thHi)} dBr${hfEst?' (est.)':''}`;
+      // Warning if amp undersized
+      ampVxNote=ampVxV<vxV?'⚑ amp limits before speaker max':'';
+      ampTxNote=ampTMaxV<tMaxV?'⚑ amp limits before speaker max':'';
     }
-
-    const diffNote=`<div style="font-size:10px;color:var(--text-faint);padding:6px 10px;border-top:1px solid var(--border);">
-      VX threshold uses ×4/3 ratio (Martin Audio method) vs ×√2 in speaker column.
-      TMax and Xmax are identical — the amp is assumed to be sized for the speaker's AES rating.
-    </div>`;
-
-    ampColBody.innerHTML=`<div class="results-grid">${vxHtml}${txHtml}${exHtml}${diffNote}</div>`;
+  } else if(isProc){
+    const procVxCtrl=vxDbu-ampGain;
+    ampVxDisplay=`${fmt1(procVxCtrl)} dBu`;
+    ampTxDisplay=`${fmt1(tMaxV)} V`;
+    ampExDisplay=`${fmt1(exV)} V`;
+    if(thHi!==null)ampThHiDisplay=`${fmt1(thHi)} dBr${hfEst?' (est.)':''}`;
+    ampVxNote=`Enter amp gain (${ampGain} dB) in processor's Amplifier Gain field for TMax/Xmax`;
   }
 
-  // ── TRACE ─────────────────────────────────────────────────
+  // ── BUILD TABLE ──────────────────────────────────────────
+  const ampCol=showAmpCol;
+  const td=(val,cls,note='')=>{
+    const noteHtml=note?`<div style="font-size:10px;color:var(--text-faint);margin-top:2px;">${note}</div>`:'';
+    return `<td class="col-${cls}"><span class="${cls==='amp'?'val-amp':'val-'+cls}">${val}</span>${noteHtml}</td>`;
+  };
+  const row=(label,spkVal,ampVal,colorClass,spkNote='',ampNote2='')=>{
+    const noteSp=spkNote?`<div style="font-size:10px;color:var(--text-faint);margin-top:2px;">${spkNote}</div>`:'';
+    const noteAmp=ampNote2?`<div style="font-size:10px;color:var(--text-faint);margin-top:2px;">${ampNote2}</div>`:'';
+    return `<tr class="data-row">
+      <td class="col-label">${label}</td>
+      <td class="col-speaker"><span class="val-${colorClass}">${spkVal}</span>${noteSp}</td>
+      ${ampCol?`<td class="col-amp"><span class="val-amp">${ampVal}</span>${noteAmp}</td>`:''}
+    </tr>`;
+  };
+  const secRow=(label,cls)=>`<tr class="section-row"><td colspan="${ampCol?3:2}" class="${cls}-color">${label}</td></tr>`;
+
+  let html='';
+
+  // VX section
+  html+=secRow('Virtual X-Over Limiter (VX)','vx');
+  html+=row('Threshold',spkVxDisplay,ampVxDisplay,'vx','',ampVxNote);
+  html+=row('Overshoot',overshoot,overshoot,'vx');
+  html+=row('Vx Frequency',vxFreq,vxFreq,'vx');
+  if(vxMode==='vx'){
+    html+=row('Threshold Hi',`${fmt1(thHi)} dBr${hfEst?' (est.)':''}`,ampThHiDisplay,'vx');
+    html+=row('Overshoot Hi','8 dB','8 dB','vx');
+  }
+
+  // TMax section
+  html+=secRow('Thermal Limiter (TMax)','tx');
+  html+=row('Threshold',spkTxDisplay,ampTxDisplay,'tx','',ampTxNote);
+  html+=row('Attack',attackS?`${fmt2(attackS)} s`:'—',attackS?`${fmt2(attackS)} s`:'—','tx');
+  html+=row('Release','2X','2X','tx');
+  if(isProc)html+=row('@ controller output',`${fmt1(v2dbu(tMaxV)-ampGain)} dBu`,ampVxNote?`${fmt1(v2dbu(tMaxV)-ampGain)} dBu`:'—','tx');
+
+  // Excursion section
+  if(hasXmax){
+    html+=secRow('Excursion Limiter (Xmax)','ex');
+    html+=row('Threshold',spkExDisplay,isProc?ampExDisplay:ampExDisplay,'ex');
+    html+=row('at Frequency',hpf?`${hpf} Hz`:'—',hpf?`${hpf} Hz`:'—','ex');
+    html+=row('Min Frequency','5 Hz','5 Hz','ex');
+  }
+
+  document.getElementById('cmpBody').innerHTML=html;
+
+  // ── TRACE ────────────────────────────────────────────────
+  const mStr=useMargin?' × 0.891 (−1 dB)':'';
   const trace=[];
-  const mStr=useMargin?' × 0.891 (−1 dB margin)':'';
-  trace.push(`<div class="trace-step">LF VMD = √(${pLF} W × ${imp} Ω) = <b>${fmt1(vmdLF)} V</b> = <b>${fmt1(dbuLF)} dBu</b></div>`);
-  if (pHF) trace.push(`<div class="trace-step">HF VMD = √(${pHF} W × ${imp} Ω) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
+  trace.push(`<div class="trace-step">LF VMD = √(${pLF}W × ${imp}Ω) = <b>${fmt1(vmdLF)} V</b> = <b>${fmt1(dbuLF)} dBu</b></div>`);
+  if(pHF)trace.push(`<div class="trace-step">HF VMD = √(${pHF}W × ${imp}Ω) = <b>${fmt1(vmdHF)} V</b> = <b>${fmt1(v2dbu(vmdHF))} dBu</b></div>`);
   else trace.push(`<div class="trace-step">HF VMD: <span>no HF power entered — Threshold Hi estimated at −3 dBr</span></div>`);
-  trace.push(`<div class="trace-step">TMax = VMD${mStr} = <b>${fmt1(tMaxV)} V</b> = <b>${fmt1(tMaxDbu)} dBu</b></div>`);
-  trace.push(`<div class="trace-step">VX = √2 × VMD${mStr} = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b>${isProc?` → @ processor output: <b>${fmt1(vxCtrl)} dBu</b> (−${ampGain} dB gain)`:''}</div>`);
+  trace.push(`<div class="trace-step">TMax = VMD${mStr} = <b>${fmt1(tMaxV)} V</b></div>`);
+  trace.push(`<div class="trace-step">VX = √2 × VMD${mStr} = <b>${fmt1(vxV)} V</b> = <b>${fmt1(vxDbu)} dBu</b>${isProc?` → @ processor output: <b>${fmt1(vxDbu-ampGain)} dBu</b>`:''}</div>`);
   trace.push(`<div class="trace-step">Excursion = VMD × 1.414 (peak)${mStr} = <b>${fmt1(exV)} V</b>${hpf?`,  attack = 100 ÷ ${hpf} = <b>${fmt2(100/hpf)} s</b>`:''}</div>`);
-  trace.push(`<div class="trace-step">Thresh Hi = <b>${fmt1(threshHiDbr)} dBr</b>${hfIsEstimated?'  (estimated)':` (dBu(HF_VMD) − dBu(LF_VMD) = ${fmt1(v2dbu(vmdHF))} − ${fmt1(dbuLF)})`}</div>`);
-  if (modelVal&&modelVal!=='custom'){
+
+  if(ampData&&imp&&ampData.watts[imp]){
+    const ampMaxV=Math.sqrt(ampData.watts[imp]*imp);
     trace.push(`<hr class="trace-sep">`);
-    trace.push(`<div class="trace-step">Amp-matched VX = TMax × 4/3 = ${fmt1(tMaxV)} × 1.333 = <b class="amp">${fmt1(tMaxV*4/3)} V</b>  <span>(Martin Audio ratio — more conservative than ×√2 = ${fmt1(tMaxV*Math.sqrt(2))} V)</span></div>`);
-    if (isProc) trace.push(`<div class="trace-step">Amp-matched VX @ controller = <b class="amp">${fmt1(v2dbu(tMaxV*4/3)-ampGain)} dBu</b></div>`);
+    trace.push(`<div class="trace-step">${modelKey} max output = √(${ampData.watts[imp]}W × ${imp}Ω) = <b class="amp">${fmt1(ampMaxV)} V</b></div>`);
+    trace.push(`<div class="trace-step">Amp-matched TMax = ${fmt1(ampMaxV)}${mStr} = <b class="amp">${fmt1(ampMaxV*mf)} V</b></div>`);
+    trace.push(`<div class="trace-step">Amp-matched VX = TMax × 4/3 = <b class="amp">${fmt1(ampMaxV*mf*4/3)} V</b>  <span>(Martin Audio method — vs ×√2 = ${fmt1(ampMaxV*mf*Math.sqrt(2))} V in speaker column)</span></div>`);
   }
 
   let warn='';
-  if (!hpf)          warn+='• HPF frequency missing — excursion at frequency and TMax attack cannot be calculated.<br>';
-  if (hfIsEstimated) warn+='• HF power not entered — Threshold Hi estimated at −3 dBr. Enter HF AES power for an exact value.<br>';
-  if (isProc&&ampGain===0) warn+='• Amplifier gain is 0 dB — VX threshold at processor output will not be correct.<br>';
-  if (warn) trace.push(`<div class="trace-warn">${warn}</div>`);
-
+  if(!hpf)warn+='• HPF frequency missing — excursion frequency and TMax attack cannot be calculated.<br>';
+  if(hfEst)warn+='• HF power not entered — Threshold Hi estimated at −3 dBr.<br>';
+  if(isProc&&ampGain===0)warn+='• Amplifier gain is 0 dB — VX threshold at processor output will be wrong.<br>';
+  if(ampData&&imp&&!ampData.watts[imp])warn+=`• ${modelKey} has no rated power for ${imp}Ω — select correct impedance.<br>`;
+  if(warn)trace.push(`<div class="trace-warn">${warn}</div>`);
   document.getElementById('traceBox').innerHTML=trace.join('');
 }
 
 window.addEventListener('DOMContentLoaded',recalc);
 recalc();
 </script>
-
 <script src="../database/speakers-db.js" onerror="console.log('speakers-db.js not found')"></script>
 </body>
 </html>
